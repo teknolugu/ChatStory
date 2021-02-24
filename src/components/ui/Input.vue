@@ -1,5 +1,5 @@
 <template>
-  <label class="inline-block">
+  <label class="inline-block relative">
     <span v-if="label" class="text-gray-500 text-sm ml-2">{{ label }}</span>
     <div class="relative flex items-center">
       <ui-icon
@@ -8,9 +8,12 @@
         class="ml-3 left-0 absolute text-gray-600"
       ></ui-icon>
       <input
-        class="w-full ui-input rounded-xl border border-gray-200 transition bg-transparent focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
+        class="w-full ui-input rounded-xl border border-gray-200 transition bg-transparent focus:ring focus:ring-opacity-50"
         v-bind="{ value: modelValue, type, placeholder }"
-        :class="{ 'pr-10': appendIcon, 'pl-10': prependIcon }"
+        :class="[
+          error ? 'focus:ring-red-500 focus:border-red-500 border-red-500' : 'focus:border-primary focus:ring-primary',
+          { 'pr-10': appendIcon, 'pl-10': prependIcon }
+        ]"
         @input="emitValue"
       />
       <ui-icon
@@ -19,6 +22,12 @@
         class="mr-3 right-0-0 absolute text-gray-600"
       ></ui-icon>
     </div>
+    <span
+      v-if="error"
+      class="text-sm ml-2 h-6 inline-block text-red-500"
+    >
+      {{ errorMessage }}
+    </span>
   </label>
 </template>
 <script>
@@ -36,6 +45,8 @@ export default {
       type: String,
       default: 'text',
     },
+    error: Boolean,
+    errorMessage: String,
     placeholder: String,
     appendIcon: String,
     prependIcon: String,

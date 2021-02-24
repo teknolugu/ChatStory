@@ -12,14 +12,14 @@ import UiTabs from './ui/Tabs.vue';
 import UiTextarea from './ui/Textarea.vue';
 import UiProgress from './ui/Progress.vue';
 import UiSpinner from './ui/Spinner.vue';
-import UiChat from './ui/Chat.vue';
+import UiModal from './ui/Modal.vue';
 
 import TransitionExpand from './transitions/Expand.vue';
 import TransitionGroupList from './transitions/GroupList.vue';
 import TransitionSlide from './transitions/Slide.vue';
 
 export default {
-  UiChat,
+  UiModal,
   UiButton,
   UiProgress,
   UiSpinner,
