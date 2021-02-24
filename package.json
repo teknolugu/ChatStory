@@ -1,0 +1,44 @@
+{
+  "name": "agame2",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
+  },
+  "dependencies": {
+    "@vuelidate/core": "^2.0.0-alpha.12",
+    "@vuelidate/validators": "^2.0.0-alpha.11",
+    "@vuex-orm/core": "^0.36.3",
+    "dayjs": "^1.10.4",
+    "drawflow": "^0.0.37",
+    "firebase-auth-lite": "^0.8.8",
+    "nanoid": "^3.1.20",
+    "snarkdown": "^2.0.0",
+    "tiny-emitter": "^2.1.0",
+    "tippy.js": "^6.2.7",
+    "vue": "^3.0.5",
+    "vue-router": "^4.0.3",
+    "vue-slicksort": "^2.0.0-alpha.2",
+    "vue-toastification": "^2.0.0-rc.1",
+    "vuedraggable": "^4.0.1",
+    "vuex": "^4.0.0",
+    "xss": "^1.0.8"
+  },
+  "devDependencies": {
+    "@rollup/plugin-eslint": "^8.0.1",
+    "@tailwindcss/forms": "^0.2.1",
+    "@vitejs/plugin-vue": "^1.0.4",
+    "@vue/compiler-sfc": "^3.0.5",
+    "autoprefixer": "^10.2.4",
+    "babel-eslint": "^10.1.0",
+    "eslint-config-prettier": "^8.0.0",
+    "eslint-plugin-prettier-vue": "^3.0.0-alpha.2",
+    "eslint-plugin-vue": "^7.6.0",
+    "postcss": "^8.2.6",
+    "prettier": "^2.2.1",
+    "tailwindcss": "^2.0.3",
+    "vite": "^2.0.0-beta.12",
+    "vite-plugin-voie": "^0.7.3"
+  }
+}
