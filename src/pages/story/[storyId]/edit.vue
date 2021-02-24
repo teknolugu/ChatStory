@@ -12,7 +12,7 @@
 import { ref } from 'vue';
 import EditorNav from '@/components/editor/EditorNav.vue';
 import EditorStory from '@/components/editor/EditorStory.vue';
-import EditorCharacters from '@/components/editor/EditorCharacters/index.vue';
+import EditorCharacters from '@/components/editor/EditorCharacters.vue';
 
 export default {
   components: { EditorNav, EditorStory, EditorCharacters },
