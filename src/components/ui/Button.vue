@@ -35,6 +35,7 @@ export default {
     const variants = {
       default: 'bg-gray-100 hover:bg-gray-200',
       primary: 'bg-primary text-white hover:bg-blue-600',
+      danger: 'bg-red-500 text-white hover:bg-red-600',
     };
 
     return {

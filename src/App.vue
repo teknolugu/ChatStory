@@ -1,6 +1,7 @@
 <template>
   <div class="app text-gray-800">
     <router-view></router-view>
+    <ui-dialog></ui-dialog>
   </div>
 </template>
 <script>

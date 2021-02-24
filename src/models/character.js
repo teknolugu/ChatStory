@@ -1,5 +1,6 @@
 import { Model } from '@vuex-orm/core';
 import { nanoid } from 'nanoid';
+import Node from './node';
 
 class Character extends Model {
   static entity = 'characters';
@@ -13,6 +14,23 @@ class Character extends Model {
       profileUrl: this.string(''),
       storyId: this.attr(null),
     };
+  }
+
+  static afterDelete(model) {
+    const nodes = Node.query().where('storyId', model.storyId).get();
+
+    nodes.forEach(({ id, data }) => {
+      const chats = data.chats.filter(({ characterId }) => characterId !== model.id);
+
+      Node.update({
+        where: id,
+        data: {
+          data: {
+            chats,
+          },
+        },
+      });
+    });
   }
 }
 

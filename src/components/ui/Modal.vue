@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 
 export default {
   props: {
@@ -55,27 +55,25 @@ export default {
   setup(props, { emit }) {
     const show = ref(false);
     const modalContent = ref(null);
-    const closeModal = () => {
+
+    function closeModal() {
       if (props.persist) return;
 
       show.value = false;
       emit('close', false);
       emit('update:modelValue', false);
-    };
+    }
+    function keyupHandler({ code }) {
+      if (code === 'Escape') closeModal();
+    }
 
-    onMounted(() => {
-      const handleEsc = ({ code }) => {
-        if (code === 'Escape') closeModal();
-      };
+    watch(() => props.modelValue, (value) => {
+      show.value = value;
+    }, { immediate: true });
 
-      watch(() => props.modelValue, (value) => {
-        show.value = value;
-      }, { immediate: true });
-
-      watch(show, (value) => {
-        if (value) window.addEventListener('keyup', handleEsc);
-        else window.removeEventListener('keyup', handleEsc);
-      });
+    watch(show, (value) => {
+      if (value) window.addEventListener('keyup', keyupHandler);
+      else window.removeEventListener('keyup', keyupHandler);
     });
 
     return {
