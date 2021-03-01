@@ -11,13 +11,14 @@
 <script>
 import { ref } from 'vue';
 import EditorNav from '@/components/editor/EditorNav.vue';
-import EditorStory from '@/components/editor/EditorStory.vue';
+import EditorStory from '@/components/editor/EditorStory/index.vue';
 import EditorCharacters from '@/components/editor/EditorCharacters.vue';
+import EditorStyle from '@/components/editor/EditorStyle/index.vue';
 
 export default {
-  components: { EditorNav, EditorStory, EditorCharacters },
+  components: { EditorNav, EditorStory, EditorCharacters, EditorStyle },
   setup() {
-    const activeTab = ref('editor-characters');
+    const activeTab = ref('editor-style');
 
     return {
       activeTab,

@@ -12,33 +12,32 @@
         </div>
         <p class="text-lg mt-4">Add Character</p>
       </ui-card>
-      <ui-card
-        v-for="character in characters"
-        :key="character.id"
-        class="text-center"
-        hover
-      >
+      <ui-card v-for="character in characters" :key="character.id" class="text-center" hover>
         <img
           :src="character.profileUrl"
           class="h-14 w-14 rounded-full mx-auto"
           :alt="character.name"
         />
-        <p class="text-lg mt-2">{{ character.name }}</p>
-        <div class="flex mt-6 items-center">
-          <ui-button @click="showModal('edit', character)" class="flex-1">
+        <p class="text-lg text-overflow mt-2">{{ character.name }}</p>
+        <div class="flex mt-6 space-x-2 items-center">
+          <ui-button class="flex-1" @click="showModal('edit', character)">
             <ui-icon size="20" name="pencil" class="mr-2 -ml-1"></ui-icon>
             <span>Edit</span>
           </ui-button>
-          <ui-button icon class="text-red-500 ml-2" @click="deleteCharacter(character)">
+          <ui-button
+            icon
+            :class="[mainCharacter === character.id ? 'text-yellow-500' : 'text-gray-600']"
+            @click="changeMainCharacter(character.id)"
+          >
+            <ui-icon name="star" class="align-middle"></ui-icon>
+          </ui-button>
+          <ui-button icon class="text-red-500" @click="deleteCharacter(character)">
             <ui-icon name="trash"></ui-icon>
           </ui-button>
         </div>
       </ui-card>
     </div>
-    <ui-modal
-      v-model="state.showModal"
-      content-class="max-w-sm"
-    >
+    <ui-modal v-model="state.showModal" content-class="max-w-sm">
       <template #header>
         <p class="capitalize">{{ state.modalType }} Character</p>
       </template>
@@ -48,31 +47,29 @@
         class="h-28 w-28 rounded-full mx-auto"
       />
       <ui-input
+        v-model="characterValidation.profileUrl.$model"
         label="Profile Image URL"
         class="w-full mt-4"
-        v-model="characterValidation.profileUrl.$model"
         placeholder="https://example.com/image.png"
         :error="characterValidation.profileUrl.$dirty && characterValidation.profileUrl.$invalid"
         :error-message="characterValidation.profileUrl.$silentErrors[0]?.$message"
       ></ui-input>
       <ui-input
+        v-model="characterValidation.name.$model"
         label="Name"
         class="w-full mt-2"
         placeholder="John Doe"
         show-detail
         :error="characterValidation.name.$dirty && characterValidation.name.$invalid"
         :error-message="characterValidation.name.$silentErrors[0]?.$message"
-        v-model="characterValidation.name.$model"
       ></ui-input>
       <div class="mt-8 flex space-x-2">
-        <ui-button class="w-6/12" @click="state.showModal = false">
-          Cancel
-        </ui-button>
+        <ui-button class="w-6/12" @click="state.showModal = false"> Cancel </ui-button>
         <ui-button
-          @click="saveBtnHandler"
           class="w-6/12"
           variant="primary"
           :disabled="characterValidation.$invalid"
+          @click="saveBtnHandler"
         >
           Save
         </ui-button>
@@ -83,10 +80,11 @@
 <script>
 import { computed, shallowReactive, shallowRef } from 'vue';
 import { useRoute } from 'vue-router';
-import { useVuelidate } from '@vuelidate/core'
-import { minLength, url, required } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core';
+import { minLength, url, required } from '@vuelidate/validators';
 import { useDialog } from '@/composable/dialog';
 import Character from '@/models/character';
+import Story from '@/models/story';
 
 export default {
   setup() {
@@ -107,6 +105,9 @@ export default {
 
     const characters = computed(() => {
       return Character.query().where('storyId', storyId).get();
+    });
+    const mainCharacter = computed(() => {
+      return Story.find(storyId)?.mainCharacter || '';
     });
 
     const rules = {
@@ -153,14 +154,24 @@ export default {
         },
       });
     }
+    function changeMainCharacter(id) {
+      Story.update({
+        where: storyId,
+        data: {
+          mainCharacter: mainCharacter.value === id ? '' : id,
+        },
+      });
+    }
 
     return {
       state,
       showModal,
       characters,
+      mainCharacter,
       tempCharacter,
       saveBtnHandler,
       deleteCharacter,
+      changeMainCharacter,
       characterValidation,
     };
   },

@@ -1,13 +1,13 @@
 <template>
   <div class="modal-ui">
-    <div class="modal-ui__activator" v-if="$slots.activator">
-      <slot name="activator" v-bind="{ open: () => show = true }"></slot>
+    <div v-if="$slots.activator" class="modal-ui__activator">
+      <slot name="activator" v-bind="{ open: () => (show = true) }"></slot>
     </div>
     <teleport :to="teleportTo" :disabled="disabledTeleport">
       <transition name="modal" mode="out-in">
         <div
-          class="bg-black p-5 overflow-y-auto bg-opacity-20 modal-ui__content-container z-50 flex justify-center items-end md:items-center"
           v-if="show"
+          class="bg-black p-5 overflow-y-auto bg-opacity-20 modal-ui__content-container z-50 flex justify-center items-end md:items-center"
           @click.self="closeModal"
         >
           <ui-card class="modal-ui__content shadow-lg w-full" :class="[contentClass]">
@@ -18,10 +18,10 @@
                 </span>
                 <ui-icon
                   v-show="!persist"
-                  @click="closeModal"
                   class="text-gray-600 cursor-pointer"
                   name="x"
                   size="20"
+                  @click="closeModal"
                 ></ui-icon>
               </div>
             </div>
@@ -67,9 +67,13 @@ export default {
       if (code === 'Escape') closeModal();
     }
 
-    watch(() => props.modelValue, (value) => {
-      show.value = value;
-    }, { immediate: true });
+    watch(
+      () => props.modelValue,
+      (value) => {
+        show.value = value;
+      },
+      { immediate: true }
+    );
 
     watch(show, (value) => {
       if (value) window.addEventListener('keyup', keyupHandler);
@@ -87,23 +91,23 @@ export default {
 <style>
 .modal-enter-active,
 .modal-leave-active {
-  transition: opacity 0.3s ease
+  transition: opacity 0.3s ease;
 }
 
 .modal-enter-active .modal-ui__content,
 .modal-leave-active .modal-ui__content {
   transition: transform 0.3s ease;
-  transform: translateY(0px)
+  transform: translateY(0px);
 }
 
 .modal-enter-from,
 .modal-leave-to {
-  opacity: 0
+  opacity: 0;
 }
 
 .modal-enter-from .modal-ui__content,
 .modal-leave-to .modal-ui__content {
-  transform: translateY(30px)
+  transform: translateY(30px);
 }
 
 .modal-ui__content-container {

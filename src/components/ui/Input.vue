@@ -11,8 +11,10 @@
         class="w-full ui-input rounded-xl border border-gray-200 transition bg-transparent focus:ring focus:ring-opacity-50"
         v-bind="{ value: modelValue, type, placeholder }"
         :class="[
-          error ? 'focus:ring-red-500 focus:border-red-500 border-red-500' : 'focus:border-primary focus:ring-primary',
-          { 'pr-10': appendIcon, 'pl-10': prependIcon }
+          error
+            ? 'focus:ring-red-500 focus:border-red-500 border-red-500'
+            : 'focus:border-primary focus:ring-primary',
+          { 'pr-10': appendIcon, 'pl-10': prependIcon },
         ]"
         @input="emitValue"
       />
@@ -22,10 +24,7 @@
         class="mr-3 right-0-0 absolute text-gray-600"
       ></ui-icon>
     </div>
-    <span
-      v-if="error"
-      class="text-sm ml-2 h-6 inline-block text-red-500"
-    >
+    <span v-if="error" class="text-sm ml-2 h-6 inline-block text-red-500">
       {{ errorMessage }}
     </span>
   </label>

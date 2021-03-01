@@ -13,6 +13,7 @@ class Story extends Model {
       id: this.uid(() => nanoid()),
       title: this.string(''),
       description: this.string(''),
+      mainCharacter: this.string(''),
       characters: this.hasMany(Character, 'storyId'),
       nodes: this.hasMany(Node, 'storyId'),
     };

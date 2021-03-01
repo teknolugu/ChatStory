@@ -5,16 +5,13 @@
     </template>
     <ui-input
       v-if="state.type === 'prompt'"
+      v-model="state.input"
       :placeholder="state.options.placeholder"
       :label="state.options.label"
-      v-model="state.input"
     ></ui-input>
     <p v-else class="text-gray-500">{{ state.options.body }}</p>
     <div class="mt-8 flex space-x-2">
-      <ui-button
-        class="w-6/12"
-        @click="fireCallback('onCancel')"
-      >
+      <ui-button class="w-6/12" @click="fireCallback('onCancel')">
         {{ state.options.cancelText }}
       </ui-button>
       <ui-button
@@ -77,13 +74,16 @@ export default {
       }
     }
 
-    watch(() => state.show, (value) => {
-      if (value) {
-        window.addEventListener('keyup', keyupHandler);
-      } else {
-        window.removeEventListener('keyup', keyupHandler);
+    watch(
+      () => state.show,
+      (value) => {
+        if (value) {
+          window.addEventListener('keyup', keyupHandler);
+        } else {
+          window.removeEventListener('keyup', keyupHandler);
+        }
       }
-    });
+    );
 
     return {
       state,

@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5" ref="root">
+  <div ref="root" class="p-5">
     <div class="flex items-center text-primary">
       <ui-icon :name="node.icon"></ui-icon>
       <p class="ml-2">Option</p>
@@ -11,7 +11,7 @@
         class="border-gray-200 rounded-xl w-44"
         placeholder="Option name"
       />
-      <ui-button @click="deleteNode" icon class="text-red-500">
+      <ui-button icon class="text-red-500" @click="deleteNode">
         <ui-icon name="trash"></ui-icon>
       </ui-button>
     </div>
@@ -25,13 +25,13 @@ import UiIcon from '../ui/Icon.vue';
 import UiButton from '../ui/Button.vue';
 
 export default {
+  components: { UiIcon, UiButton },
   props: {
     editor: {
       type: Object,
       default: () => ({}),
     },
   },
-  components: { UiIcon, UiButton },
   setup(props) {
     const root = ref(null);
     const nodeId = ref('');

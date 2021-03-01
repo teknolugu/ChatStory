@@ -16,7 +16,7 @@
         :data-node="node.id"
         style="cursor: grab"
         draggable="true"
-        class="p-5 hover:bg-gray-100 rounded-xl select-none transition text-center bg-gray-50"
+        class="py-5 hover:bg-gray-100 rounded-xl select-none transition text-center bg-gray-50"
         @dragstart="dragHandler"
       >
         <ui-icon size="30" :class="node.textColor" :name="node.icon"></ui-icon>

@@ -12,22 +12,19 @@
         Publish
       </ui-button>
     </div>
-    <div class="nav-tab flex items-center text-sm">
-      <ui-icon name="view-grid" class="text-primary mr-4"></ui-icon>
-      <div class="flex items-stretch">
-        <div
-          v-for="tab in tabs"
-          :key="tab"
-          class="tab px-4 py-2 transition cursor-pointer capitalize"
-          :class="[
-            activeTab === tab.id
-              ? 'border-b-2 border-primary text-primary'
-              : 'text-gray-500 hover:text-gray-700',
-          ]"
-          @click="$emit('update:activeTab', tab.id)"
-        >
-          {{ tab.name }}
-        </div>
+    <div class="nav-tab flex items-stretch text-sm">
+      <div
+        v-for="tab in tabs"
+        :key="tab"
+        class="tab px-4 py-2 transition cursor-pointer capitalize"
+        :class="[
+          activeTab === tab.id
+            ? 'border-b-2 border-primary text-primary'
+            : 'text-gray-500 hover:text-gray-700',
+        ]"
+        @click="$emit('update:activeTab', tab.id)"
+      >
+        {{ tab.name }}
       </div>
     </div>
   </nav>
@@ -44,6 +41,7 @@ export default {
   },
   setup(props, { emit }) {
     const tabs = [
+      { id: 'editor-detail', name: 'details' },
       { id: 'editor-story', name: 'story flow' },
       { id: 'editor-characters', name: 'characters' },
       { id: 'editor-style', name: 'chat style' },

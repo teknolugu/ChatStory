@@ -24,6 +24,20 @@ export const nodes = {
       chats: [],
     },
   },
+  transition: {
+    title: 'Transition',
+    description: '',
+    icon: 'location-marker',
+    input: 1,
+    output: 1,
+    allowedInput: [],
+    colorGradient: 'from-light-blue-400 to-indigo-500',
+    textColor: 'text-cyan-500',
+    maxConnection: 1,
+    data: {
+      text: '',
+    },
+  },
   annotation: {
     title: 'Annotation',
     description: 'blackbird',
