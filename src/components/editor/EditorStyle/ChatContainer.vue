@@ -1,17 +1,18 @@
 <template>
   <div
-    class="w-full max-w-xs text-white h-full bg-white relative"
+    class="w-full max-w-xs h-full bg-white relative"
     :class="isActive('general')"
+    :style="convertToCssObject(style.general)"
   >
     <div
-      class="bg-gray-900 text-white px-5 absolute top-0 w-full h-12 flex items-center"
+      class="bg-gray-900 px-5 absolute top-0 w-full h-12 flex items-center"
       :class="isActive('navigation')"
     >
       <p>Story Title</p>
     </div>
-    <div class="pb-5 px-2 space-y-2 pt-16 overflow-auto scroll h-full bg-blue-gray-800">
+    <div class="pb-5 px-2 space-y-2 pt-16 overflow-auto scroll h-full">
       <p
-        class="w-full p-1 mb-4 rounded text-opacity-90 bg-opacity-60 text-white bg-gray-700 text-sm text-center"
+        class="w-full p-1 mb-4 rounded text-opacity-90 bg-opacity-60 bg-gray-700 text-sm text-center"
         :class="isActive('annotation')"
       >
         One day
@@ -33,7 +34,7 @@
         </div>
       </div>
       <div class="flex items-start pr-10">
-        <img src="" class="h-10 w-10 invisible rounded-full"/>
+        <img src="" class="h-10 w-10 invisible rounded-full" />
         <div class="ml-2">
           <p class="hidden">John Doe</p>
           <p
@@ -53,7 +54,7 @@
         <div class="mr-2 text-right">
           <p>Jonathan Doe</p>
           <p
-            class="py-2 px-3 bg-primary bg-opacity-30 border-opacity-40 border-primary border-2 text-white rounded-xl rounded-tr-md inline-block"
+            class="py-2 px-3 bg-primary bg-opacity-30 border-opacity-40 border-primary border-2 rounded-xl rounded-tr-md inline-block"
             :class="isActive('main-character')"
           >
             What?
@@ -66,7 +67,7 @@
         />
       </div>
       <div class="pl-10 text-right space-y-2 pt-2">
-        <div class="option" v-for="option in options" :key="option">
+        <div v-for="option in options" :key="option" class="option">
           <p
             class="p-2 relative rounded-tr-md inline-block bg-green-500 border-green-500 border-2 border-opacity-40 bg-opacity-30 rounded-xl animate-pulse cursor-pointer"
             :class="isActive('option')"
@@ -79,6 +80,11 @@
   </div>
 </template>
 <script>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { convertToCssObject } from '@/utils/helper';
+import Style from '@/models/style';
+
 export default {
   props: {
     activeElement: {
@@ -87,15 +93,22 @@ export default {
     },
   },
   setup(props) {
+    const route = useRoute();
+
+    const storyId = route.params.storyid;
     const options = ['Fuck you!', 'Execuse me'];
+
+    const style = computed(() => Style.query().where('storyId', storyId).first());
 
     function isActive(id) {
       return props.activeElement === id ? 'ring' : '';
     }
 
     return {
+      style,
       options,
       isActive,
+      convertToCssObject,
     };
   },
 };

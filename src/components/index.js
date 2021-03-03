@@ -14,12 +14,14 @@ import UiProgress from './ui/Progress.vue';
 import UiSpinner from './ui/Spinner.vue';
 import UiModal from './ui/Modal.vue';
 import UiDialog from './ui/Dialog.vue';
+import UiColorPicker from './ui/ColorPicker.vue';
 
 import TransitionExpand from './transitions/Expand.vue';
 import TransitionGroupList from './transitions/GroupList.vue';
 import TransitionSlide from './transitions/Slide.vue';
 
 export default {
+  UiColorPicker,
   UiDialog,
   UiModal,
   UiButton,

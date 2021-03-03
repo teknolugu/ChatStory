@@ -7,7 +7,6 @@
     }"
     class="icon-ui"
     fill="currentColor"
-    @click="$emit('click', $event)"
     v-html="icon"
   ></svg>
 </template>

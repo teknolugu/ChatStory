@@ -2,6 +2,7 @@ import { Model } from '@vuex-orm/core';
 import { nanoid } from 'nanoid';
 import Character from './character';
 import Node from './node';
+import Style from './style';
 
 class Story extends Model {
   static entity = 'stories';
@@ -16,6 +17,7 @@ class Story extends Model {
       mainCharacter: this.string(''),
       characters: this.hasMany(Character, 'storyId'),
       nodes: this.hasMany(Node, 'storyId'),
+      style: this.hasOne(Style, 'storyId'),
     };
   }
 }

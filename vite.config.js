@@ -7,7 +7,16 @@ import eslint from '@rollup/plugin-eslint';
  * @type {import('vite').UserConfig}
  */
 export default {
-  plugins: [vue(), voie(), eslint({ include: ['src/**/*.{js,vue}'] })],
+  plugins: [
+    vue(),
+    voie(),
+    {
+      ...eslint({
+        include: ['./src/**/*.vue', './src/**/*.js'],
+      }),
+      enforce: 'pre',
+    },
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

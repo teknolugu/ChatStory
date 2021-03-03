@@ -9,6 +9,8 @@ class Style extends Model {
   static fields() {
     return {
       id: this.uid(() => nanoid()),
+      storyId: this.attr(null),
+      general: this.attr({}),
     };
   }
 }
