@@ -7,6 +7,7 @@
 import { provide, toRef } from 'vue';
 
 export default {
+  emits: ['input'],
   props: {
     value: {
       type: [String, Number],

@@ -44,11 +44,23 @@ export default {
       type: String,
       default: 'text',
     },
+    errorMessage: {
+      type: String,
+      default: '',
+    },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    appendIcon: {
+      type: String,
+      default: '',
+    },
+    prependIcon: {
+      type: String,
+      default: '',
+    },
     error: Boolean,
-    errorMessage: String,
-    placeholder: String,
-    appendIcon: String,
-    prependIcon: String,
   },
   emits: ['update:modelValue', 'input', 'change'],
   setup(props, { emit }) {

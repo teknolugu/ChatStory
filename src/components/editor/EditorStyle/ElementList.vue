@@ -22,6 +22,7 @@ import ElementMain from './elements/ElementMain.vue';
 
 export default {
   components: { ElementMain },
+  emits: ['update:activeElement'],
   props: {
     activeElement: {
       type: String,

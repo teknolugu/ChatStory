@@ -33,13 +33,14 @@
 import { ref } from 'vue';
 
 export default {
+  emit: ['update:activeTab'],
   props: {
     activeTab: {
       type: String,
       default: '',
     },
   },
-  setup(props, { emit }) {
+  setup(props) {
     const tabs = [
       { id: 'editor-detail', name: 'details' },
       { id: 'editor-story', name: 'story flow' },

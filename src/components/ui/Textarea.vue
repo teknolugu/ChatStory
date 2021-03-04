@@ -15,6 +15,7 @@
 import { ref, onMounted } from 'vue';
 
 export default {
+  emits: ['update:modelValue'],
   props: {
     modelValue: {
       type: String,

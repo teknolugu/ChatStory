@@ -62,6 +62,7 @@ import debounce from '@/utils/debounce';
 import Node from '@/models/node';
 
 export default {
+  emits: ['update'],
   props: {
     chat: {
       type: Object,
@@ -75,7 +76,10 @@ export default {
       type: [Number, String],
       default: 0,
     },
-    nodeId: String,
+    nodeId: {
+      type: String,
+      default: '',
+    },
   },
   setup(props, { emit }) {
     const isEditing = ref(false);
