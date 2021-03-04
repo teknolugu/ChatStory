@@ -62,7 +62,6 @@ import debounce from '@/utils/debounce';
 import Node from '@/models/node';
 
 export default {
-  emits: ['update'],
   props: {
     chat: {
       type: Object,
@@ -81,6 +80,7 @@ export default {
       default: '',
     },
   },
+  emits: ['update'],
   setup(props, { emit }) {
     const isEditing = ref(false);
     const tempData = ref({});

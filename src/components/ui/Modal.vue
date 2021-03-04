@@ -36,6 +36,7 @@
 import { ref, watch } from 'vue';
 
 export default {
+  emits: ['close', 'update:modelValue'],
   props: {
     modelValue: {
       type: Boolean,

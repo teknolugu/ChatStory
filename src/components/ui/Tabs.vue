@@ -7,13 +7,13 @@
 import { provide, toRef } from 'vue';
 
 export default {
-  emits: ['input'],
   props: {
     value: {
       type: [String, Number],
       default: '',
     },
   },
+  emits: ['input'],
   setup(props, { emit }) {
     provide('ui-tabs', {
       active: toRef(props, 'value'),

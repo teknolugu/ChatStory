@@ -22,13 +22,13 @@ import ElementMain from './elements/ElementMain.vue';
 
 export default {
   components: { ElementMain },
-  emits: ['update:activeElement'],
   props: {
     activeElement: {
       type: String,
       default: 'general',
     },
   },
+  emits: ['update:activeElement'],
   setup(props, { emit }) {
     const elements = [
       { id: 'general', name: 'general', component: 'element-main' },

@@ -1,6 +1,6 @@
 <template>
   <div class="main-element">
-    <ui-select label="Select font" class="w-full" v-model="state.fontFamily">
+    <ui-select v-model="state.fontFamily" label="Select font" class="w-full">
       <option v-for="font in fonts" :key="font" :value="font">
         {{ font }}
       </option>
@@ -44,14 +44,18 @@ export default {
       backgroundColor: '#1e293b',
     });
 
-    watch(state, () => {
-      Style.update({
-        where: ({ storyId }) => storyId === route.params.storyid,
-        data: {
-          [props.id]: state.value,
-        },
-      });
-    }, { deep: true });
+    watch(
+      state,
+      () => {
+        Style.update({
+          where: ({ storyId }) => storyId === route.params.storyid,
+          data: {
+            [props.id]: state.value,
+          },
+        });
+      },
+      { deep: true }
+    );
 
     return {
       state,

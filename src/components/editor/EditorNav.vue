@@ -33,7 +33,7 @@
 import { ref } from 'vue';
 
 export default {
-  emit: ['update:activeTab'],
+  emits: ['update:activeTab'],
   props: {
     activeTab: {
       type: String,

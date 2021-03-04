@@ -14,7 +14,7 @@
       </div>
     </button>
     <transition-expand>
-      <div class="px-4 py-2" v-if="expand">
+      <div v-if="expand" class="px-4 py-2">
         <slot></slot>
       </div>
     </transition-expand>
@@ -33,9 +33,13 @@ export default {
   setup(props) {
     const expand = ref(false);
 
-    watch(() => props.show, (value) => {
-      expand.value = value;
-    }, { immeadiate: true });
+    watch(
+      () => props.show,
+      (value) => {
+        expand.value = value;
+      },
+      { immeadiate: true }
+    );
 
     return {
       expand,

@@ -15,7 +15,6 @@
 import { ref, onMounted } from 'vue';
 
 export default {
-  emits: ['update:modelValue'],
   props: {
     modelValue: {
       type: String,
@@ -34,6 +33,7 @@ export default {
       default: false,
     },
   },
+  emits: ['update:modelValue'],
   setup(props, { emit }) {
     const textarea = ref(null);
 
