@@ -37,13 +37,13 @@ export default {
           interaction: {
             hex: true,
             rgba: true,
-            save: true,
           },
         },
       });
 
-      pickr.value.on('save', (color) => {
+      pickr.value.on('changestop', () => {
         const colorRepresentation = pickr.value.getColorRepresentation();
+        const color = pickr.value.getColor();
         const colorStr = color[`to${colorRepresentation}`]().toString(0);
 
         emit('change', colorStr);

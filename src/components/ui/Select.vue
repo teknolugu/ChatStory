@@ -4,7 +4,6 @@
     <select
       class="rounded-xl ui-select w-full block border border-gray-200 transition bg-transparent focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
       :value="modelValue"
-      v-bind="$attrs"
       @change="emitValue"
     >
       <option v-if="placeholder" value="" disabled selected>{{ placeholder }}</option>

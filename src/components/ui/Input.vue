@@ -2,11 +2,9 @@
   <label class="inline-block relative">
     <span v-if="label" class="text-gray-500 text-sm ml-2">{{ label }}</span>
     <div class="relative flex items-center">
-      <ui-icon
-        v-if="prependIcon"
-        :name="prependIcon"
-        class="ml-3 left-0 absolute text-gray-600"
-      ></ui-icon>
+      <span v-if="$slots.prepend" class="ml-3 left-0 absolute inline-block">
+        <slot name="prepend"></slot>
+      </span>
       <input
         class="w-full ui-input rounded-xl border border-gray-200 transition bg-transparent focus:ring focus:ring-opacity-50"
         v-bind="{ value: modelValue, type, placeholder }"
@@ -14,15 +12,13 @@
           error
             ? 'focus:ring-red-500 focus:border-red-500 border-red-500'
             : 'focus:border-primary focus:ring-primary',
-          { 'pr-10': appendIcon, 'pl-10': prependIcon },
+          { 'pr-10': $slots.append, 'pl-10': $slots.prepend },
         ]"
         @input="emitValue"
       />
-      <ui-icon
-        v-if="appendIcon"
-        :name="appendIcon"
-        class="mr-3 right-0-0 absolute text-gray-600"
-      ></ui-icon>
+      <span v-if="$slots.append" class="mr-3 right-0 absolute inline-block">
+        <slot name="append"></slot>
+      </span>
     </div>
     <span v-if="error" class="text-sm ml-2 h-6 inline-block text-red-500">
       {{ errorMessage }}
@@ -49,14 +45,6 @@ export default {
       default: '',
     },
     placeholder: {
-      type: String,
-      default: '',
-    },
-    appendIcon: {
-      type: String,
-      default: '',
-    },
-    prependIcon: {
       type: String,
       default: '',
     },

@@ -3,25 +3,22 @@
     <ui-select
       :model-value="activeElement"
       label="Element"
-      class="w-full capitalize mb-4"
+      class="w-full mb-4"
       @change="updateActiveElement"
     >
-      <option v-for="element in elements" :key="element.id" :value="element.id">
+      <option v-for="element in elements" :key="element.id" class="capitalize" :value="element.id">
         {{ element.name }}
       </option>
     </ui-select>
-    <component
-      v-bind="{ fonts, id: activeElementData.id }"
-      :is="activeElementData.component"
-    ></component>
+    <element-editor :id="activeElementData.key"></element-editor>
   </div>
 </template>
 <script>
 import { computed } from 'vue';
-import ElementMain from './elements/ElementMain.vue';
+import ElementEditor from './ElementEditor.vue';
 
 export default {
-  components: { ElementMain },
+  components: { ElementEditor },
   props: {
     activeElement: {
       type: String,
@@ -31,16 +28,15 @@ export default {
   emits: ['update:activeElement'],
   setup(props, { emit }) {
     const elements = [
-      { id: 'general', name: 'general', component: 'element-main' },
-      { id: 'annotation', name: 'annotation' },
-      { id: 'navigation', name: 'navigation' },
-      { id: 'chat-image', name: 'chat image' },
-      { id: 'main-character', name: 'main character chat' },
-      { id: 'character-chat', name: 'character chat' },
-      { id: 'profile-picture', name: 'profile picture' },
-      { id: 'option', name: 'option' },
+      { id: 'general', name: 'general', key: 'general' },
+      { id: 'annotation', name: 'annotation', key: 'annotation' },
+      { id: 'navigation', name: 'navigation', key: 'navigation' },
+      { id: 'chat-image', name: 'chat image', key: 'chatImage' },
+      { id: 'main-character', name: 'main character chat', key: 'mainCharacter' },
+      { id: 'character-chat', name: 'character chat', key: 'characterChat' },
+      { id: 'profile-picture', name: 'profile picture', key: 'profilePicture' },
+      { id: 'option', name: 'option', key: 'optoin' },
     ].sort((a, b) => (a.name > b.name ? 1 : -1));
-    const fonts = ['Poppins', 'DotGothic16', 'Lato', 'Montserrat', 'Open Sans'];
 
     const activeElementData = computed(() => elements.find(({ id }) => props.activeElement === id));
 
@@ -49,7 +45,6 @@ export default {
     }
 
     return {
-      fonts,
       elements,
       activeElementData,
       updateActiveElement,

@@ -18,14 +18,10 @@ export default {
           { name: 'Sophia', profileUrl: 'https://ui-avatars.com/api/?name=Shopia' },
           { name: 'Random', profileUrl: 'https://ui-avatars.com/api/?name=Random' },
         ],
-        style: {
-          general: {
-            fontFamily: 'Poppins',
-            textColor: '#fff',
-            backgroundColor: '#1e293b',
-          },
-        },
+        style: {},
       },
+    }).then((data) => {
+      console.log(data);
     });
   },
 };

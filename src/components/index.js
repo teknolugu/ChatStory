@@ -16,12 +16,14 @@ import UiModal from './ui/Modal.vue';
 import UiDialog from './ui/Dialog.vue';
 import UiColorPicker from './ui/ColorPicker.vue';
 import UiExpansionPanel from './ui/ExpansionPanel.vue';
+import UiCheckbox from './ui/Checkbox.vue';
 
 import TransitionExpand from './transitions/Expand.vue';
 import TransitionGroupList from './transitions/GroupList.vue';
 import TransitionSlide from './transitions/Slide.vue';
 
 export default {
+  UiCheckbox,
   UiExpansionPanel,
   UiColorPicker,
   UiDialog,

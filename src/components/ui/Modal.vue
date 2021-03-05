@@ -36,7 +36,6 @@
 import { ref, watch } from 'vue';
 
 export default {
-  emits: ['close', 'update:modelValue'],
   props: {
     modelValue: {
       type: Boolean,
@@ -53,6 +52,7 @@ export default {
     persist: Boolean,
     disabledTeleport: Boolean,
   },
+  emits: ['close', 'update:modelValue'],
   setup(props, { emit }) {
     const show = ref(false);
     const modalContent = ref(null);

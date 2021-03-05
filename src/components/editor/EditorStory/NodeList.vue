@@ -3,12 +3,11 @@
     <div class="flex items-center space-x-4 justify-between mb-2">
       <h4 class="text-xl">Blocks</h4>
     </div>
-    <ui-input
-      v-model="searchQuery"
-      prepend-icon="search"
-      placeholder="Search blocks..."
-      class="flex-1"
-    ></ui-input>
+    <ui-input v-model="searchQuery" placeholder="Search blocks..." class="flex-1">
+      <template #prepend>
+        <ui-icon name="search"></ui-icon>
+      </template>
+    </ui-input>
     <div class="nodes mt-6 gap-2 grid grid-cols-2">
       <div
         v-for="node in nodes"
