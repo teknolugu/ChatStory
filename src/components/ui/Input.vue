@@ -9,6 +9,7 @@
         class="w-full ui-input rounded-xl border border-gray-200 transition bg-transparent focus:ring focus:ring-opacity-50"
         v-bind="{ value: modelValue, type, placeholder }"
         :class="[
+          { 'hide-appearance': hideAppearance },
           error
             ? 'focus:ring-red-500 focus:border-red-500 border-red-500'
             : 'focus:border-primary focus:ring-primary',
@@ -48,6 +49,7 @@ export default {
       type: String,
       default: '',
     },
+    hideAppearance: Boolean,
     error: Boolean,
   },
   emits: ['update:modelValue', 'input', 'change'],
@@ -65,7 +67,16 @@ export default {
 };
 </script>
 <style>
-.ui-input__content:focus-within {
-  @apply border-primary;
+.ui-input {
+  text-align: inherit;
+}
+.ui-input.hide-appearance::-webkit-outer-spin-button,
+.ui-input.hide-appearance::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+.ui-input.hide-appearance[type='number'] {
+  -moz-appearance: textfield; /* Firefox */
 }
 </style>
