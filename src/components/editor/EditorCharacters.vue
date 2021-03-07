@@ -25,6 +25,7 @@
             <span>Edit</span>
           </ui-button>
           <ui-button
+            v-tooltip="`${mainCharacter === character.id ? 'Remove' : 'Set'} as main character`"
             icon
             :class="[mainCharacter === character.id ? 'text-yellow-500' : 'text-gray-600']"
             @click="changeMainCharacter(character.id)"

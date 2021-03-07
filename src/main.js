@@ -8,6 +8,7 @@ import VTooltip from './directives/VTooltip';
 import 'vue-toastification/dist/index.css';
 import './assets/css/tailwind.css';
 import './assets/css/style.css';
+import './assets/css/tooltip.css';
 
 const app = createApp(App);
 

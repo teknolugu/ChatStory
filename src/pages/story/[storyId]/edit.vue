@@ -2,7 +2,7 @@
   <div class="editor">
     <editor-nav v-model:activeTab="activeTab"></editor-nav>
     <main class="h-screen" style="padding-top: 95px">
-      <keep-alive>
+      <keep-alive include="editor-story">
         <component :is="activeTab"></component>
       </keep-alive>
     </main>
