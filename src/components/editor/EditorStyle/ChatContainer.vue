@@ -11,7 +11,7 @@
     >
       <p>Story Title</p>
     </div>
-    <div class="pb-5 px-2 space-y-2 pt-16 overflow-auto scroll h-full">
+    <div class="pb-5 px-2 pt-16 overflow-auto scroll h-full">
       <p
         class="w-full p-1 mb-4 text-sm text-center"
         :class="isActive('annotation')"
@@ -19,7 +19,7 @@
       >
         One day
       </p>
-      <div class="flex items-start pr-10">
+      <div class="flex items-start pr-10 mb-1">
         <img
           src="https://avataaars.io/?avatarStyle=Circle&topType=WinterHat1&accessoriesType=Blank&hatColor=Red&facialHairType=BeardMedium&facialHairColor=BrownDark&clotheType=ShirtVNeck&clotheColor=Gray01&eyeType=Surprised&eyebrowType=FlatNatural&mouthType=Sad&skinColor=Pale"
           class="h-10 w-10"
@@ -56,7 +56,7 @@
           />
         </div>
       </div>
-      <div class="flex justify-end items-start pl-10">
+      <div class="flex justify-end items-start pl-10 mt-2">
         <div class="mr-2 text-right">
           <p>Jonathan Doe</p>
           <p
@@ -74,7 +74,7 @@
           :style="convertToCss(style.profilePicture)"
         />
       </div>
-      <div class="pl-10 text-right space-y-2 pt-2">
+      <div class="pl-10 text-right space-y-2 mt-4">
         <div v-for="option in options" :key="option" class="option">
           <p
             class="p-2 relative inline-block animate-pulse cursor-pointer"

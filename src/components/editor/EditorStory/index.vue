@@ -44,8 +44,7 @@ export default {
     onMounted(() => {
       const storyId = route.params.storyid;
       editor.value = initDrawflow(document.querySelector('#drawflow'), storyId);
-
-      console.log(editor);
+      console.log(editor.value);
     });
 
     return {
@@ -58,7 +57,7 @@ export default {
 </script>
 <style type="text/css">
 .editor-story {
-  background-image: url('../../assets/images/tile.png');
+  background-image: url('../../../assets/images/tile.png');
   background-size: 30px 30px;
   background-repeat: repeat;
 }

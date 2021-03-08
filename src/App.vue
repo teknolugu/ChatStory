@@ -19,9 +19,10 @@ export default {
           { name: 'Random', profileUrl: 'https://ui-avatars.com/api/?name=Random' },
         ],
         style: {},
+        setting: {},
       },
     }).then((data) => {
-      console.log(data);
+      console.log(data, Story.all());
     });
   },
 };

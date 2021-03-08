@@ -2,7 +2,7 @@
   <div class="editor">
     <editor-nav v-model:activeTab="activeTab"></editor-nav>
     <main class="h-screen" style="padding-top: 95px">
-      <keep-alive include="editor-story">
+      <keep-alive>
         <component :is="activeTab"></component>
       </keep-alive>
     </main>
@@ -18,7 +18,7 @@ import EditorStyle from '@/components/editor/EditorStyle/index.vue';
 export default {
   components: { EditorNav, EditorStory, EditorCharacters, EditorStyle },
   setup() {
-    const activeTab = ref('editor-style');
+    const activeTab = ref('editor-story');
 
     return {
       activeTab,

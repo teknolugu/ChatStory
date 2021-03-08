@@ -19,7 +19,7 @@ class Story extends Model {
       characters: this.hasMany(Character, 'storyId'),
       nodes: this.hasMany(Node, 'storyId'),
       style: this.hasOne(Style, 'storyId'),
-      settings: this.hasOne(Setting, 'storyId'),
+      setting: this.hasOne(Setting, 'storyId'),
     };
   }
 }
