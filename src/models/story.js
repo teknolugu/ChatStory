@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import Character from './character';
 import Node from './node';
 import Style from './style';
+import Setting from './setting';
 
 class Story extends Model {
   static entity = 'stories';
@@ -18,6 +19,7 @@ class Story extends Model {
       characters: this.hasMany(Character, 'storyId'),
       nodes: this.hasMany(Node, 'storyId'),
       style: this.hasOne(Style, 'storyId'),
+      settings: this.hasOne(Setting, 'storyId'),
     };
   }
 }

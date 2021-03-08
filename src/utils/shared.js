@@ -1,7 +1,6 @@
 export const nodes = {
   start: {
     title: 'Start',
-    description: 'in week or two',
     icon: 'lightning-bolt',
     input: 0,
     output: 1,
@@ -12,7 +11,6 @@ export const nodes = {
   },
   chat: {
     title: 'Chats',
-    description: 'mother natures son',
     icon: 'chat-alt2',
     input: 1,
     output: 1,
@@ -24,27 +22,25 @@ export const nodes = {
       chats: [],
     },
   },
-  transition: {
-    title: 'Transition',
-    description: '',
-    icon: 'location-marker',
-    input: 1,
-    output: 1,
-    allowedInput: [],
-    colorGradient: 'from-light-blue-400 to-indigo-500',
-    textColor: 'text-cyan-500',
-    maxConnection: 1,
-    data: {
-      text: '',
-    },
-  },
+  // transition: {
+  //   title: 'Transition',
+  //   icon: 'location-marker',
+  //   input: 1,
+  //   output: 1,
+  //   allowedInput: [],
+  //   colorGradient: 'from-light-blue-400 to-indigo-500',
+  //   textColor: 'text-cyan-500',
+  //   maxConnection: 1,
+  //   data: {
+  //     text: '',
+  //   },
+  // },
   annotation: {
     title: 'Annotation',
-    description: 'blackbird',
     icon: 'annotation',
     input: 1,
     output: 1,
-    allowedInput: ['chat'],
+    allowedInput: ['chat', 'option'],
     colorGradient: 'from-light-blue-400 to-indigo-500',
     textColor: 'text-cyan-500',
     maxConnection: 1,
@@ -54,7 +50,6 @@ export const nodes = {
   },
   option: {
     title: 'Option',
-    description: 'blackbird',
     icon: 'clipboard-list',
     input: 1,
     output: 1,
@@ -68,7 +63,6 @@ export const nodes = {
   },
   end: {
     title: 'Ending',
-    description: 'you never give me your money',
     icon: 'flag',
     input: 1,
     output: 0,

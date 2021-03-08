@@ -2,7 +2,7 @@
   <div ref="container"></div>
 </template>
 <script>
-import { ref, onMounted, watch, shallowRef } from 'vue';
+import { ref, onMounted, watch, shallowRef, onBeforeUnmount } from 'vue';
 import Pickr from '@simonwep/pickr';
 import '@simonwep/pickr/dist/themes/nano.min.css';
 
@@ -49,6 +49,9 @@ export default {
         emit('change', colorStr);
         emit('update:modelValue', colorStr);
       });
+    });
+    onBeforeUnmount(() => {
+      pickr.value.destroyAndRemove();
     });
 
     return {

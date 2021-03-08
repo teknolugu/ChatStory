@@ -5,12 +5,7 @@
       <p class="ml-2">Annotation</p>
     </div>
     <div class="flex items-center mt-4 space-x-2">
-      <input
-        v-model="text"
-        type="text"
-        class="border-gray-200 rounded-xl w-44"
-        placeholder="Annotation name"
-      />
+      <ui-input v-model="text" class="w-44" placeholder="Annotation..." />
       <ui-button icon class="text-red-500" @click="deleteNode">
         <ui-icon name="trash"></ui-icon>
       </ui-button>
@@ -23,9 +18,10 @@ import { nodes } from '@/utils/shared';
 import Node from '@/models/node';
 import UiIcon from '../ui/Icon.vue';
 import UiButton from '../ui/Button.vue';
+import UiInput from '../ui/Input.vue';
 
 export default {
-  components: { UiIcon, UiButton },
+  components: { UiIcon, UiButton, UiInput },
   props: {
     editor: {
       type: Object,

@@ -4,6 +4,7 @@ import NodeStart from '@/components/nodes/NodeStart.vue';
 import NodeChat from '@/components/nodes/NodeChat.vue';
 import NodeOption from '@/components/nodes/NodeOption.vue';
 import NodeEnd from '@/components/nodes/NodeEnd.vue';
+import NodeSettings from '@/components/nodes/NodeSettings.vue';
 import NodeAnnotation from '@/components/nodes/NodeAnnotation.vue';
 import { nodes } from './shared';
 import Node from '@/models/node';
@@ -18,6 +19,7 @@ export default function (element, storyId) {
   editor.start();
 
   editor.registerNode('start', NodeStart);
+  editor.registerNode('settings', NodeSettings);
   editor.registerNode('chat', NodeChat, componentProps, {});
   editor.registerNode('option', NodeOption, componentProps, {});
   editor.registerNode('annotation', NodeAnnotation, componentProps, {});
@@ -55,7 +57,7 @@ export default function (element, storyId) {
   });
   editor.on('nodeCreated', (id) => {
     const { name } = editor.getNodeFromId(id);
-    const nodeData = nodes[name].data;
+    const nodeData = nodes[name]?.data;
 
     if (nodeData) {
       Node.insert({
@@ -66,11 +68,11 @@ export default function (element, storyId) {
           type: name,
         },
       });
-      console.log(Node.all(), id);
     }
   });
 
   editor.addNode('start', 0, 1, 50, 200, 'start', {}, 'start', 'vue');
+  editor.addNode('settings', 0, 0, 50, 360, 'settings', {}, 'settings', 'vue');
 
   return editor;
 }

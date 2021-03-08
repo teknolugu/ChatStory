@@ -12,6 +12,7 @@
       </div>
       <chat-properties v-bind="{ editor }"></chat-properties>
     </div>
+    <settings-modal></settings-modal>
   </div>
 </template>
 <script>
@@ -19,11 +20,12 @@ import { onMounted, shallowRef } from 'vue';
 import { useRoute } from 'vue-router';
 import NodeList from './NodeList.vue';
 import ChatProperties from './ChatProperties/index.vue';
+import SettingsModal from './SettingsModal.vue';
 import initDrawflow from '@/utils/initDrawflow';
 import addNodeToDrawflow from '@/utils/addNodeToDrawflow';
 
 export default {
-  components: { NodeList, ChatProperties },
+  components: { NodeList, ChatProperties, SettingsModal },
   setup() {
     const editor = shallowRef(null);
     const route = useRoute();

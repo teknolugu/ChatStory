@@ -44,8 +44,9 @@ export default {
 
     const searchQuery = ref('');
     const nodes = computed(() => {
-      return nodesArry.filter(({ title }) =>
-        title.toLowerCase().includes(searchQuery.value.toLowerCase())
+      return nodesArry.filter(
+        ({ title, id }) =>
+          title.toLowerCase().includes(searchQuery.value.toLowerCase()) && id !== 'start'
       );
     });
 
