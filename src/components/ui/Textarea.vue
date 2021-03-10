@@ -1,5 +1,5 @@
 <template>
-  <label class="inline-block">
+  <label :class="[block ? 'block' : 'inline-block']">
     <span v-if="label" class="text-gray-500 text-sm ml-2 block">{{ label }}</span>
     <textarea
       ref="textarea"
@@ -11,6 +11,7 @@
           ? 'focus:ring-red-500 focus:border-red-500 border-red-500'
           : 'focus:border-primary focus:ring-primary',
       ]"
+      :style="{ height }"
       @input="emitValue"
     ></textarea>
     <span
@@ -46,7 +47,12 @@ export default {
       type: String,
       default: '',
     },
+    height: {
+      type: [Number, String],
+      default: '',
+    },
     error: Boolean,
+    block: Boolean,
     showDetail: Boolean,
   },
   emits: ['update:modelValue', 'change'],

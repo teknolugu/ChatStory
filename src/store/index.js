@@ -13,6 +13,10 @@ export default createStore({
   plugins: [VuexORM.install(database)],
   state: () => ({
     user: null,
+    editor: {
+      instance: null,
+      showPreview: false,
+    },
   }),
   mutations: {
     updateState(state, { key, value }) {

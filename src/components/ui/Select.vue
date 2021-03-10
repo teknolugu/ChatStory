@@ -1,5 +1,5 @@
 <template>
-  <label class="inline-block">
+  <label :class="[block ? 'block' : 'inline-block']">
     <span v-if="label" class="text-gray-500 text-sm ml-2">{{ label }}</span>
     <select
       class="rounded-xl ui-select w-full block border border-gray-200 transition bg-transparent focus:ring focus:ring-opacity-50"
@@ -42,6 +42,7 @@ export default {
       default: '',
     },
     error: Boolean,
+    block: Boolean,
     showDetail: Boolean,
   },
   emits: ['update:modelValue', 'change'],

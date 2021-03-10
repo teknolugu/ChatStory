@@ -3,10 +3,13 @@
     <div class="nav-content py-2 flex items-center border-b border-gray-100">
       <p>hello</p>
       <div class="flex-grow"></div>
+      <ui-button v-tooltip="'Preview'" class="mr-2" icon>
+        <ui-icon name="play" class="icon-ui"></ui-icon>
+      </ui-button>
       <ui-button variant="primary">
         <ui-icon
           name="paper-airplane"
-          class="icon-ui -ml-1 mr-1 transform rotate-45 -mt-1"
+          class="icon-ui mr-2 transform rotate-45 -mt-1"
           size="20"
         ></ui-icon>
         Publish

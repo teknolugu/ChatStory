@@ -1,77 +1,90 @@
 <template>
   <div class="py-5 container">
-    <h2 class="text-xl font-semibold">Story Details</h2>
-    <div class="mt-6 flex items-start">
-      <ui-card class="bg-white mr-5 w-7/12 space-y-2">
+    <div class="flex items-center">
+      <h4 class="text-xl font-semibold mb-8">Details</h4>
+      <div class="flex-grow"></div>
+      <ui-button variant="primary" class="w-24" @click="saveData">Save</ui-button>
+    </div>
+    <div class="flex">
+      <p class="font-semibold w-2/12 align-top">Story details</p>
+      <div class="space-y-3 border-b pb-5 inline-block flex-1">
         <ui-input
           v-model="validation.title.$model"
-          class="w-full"
+          class="w-6/12"
           placeholder="Story title"
           label="Title*"
           :error="validation.title.$dirty && validation.title.$invalid"
           :error-message="validation.title.$silentErrors[0]?.$message"
         ></ui-input>
-        <ui-textarea
-          v-model="validation.description.$model"
-          class="w-full"
-          placeholder="Description here"
-          label="Description*"
-          :error="validation.description.$dirty && validation.description.$invalid"
-          :error-message="validation.description.$silentErrors[0]?.$message"
-        ></ui-textarea>
-        <div class="flex items-center space-x-3">
-          <ui-select
-            v-model="validation.category.$model"
-            :error="validation.category.$dirty && validation.category.$invalid"
-            :error-message="validation.category.$silentErrors[0]?.$message"
-            show-detail
-            label="Category*"
+        <div class="description flex items-start">
+          <ui-textarea
+            v-model="validation.description.$model"
+            height="120px"
             class="w-6/12"
-            placeholder="Select category"
-          ></ui-select>
-          <ui-input
-            v-model="story.tags"
-            class="w-6/12"
-            placeholder="tag 1, tag 2"
-            label="Tags (use comma as separator)"
-            show-detail
-          ></ui-input>
-        </div>
-        <div class="pb-8">
-          <div v-for="(image, index) in story.images" :key="index" class="flex items-end mb-2">
-            <ui-input
-              v-model="story.images[index]"
-              class="flex-1 mr-3"
-              placeholder="https://example.com/image.png"
-              :label="`Image ${index + 1}`"
-            ></ui-input>
-            <ui-button
-              v-if="story.images.length !== 1"
-              icon
-              class="text-red-500"
-              @click="updateImage('delete', index)"
-            >
-              <ui-icon name="trash"></ui-icon>
-            </ui-button>
+            placeholder="Description here"
+            label="Description*"
+            :error="validation.description.$dirty && validation.description.$invalid"
+            :error-message="validation.description.$silentErrors[0]?.$message"
+          ></ui-textarea>
+          <div class="ml-4 -l-2 border-primary pl-2 mt-4">
+            <p>Supported Markdown:</p>
+            <ul class="list-disc list-inside">
+              <li><b>**Bold**</b></li>
+              <li><i>_Italic_</i></li>
+            </ul>
           </div>
-          <ui-button v-if="story.images.length !== 3" @click="updateImage('add')">
-            <ui-icon class="mr-1 -ml-2" name="plus"></ui-icon>
-            Add Image
-          </ui-button>
         </div>
-        <ui-button variant="primary" class="w-full" @click="saveData">Save</ui-button>
-      </ui-card>
-      <div class="w-5/12">
-        <div
-          class="w-full h-64 rounded-xl bg-center bg-no-repeat bg-cover"
-          style="background-image: url('https://picsum.photos/600')"
-        ></div>
-        <h4 class="text-2xl font-semibold mt-4">{{ story.title }}</h4>
-        <div class="flex items-center mb-6 mt-4">
-          <img src="https://picsum.photos/600" class="rounded-full h-10 w-10" />
-          <p class="ml-4 font-semibold">Name</p>
+        <ui-select
+          v-model="validation.category.$model"
+          :error="validation.category.$dirty && validation.category.$invalid"
+          :error-message="validation.category.$silentErrors[0]?.$message"
+          class="w-4/12"
+          label="Category*"
+          placeholder="Select category"
+        ></ui-select>
+        <ui-input
+          v-model="story.tags"
+          class="w-6/12"
+          placeholder="tag 1, tag 2"
+          label="Tags (use comma as separator)"
+          block
+        ></ui-input>
+      </div>
+    </div>
+    <div class="flex mt-5">
+      <p class="font-semibold w-2/12 align-top">Graphic assets</p>
+      <div class="space-y-3 border-b pb-5 inline-block flex-1">
+        <div class="flex">
+          <ui-input
+            v-model="story.iconImage"
+            class="w-6/12"
+            label="Story icon"
+            :error="validation.iconImage.$dirty && validation.iconImage.$invalid"
+            :error-message="validation.iconImage.$silentErrors[0]?.$message"
+            placeholder="https://example.com/image.png"
+          ></ui-input>
+          <div class="mt-6 ml-4">
+            <img src="https://picsum.photos/500" class="w-16 rounded-xl" />
+            <p class="mt-1 text-sm">Recommended size 64x64 pixels</p>
+          </div>
         </div>
-        <p class="whitespace-pre">{{ story.description }}</p>
+        <div class="flex">
+          <ui-input
+            v-model="story.bannerImage"
+            class="w-6/12"
+            label="Banner*"
+            :error="validation.bannerImage.$dirty && validation.bannerImage.$invalid"
+            :error-message="validation.bannerImage.$silentErrors[0]?.$message"
+            placeholder="https://example.com/image.png"
+          ></ui-input>
+          <div class="mt-6 ml-4">
+            <div
+              class="bg-cover bg-center rounded-xl bg-no-repeat"
+              style="background-image: url('https://picsum.photos/600'); width: 120px; height: 80px"
+            ></div>
+            <p class="mt-1 text-sm">Recommended size 1280x720 pixels</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -93,7 +106,8 @@ export default {
       description: '',
       tags: '',
       category: '',
-      images: [''],
+      bannerImage: '',
+      iconImage: '',
     });
 
     const rules = {
@@ -110,7 +124,11 @@ export default {
       category: {
         required,
       },
-      images: {
+      bannerImage: {
+        required,
+        url,
+      },
+      iconImage: {
         url,
       },
     };
