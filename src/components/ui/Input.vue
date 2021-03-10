@@ -21,7 +21,10 @@
         <slot name="append"></slot>
       </span>
     </div>
-    <span v-if="error" class="text-sm ml-2 h-6 inline-block text-red-500">
+    <span
+      v-if="(error && errorMessage) || showDetail"
+      class="text-sm ml-2 h-6 inline-block text-red-500"
+    >
       {{ errorMessage }}
     </span>
   </label>
@@ -51,6 +54,7 @@ export default {
     },
     hideAppearance: Boolean,
     error: Boolean,
+    showDetail: Boolean,
   },
   emits: ['update:modelValue', 'input', 'change'],
   setup(props, { emit }) {
@@ -72,11 +76,10 @@ export default {
 }
 .ui-input.hide-appearance::-webkit-outer-spin-button,
 .ui-input.hide-appearance::-webkit-inner-spin-button {
-  /* display: none; <- Crashes Chrome on hover */
   -webkit-appearance: none;
-  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  margin: 0;
 }
 .ui-input.hide-appearance[type='number'] {
-  -moz-appearance: textfield; /* Firefox */
+  -moz-appearance: textfield;
 }
 </style>

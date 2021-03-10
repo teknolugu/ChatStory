@@ -1,6 +1,6 @@
 <template>
   <div class="editor-characters p-5 container">
-    <h3 class="text-xl mb-6">Characters</h3>
+    <h3 class="text-xl mb-6 font-semibold">Characters</h3>
     <div class="grid grid-cols-5 gap-4">
       <ui-card
         class="flex flex-col items-center justify-center cursor-pointer"
@@ -48,28 +48,28 @@
         class="h-28 w-28 rounded-full mx-auto"
       />
       <ui-input
-        v-model="characterValidation.profileUrl.$model"
+        v-model="validation.profileUrl.$model"
         label="Profile Image URL"
         class="w-full mt-4"
         placeholder="https://example.com/image.png"
-        :error="characterValidation.profileUrl.$dirty && characterValidation.profileUrl.$invalid"
-        :error-message="characterValidation.profileUrl.$silentErrors[0]?.$message"
+        :error="validation.profileUrl.$dirty && validation.profileUrl.$invalid"
+        :error-message="validation.profileUrl.$silentErrors[0]?.$message"
       ></ui-input>
       <ui-input
-        v-model="characterValidation.name.$model"
+        v-model="validation.name.$model"
         label="Name"
         class="w-full mt-2"
         placeholder="John Doe"
         show-detail
-        :error="characterValidation.name.$dirty && characterValidation.name.$invalid"
-        :error-message="characterValidation.name.$silentErrors[0]?.$message"
+        :error="validation.name.$dirty && validation.name.$invalid"
+        :error-message="validation.name.$silentErrors[0]?.$message"
       ></ui-input>
       <div class="mt-8 flex space-x-2">
         <ui-button class="w-6/12" @click="state.showModal = false"> Cancel </ui-button>
         <ui-button
           class="w-6/12"
           variant="primary"
-          :disabled="characterValidation.$invalid"
+          :disabled="validation.$invalid"
           @click="saveBtnHandler"
         >
           Save
@@ -115,14 +115,14 @@ export default {
       name: { required, minLength: minLength(4) },
       profileUrl: { required, url },
     };
-    const characterValidation = useVuelidate(rules, tempCharacter);
+    const validation = useVuelidate(rules, tempCharacter);
 
     function showModal(type, character = {}) {
       state.characterId = character?.id || '';
       tempCharacter.profileUrl = character?.profileUrl || '';
       tempCharacter.name = character?.name || '';
 
-      characterValidation.value.$reset();
+      validation.value.$reset();
 
       state.modalType = type;
       state.showModal = true;
@@ -168,12 +168,12 @@ export default {
       state,
       showModal,
       characters,
+      validation,
       mainCharacter,
       tempCharacter,
       saveBtnHandler,
       deleteCharacter,
       changeMainCharacter,
-      characterValidation,
     };
   },
 };

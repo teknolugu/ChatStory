@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-white z-50 w-full px-5 shadow-sm absolute top-0">
+  <nav class="bg-white z-50 w-full px-5 shadow-sm fixed top-0">
     <div class="nav-content py-2 flex items-center border-b border-gray-100">
       <p>hello</p>
       <div class="flex-grow"></div>
@@ -42,7 +42,7 @@ export default {
   emits: ['update:activeTab'],
   setup(props) {
     const tabs = [
-      { id: 'editor-detail', name: 'details' },
+      { id: 'editor-details', name: 'details' },
       { id: 'editor-story', name: 'story flow' },
       { id: 'editor-characters', name: 'characters' },
       { id: 'editor-style', name: 'chat style' },

@@ -4,11 +4,21 @@
     <textarea
       ref="textarea"
       v-bind="{ value: modelValue, placeholder }"
-      :value="modelValue"
-      class="ui-textarea w-full ui-input rounded-xl border border-gray-200 transition bg-transparent focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
-      :class="{ 'overflow-hidden resize-none': autoresize }"
+      class="ui-textarea w-full ui-input rounded-xl border border-gray-200 transition bg-transparent focus:ring focus:ring-opacity-50"
+      :class="[
+        { 'overflow-hidden resize-none': autoresize },
+        error
+          ? 'focus:ring-red-500 focus:border-red-500 border-red-500'
+          : 'focus:border-primary focus:ring-primary',
+      ]"
       @input="emitValue"
     ></textarea>
+    <span
+      v-if="(error && errorMessage) || showDetail"
+      class="text-sm ml-2 h-6 inline-block text-red-500"
+    >
+      {{ errorMessage }}
+    </span>
   </label>
 </template>
 <script>
@@ -32,8 +42,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    errorMessage: {
+      type: String,
+      default: '',
+    },
+    error: Boolean,
+    showDetail: Boolean,
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'change'],
   setup(props, { emit }) {
     const textarea = ref(null);
 
@@ -47,6 +63,7 @@ export default {
       const { value } = target;
 
       emit('update:modelValue', value);
+      emit('change', value);
       calcHeight();
     }
 
