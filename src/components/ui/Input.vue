@@ -16,17 +16,18 @@
           { 'pr-10': $slots.append, 'pl-10': $slots.prepend },
         ]"
         @input="emitValue"
+        @blur="$emit('blur', $event)"
       />
       <span v-if="$slots.append" class="mr-3 right-0 absolute inline-block">
         <slot name="append"></slot>
       </span>
     </div>
-    <span
+    <div
       v-if="(error && errorMessage) || showDetail"
       class="text-sm ml-2 h-6 inline-block text-red-500"
     >
-      {{ errorMessage }}
-    </span>
+      <span v-if="error">{{ errorMessage }}</span>
+    </div>
   </label>
 </template>
 <script>
@@ -57,7 +58,7 @@ export default {
     block: Boolean,
     showDetail: Boolean,
   },
-  emits: ['update:modelValue', 'input', 'change'],
+  emits: ['update:modelValue', 'input', 'change', 'blur'],
   setup(props, { emit }) {
     function emitValue({ target }) {
       emit('update:modelValue', target.value);

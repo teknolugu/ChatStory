@@ -61,7 +61,7 @@ export default {
 
       const chatsData = node.data.chats;
       const chatsWithCharacters = chatsData.map((chat) => {
-        const character = Character.find(chat.characterId);
+        const character = Character.find(chat.characterId) || {};
 
         return { ...chat, character };
       });

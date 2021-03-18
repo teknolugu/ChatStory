@@ -14,12 +14,12 @@
       <option v-if="placeholder" value="" disabled selected>{{ placeholder }}</option>
       <slot></slot>
     </select>
-    <span
+    <div
       v-if="(error && errorMessage) || showDetail"
       class="text-sm ml-2 h-6 inline-block text-red-500"
     >
-      {{ errorMessage }}
-    </span>
+      <span v-if="error">{{ errorMessage }}</span>
+    </div>
   </label>
 </template>
 <script>

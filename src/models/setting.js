@@ -10,6 +10,7 @@ class Setting extends Model {
     return {
       id: this.uid(() => nanoid()),
       backgroundMusic: this.string(''),
+      chatDelay: this.number(1000),
       storyId: this.attr(null),
     };
   }

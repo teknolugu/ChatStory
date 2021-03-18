@@ -16,19 +16,24 @@
   </div>
 </template>
 <script>
-import { onMounted, shallowRef } from 'vue';
+import { onMounted, shallowRef, onDeactivated } from 'vue';
 import { useRoute } from 'vue-router';
+import emitter from 'tiny-emitter/instance';
 import NodeList from './NodeList.vue';
 import ChatProperties from './ChatProperties/index.vue';
 import SettingsModal from './SettingsModal.vue';
+import Node from '@/models/node';
 import initDrawflow from '@/utils/initDrawflow';
 import addNodeToDrawflow from '@/utils/addNodeToDrawflow';
+import convertEditorData from '@/utils/convertEditorData';
 
 export default {
   components: { NodeList, ChatProperties, SettingsModal },
   setup() {
     const editor = shallowRef(null);
     const route = useRoute();
+
+    const storyId = route.params.storyid;
 
     function dropHandler({ dataTransfer, clientX, clientY }) {
       const name = dataTransfer.getData('node');
@@ -41,10 +46,22 @@ export default {
       event.preventDefault();
     }
 
+    emitter.on('preview-story', () => {
+      console.log(editor.value.export());
+    });
+
     onMounted(() => {
-      const storyId = route.params.storyid;
-      editor.value = initDrawflow(document.querySelector('#drawflow'), storyId);
-      console.log(editor.value);
+      const nodes = Node.query().where('storyId', storyId).get();
+      const drawflowData = convertEditorData.toDrawflow(nodes);
+
+      editor.value = initDrawflow({
+        element: document.querySelector('#drawflow'),
+        storyId,
+        data: drawflowData,
+      });
+    });
+    onDeactivated(() => {
+      convertEditorData.toNode(storyId, editor.value.export());
     });
 
     return {

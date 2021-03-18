@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import { ref } from 'vue';
 import { nodes } from './shared';
 
 export default function ({ name, editor, clientX, clientY }) {
@@ -14,5 +15,5 @@ export default function ({ name, editor, clientX, clientY }) {
     editor.precanvas.getBoundingClientRect().y *
       (editor.precanvas.clientHeight / (editor.precanvas.clientHeight * editor.zoom));
 
-  editor.addNode(name, input, output, xPosition, yPosition, name, {}, name, 'vue');
+  editor.addNode(name, input, output, xPosition, yPosition, name, ref(data), name, 'vue');
 }

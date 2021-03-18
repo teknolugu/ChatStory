@@ -1,7 +1,7 @@
 <template>
   <div class="py-5 container">
-    <div class="flex items-center">
-      <h4 class="text-xl font-semibold mb-8">Details</h4>
+    <div class="flex items-center mb-8">
+      <h4 class="text-xl font-semibold">Details</h4>
       <div class="flex-grow"></div>
       <ui-button variant="primary" class="w-24" @click="saveData">Save</ui-button>
     </div>
@@ -16,24 +16,16 @@
           :error="validation.title.$dirty && validation.title.$invalid"
           :error-message="validation.title.$silentErrors[0]?.$message"
         ></ui-input>
-        <div class="description flex items-start">
-          <ui-textarea
-            v-model="validation.description.$model"
-            height="120px"
-            class="w-6/12"
-            placeholder="Description here"
-            label="Description*"
-            :error="validation.description.$dirty && validation.description.$invalid"
-            :error-message="validation.description.$silentErrors[0]?.$message"
-          ></ui-textarea>
-          <div class="ml-4 -l-2 border-primary pl-2 mt-4">
-            <p>Supported Markdown:</p>
-            <ul class="list-disc list-inside">
-              <li><b>**Bold**</b></li>
-              <li><i>_Italic_</i></li>
-            </ul>
-          </div>
-        </div>
+        <ui-textarea
+          v-model="validation.description.$model"
+          height="120px"
+          class="w-6/12"
+          block
+          placeholder="Description here"
+          label="Description*"
+          :error="validation.description.$dirty && validation.description.$invalid"
+          :error-message="validation.description.$silentErrors[0]?.$message"
+        ></ui-textarea>
         <ui-select
           v-model="validation.category.$model"
           :error="validation.category.$dirty && validation.category.$invalid"
@@ -64,7 +56,7 @@
             placeholder="https://example.com/image.png"
           ></ui-input>
           <div class="mt-6 ml-4">
-            <img src="https://picsum.photos/500" class="w-16 rounded-xl" />
+            <img :src="story.iconImage" :alt="`${story.title} icon`" class="w-16 rounded-xl" />
             <p class="mt-1 text-sm">Recommended size 64x64 pixels</p>
           </div>
         </div>
@@ -80,7 +72,11 @@
           <div class="mt-6 ml-4">
             <div
               class="bg-cover bg-center rounded-xl bg-no-repeat"
-              style="background-image: url('https://picsum.photos/600'); width: 120px; height: 80px"
+              :style="{
+                'background-image': `url('${story.bannerImage}')`,
+                width: '120px',
+                height: '80px',
+              }"
             ></div>
             <p class="mt-1 text-sm">Recommended size 1280x720 pixels</p>
           </div>

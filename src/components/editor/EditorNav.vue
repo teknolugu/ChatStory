@@ -3,7 +3,7 @@
     <div class="nav-content py-2 flex items-center border-b border-gray-100">
       <p>hello</p>
       <div class="flex-grow"></div>
-      <ui-button v-tooltip="'Preview'" class="mr-2" icon>
+      <ui-button v-tooltip="'Preview'" class="mr-2" icon @click="previewStory">
         <ui-icon name="play" class="icon-ui"></ui-icon>
       </ui-button>
       <ui-button variant="primary">
@@ -34,6 +34,9 @@
 </template>
 <script>
 import { ref } from 'vue';
+// import { useRoute } from 'vue-router';
+import emitter from 'tiny-emitter/instance';
+import Story from '@/models/story';
 
 export default {
   props: {
@@ -42,17 +45,24 @@ export default {
       default: '',
     },
   },
-  emits: ['update:activeTab'],
-  setup(props) {
+  emits: ['update:activeTab', 'showPreview'],
+  setup(props, { emit }) {
     const tabs = [
       { id: 'editor-details', name: 'details' },
       { id: 'editor-story', name: 'story flow' },
       { id: 'editor-characters', name: 'characters' },
       { id: 'editor-style', name: 'chat style' },
     ];
+    // const route = useRoute();
+
+    function previewStory() {
+      emit('showPreview');
+      emitter.emit('preview-story');
+    }
 
     return {
       tabs,
+      previewStory,
     };
   },
 };

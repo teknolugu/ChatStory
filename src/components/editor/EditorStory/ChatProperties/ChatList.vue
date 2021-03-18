@@ -90,7 +90,9 @@ export default {
     );
 
     function updateNode(type) {
-      const node = Node.find(props.nodeId)?.data || {};
+      const node = Node.find(props.nodeId)?.data ?? {};
+
+      if (!node) return;
 
       if (type === 'delete') {
         const index = node.chats.findIndex(({ id }) => id === props.chat.id);

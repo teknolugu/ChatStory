@@ -12,6 +12,10 @@ class Node extends Model {
       type: this.string(''),
       storyId: this.attr(null),
       data: this.attr(null),
+      outputs: this.attr(null),
+      inputs: this.attr(null),
+      pos_x: this.number(0),
+      pos_y: this.number(0),
     };
   }
 }

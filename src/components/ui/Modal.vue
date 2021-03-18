@@ -8,9 +8,11 @@
         <div
           v-if="show"
           class="bg-black p-5 overflow-y-auto bg-opacity-20 modal-ui__content-container z-50 flex justify-center items-end md:items-center"
+          :style="{ 'backdrop-filter': blur && 'blur(2px)' }"
           @click.self="closeModal"
         >
-          <ui-card class="modal-ui__content shadow-lg w-full" :class="[contentClass]">
+          <slot v-if="customContent"></slot>
+          <ui-card v-else class="modal-ui__content shadow-lg w-full" :class="[contentClass]">
             <div class="mb-4">
               <div class="flex items-center justify-between">
                 <span class="content-header">
@@ -49,7 +51,9 @@ export default {
       type: String,
       default: 'max-w-lg',
     },
+    customContent: Boolean,
     persist: Boolean,
+    blur: Boolean,
     disabledTeleport: Boolean,
   },
   emits: ['close', 'update:modelValue'],
@@ -57,12 +61,17 @@ export default {
     const show = ref(false);
     const modalContent = ref(null);
 
+    function toggleBodyOverflow(value) {
+      document.body.classList.toggle('overflow-hidden', value);
+    }
     function closeModal() {
       if (props.persist) return;
 
       show.value = false;
       emit('close', false);
       emit('update:modelValue', false);
+
+      toggleBodyOverflow(false);
     }
     function keyupHandler({ code }) {
       if (code === 'Escape') closeModal();
@@ -72,6 +81,7 @@ export default {
       () => props.modelValue,
       (value) => {
         show.value = value;
+        toggleBodyOverflow(value);
       },
       { immediate: true }
     );

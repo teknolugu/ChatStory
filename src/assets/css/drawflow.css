@@ -1,3 +1,11 @@
+.drawflow .drawflow-node.option .outputs {
+  top: 72px;
+  transform: none;
+}
+.drawflow .drawflow-node.option .output {
+  margin-bottom: 34px;
+}
+
 .drawflow,
 .drawflow .parent-node {
   position: relative

@@ -6,6 +6,7 @@
 </template>
 <script>
 import Story from './models/story';
+import { nodesData } from './utils/shared';
 
 export default {
   setup() {
@@ -15,14 +16,24 @@ export default {
         title: 'My story',
         description: 'this is my story',
         characters: [
-          { name: 'Sophia', profileUrl: 'https://ui-avatars.com/api/?name=Shopia' },
-          { name: 'Random', profileUrl: 'https://ui-avatars.com/api/?name=Random' },
+          {
+            id: '1yssPZWt2u59Hag2j6iIP',
+            name: 'Sophia',
+            profileUrl:
+              'https://avataaars.io/?avatarStyle=Circle&topType=ShortHairShortRound&accessoriesType=Prescription02&hairColor=SilverGray&facialHairType=BeardLight&facialHairColor=Platinum&clotheType=BlazerShirt&eyeType=Squint&eyebrowType=RaisedExcitedNatural&mouthType=Serious&skinColor=Light',
+          },
+          {
+            id: 'MHAC5I8Vvnp7UMIYMyucL',
+            name: 'Random',
+            profileUrl: 'https://ui-avatars.com/api/?name=Random',
+          },
         ],
+        nodes: nodesData,
         style: {},
         setting: {},
       },
     }).then((data) => {
-      console.log(data, Story.all());
+      console.log(data, Story.query().withAll().first());
     });
   },
 };

@@ -6,11 +6,12 @@ import NodeOption from '@/components/nodes/NodeOption.vue';
 import NodeEnd from '@/components/nodes/NodeEnd.vue';
 import NodeSettings from '@/components/nodes/NodeSettings.vue';
 import NodeAnnotation from '@/components/nodes/NodeAnnotation.vue';
+import NodeTransition from '@/components/nodes/NodeTransition.vue';
 import { nodes } from './shared';
 import Node from '@/models/node';
 import '@/assets/css/drawflow.css';
 
-export default function (element, storyId) {
+export default function ({ element, storyId, data }) {
   const editor = new Drawflow(element, Vue);
   const componentProps = { editor, name: 'test' };
 
@@ -23,6 +24,7 @@ export default function (element, storyId) {
   editor.registerNode('chat', NodeChat, componentProps, {});
   editor.registerNode('option', NodeOption, componentProps, {});
   editor.registerNode('annotation', NodeAnnotation, componentProps, {});
+  editor.registerNode('transition', NodeTransition, componentProps, {});
   editor.registerNode('end', NodeEnd);
 
   editor.removeNodeId = function (id) {
@@ -49,7 +51,7 @@ export default function (element, storyId) {
     const { name: inputName } = editor.getNodeFromId(input_id);
     const { allowedInput, maxConnection } = nodes[outputName];
     const isAllowed = allowedInput.includes(inputName);
-    const isMaxConnections = outputs.output_1.connections.length > maxConnection;
+    const isMaxConnections = outputs[output_class].connections.length > maxConnection;
 
     if (!isAllowed || isMaxConnections) {
       editor.removeSingleConnection(output_id, input_id, output_class, input_class);
@@ -57,21 +59,27 @@ export default function (element, storyId) {
   });
   editor.on('nodeCreated', (id) => {
     const { name } = editor.getNodeFromId(id);
-    const nodeData = nodes[name]?.data;
+    const nodeData = nodes[name]?.data || null;
 
-    if (nodeData) {
-      Node.insert({
-        data: {
-          id,
-          data: nodeData,
-          storyId,
-          type: name,
-        },
-      });
-    }
+    if (name === 'settings') return;
+
+    Node.insert({
+      data: {
+        id,
+        data: nodeData,
+        storyId,
+        type: name,
+      },
+    });
   });
 
-  editor.addNode('start', 0, 1, 50, 200, 'start', {}, 'start', 'vue');
+  if (data) {
+    editor.import(data);
+  }
+
+  if (editor.getNodesFromName('start').length === 0) {
+    editor.addNode('start', 0, 1, 50, 200, 'start', {}, 'start', 'vue');
+  }
   editor.addNode('settings', 0, 0, 50, 360, 'settings', {}, 'settings', 'vue');
 
   return editor;

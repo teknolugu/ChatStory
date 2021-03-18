@@ -1,29 +1,27 @@
 <template>
-  <transition-slide direction="right">
-    <div
-      v-if="state.show"
-      class="absolute h-full w-80 right-0 bg-white top-0 z-20 scroll flex flex-col"
-    >
-      <div class="flex justify-between items-center mb-2 pt-5 px-5">
-        <p class="text-xl">Chats</p>
-        <ui-icon name="x" class="cursor-pointer" @click="close"></ui-icon>
-      </div>
-      <draggable
-        v-model="chats"
-        item-key="id"
-        class="space-y-4 flex-1 overflow-auto p-5 scroll"
-        handle="#handle"
-      >
-        <template #item="{ element, index }">
-          <chat-list
-            v-bind="{ chat: element, characters, index, nodeId: state.nodeId, chats }"
-            @update="updateNodeData('chats', $event)"
-          ></chat-list>
-        </template>
-      </draggable>
-      <add-chat class="px-5 pb-5" v-bind="{ characters, node: nodeData }"></add-chat>
+  <div
+    v-if="state.show"
+    class="absolute h-full w-80 right-0 bg-white top-0 z-20 scroll flex flex-col"
+  >
+    <div class="flex justify-between items-center mb-2 pt-5 px-5">
+      <p class="text-xl">Chats</p>
+      <ui-icon name="x" class="cursor-pointer" @click="close"></ui-icon>
     </div>
-  </transition-slide>
+    <draggable
+      v-model="chats"
+      item-key="id"
+      class="space-y-4 flex-1 overflow-auto p-5 scroll"
+      handle="#handle"
+    >
+      <template #item="{ element, index }">
+        <chat-list
+          v-bind="{ chat: element, characters, index, nodeId: state.nodeId, chats }"
+          @update="updateNodeData('chats', $event)"
+        ></chat-list>
+      </template>
+    </draggable>
+    <add-chat class="px-5 pb-5" v-bind="{ characters, node: nodeData }"></add-chat>
+  </div>
 </template>
 <script>
 import { computed, shallowReactive, watch } from 'vue';
@@ -67,6 +65,8 @@ export default {
     });
 
     function updateNodeData(key, value) {
+      if (!nodeData.value) return;
+
       Node.update({
         where: state.nodeId,
         data: {
