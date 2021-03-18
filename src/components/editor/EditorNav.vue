@@ -1,16 +1,20 @@
 <template>
   <nav class="bg-white z-50 w-full px-5 shadow-sm fixed top-0">
     <div class="nav-content py-2 flex items-center border-b border-gray-100">
-      <p>hello</p>
+      <p>{{ story.title }}</p>
       <div class="flex-grow"></div>
-      <ui-button v-tooltip="'Preview'" class="mr-2" icon @click="previewStory">
+      <ui-button v-tooltip="'Preview'" :disabled="loading" class="mr-2" icon @click="previewStory">
         <ui-icon name="play" class="icon-ui"></ui-icon>
+      </ui-button>
+      <ui-button v-tooltip="'Save draft'" icon class="text-primary mr-2">
+        <ui-icon name="save"></ui-icon>
       </ui-button>
       <ui-button variant="primary">
         <ui-icon
           name="paper-airplane"
           class="icon-ui mr-2 transform rotate-45 -mt-1"
           size="20"
+          :disabled="loading"
         ></ui-icon>
         Publish
       </ui-button>
@@ -34,15 +38,21 @@
 </template>
 <script>
 import { ref } from 'vue';
-// import { useRoute } from 'vue-router';
 import emitter from 'tiny-emitter/instance';
-import Story from '@/models/story';
 
 export default {
   props: {
     activeTab: {
       type: String,
       default: '',
+    },
+    loading: {
+      type: Boolean,
+      default: true,
+    },
+    story: {
+      type: Object,
+      default: () => ({}),
     },
   },
   emits: ['update:activeTab', 'showPreview'],
@@ -53,7 +63,6 @@ export default {
       { id: 'editor-characters', name: 'characters' },
       { id: 'editor-style', name: 'chat style' },
     ];
-    // const route = useRoute();
 
     function previewStory() {
       emit('showPreview');

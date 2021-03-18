@@ -2,14 +2,19 @@
   <div class="editor">
     <editor-nav
       v-model:activeTab="state.activeTab"
+      :loading="state.loading"
+      :story="state.story"
       @showPreview="state.showPreview = true"
     ></editor-nav>
     <main class="h-screen" style="padding-top: 95px">
-      <keep-alive>
+      <div v-if="state.loading" class="py-10 text-center">
+        <ui-spinner size="36"></ui-spinner>
+      </div>
+      <keep-alive v-else>
         <component :is="state.activeTab"></component>
       </keep-alive>
     </main>
-    <ui-modal v-model="state.showPreview" custom-content persist>
+    <ui-modal v-if="!state.loading" v-model="state.showPreview" custom-content persist>
       <chats-container>
         <template #header>
           <div class="flex-grow"></div>
@@ -20,7 +25,9 @@
   </div>
 </template>
 <script>
-import { shallowReactive } from 'vue';
+import { shallowReactive, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import Story from '@/models/story';
 import EditorNav from '@/components/editor/EditorNav.vue';
 import EditorStory from '@/components/editor/EditorStory/index.vue';
 import EditorCharacters from '@/components/editor/EditorCharacters.vue';
@@ -38,9 +45,27 @@ export default {
     ChatsContainer,
   },
   setup() {
+    const router = useRouter();
+
     const state = shallowReactive({
       activeTab: 'editor-details',
       showPreview: false,
+      loading: true,
+      story: {},
+    });
+
+    onMounted(() => {
+      console.log(router);
+      const storyId = router.currentRoute.value.params.storyid;
+      const story = Story.find(storyId);
+
+      if (!story) {
+        router.push('/');
+        return;
+      }
+
+      state.story = story;
+      state.loading = false;
     });
 
     return {

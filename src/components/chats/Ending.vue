@@ -1,8 +1,8 @@
 <template>
   <transition name="ending" appear @after-enter="transitionComplete">
     <div
-      class="bg-gray-800 absolute h-full w-full top-0 ending left-0 flex justify-center items-center"
       v-if="show"
+      class="bg-gray-800 absolute h-full w-full top-0 ending left-0 flex justify-center items-center"
     >
       <p class="text-2xl">The End?</p>
     </div>

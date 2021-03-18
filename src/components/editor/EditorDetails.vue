@@ -5,13 +5,14 @@
       <div class="flex-grow"></div>
       <ui-button variant="primary" class="w-24" @click="saveData">Save</ui-button>
     </div>
-    <div class="flex">
-      <p class="font-semibold w-2/12 align-top">Story details</p>
+    <div class="flex lg:flex-row flex-col">
+      <p class="font-semibold lg:w-2/12 align-top mb-4 lg:mb-0">Story details</p>
       <div class="space-y-3 border-b pb-5 inline-block flex-1">
         <ui-input
           v-model="validation.title.$model"
-          class="w-6/12"
+          class="lg:w-6/12"
           placeholder="Story title"
+          block
           label="Title*"
           :error="validation.title.$dirty && validation.title.$invalid"
           :error-message="validation.title.$silentErrors[0]?.$message"
@@ -19,7 +20,7 @@
         <ui-textarea
           v-model="validation.description.$model"
           height="120px"
-          class="w-6/12"
+          class="lg:w-6/12"
           block
           placeholder="Description here"
           label="Description*"
@@ -30,46 +31,49 @@
           v-model="validation.category.$model"
           :error="validation.category.$dirty && validation.category.$invalid"
           :error-message="validation.category.$silentErrors[0]?.$message"
-          class="w-4/12"
+          class="lg:w-4/12"
+          block
           label="Category*"
           placeholder="Select category"
         ></ui-select>
         <ui-input
           v-model="story.tags"
-          class="w-6/12"
+          class="lg:w-6/12"
           placeholder="tag 1, tag 2"
           label="Tags (use comma as separator)"
           block
         ></ui-input>
       </div>
     </div>
-    <div class="flex mt-5">
-      <p class="font-semibold w-2/12 align-top">Graphic assets</p>
+    <div class="flex lg:flex-row flex-col mt-5">
+      <p class="font-semibold lg:w-2/12 align-top mb-4 lg:mb-0">Graphic assets</p>
       <div class="space-y-3 border-b pb-5 inline-block flex-1">
-        <div class="flex">
+        <div class="flex flex-col lg:flex-row">
           <ui-input
             v-model="story.iconImage"
-            class="w-6/12"
+            class="lg:w-6/12 mb-1 lg:mb-0"
+            block
             label="Story icon"
             :error="validation.iconImage.$dirty && validation.iconImage.$invalid"
             :error-message="validation.iconImage.$silentErrors[0]?.$message"
             placeholder="https://example.com/image.png"
           ></ui-input>
-          <div class="mt-6 ml-4">
+          <div class="mt-6 lg:ml-4">
             <img :src="story.iconImage" :alt="`${story.title} icon`" class="w-16 rounded-xl" />
             <p class="mt-1 text-sm">Recommended size 64x64 pixels</p>
           </div>
         </div>
-        <div class="flex">
+        <div class="flex flex-col lg:flex-row">
           <ui-input
             v-model="story.bannerImage"
-            class="w-6/12"
+            class="lg:w-6/12"
+            block
             label="Banner*"
             :error="validation.bannerImage.$dirty && validation.bannerImage.$invalid"
             :error-message="validation.bannerImage.$silentErrors[0]?.$message"
             placeholder="https://example.com/image.png"
           ></ui-input>
-          <div class="mt-6 ml-4">
+          <div class="mt-6 lg:ml-4">
             <div
               class="bg-cover bg-center rounded-xl bg-no-repeat"
               :style="{

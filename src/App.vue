@@ -15,6 +15,7 @@ export default {
         id: 'test',
         title: 'My story',
         description: 'this is my story',
+        bannerImage: 'https://picsum.photos/600',
         characters: [
           {
             id: '1yssPZWt2u59Hag2j6iIP',

@@ -141,7 +141,7 @@ class Story extends Node {
     this.chatContainer.onclick = () => {
       this.chatHandler();
       clearTimeout(timeout);
-    }
+    };
   }
 
   on(name, callback) {
