@@ -19,20 +19,29 @@
         Publish
       </ui-button>
     </div>
-    <div class="nav-tab flex items-stretch text-sm">
-      <div
-        v-for="tab in tabs"
-        :key="tab"
-        class="tab px-4 py-2 transition cursor-pointer capitalize"
-        :class="[
-          activeTab === tab.id
-            ? 'border-b-2 border-primary text-primary'
-            : 'text-gray-500 hover:text-gray-700',
-        ]"
-        @click="$emit('update:activeTab', tab.id)"
-      >
-        {{ tab.name }}
-      </div>
+    <div class="nav-tab flex items-center text-sm">
+      <ui-icon
+        v-show="activeTab === 'editor-story'"
+        v-tooltip="'Show blocks'"
+        name="view-grid"
+        class="text-primary lg:hidden mr-2"
+        @click="showBlocks"
+      ></ui-icon>
+      <ui>
+        <li
+          v-for="tab in tabs"
+          :key="tab"
+          class="tab px-4 py-2 transition cursor-pointer capitalize inline-block"
+          :class="[
+            activeTab === tab.id
+              ? 'border-b-2 border-primary text-primary'
+              : 'text-gray-500 hover:text-gray-700',
+          ]"
+          @click="$emit('update:activeTab', tab.id)"
+        >
+          {{ tab.name }}
+        </li>
+      </ui>
     </div>
   </nav>
 </template>
@@ -68,9 +77,13 @@ export default {
       emit('showPreview');
       emitter.emit('preview-story');
     }
+    function showBlocks() {
+      emitter.emit('show-blocks');
+    }
 
     return {
       tabs,
+      showBlocks,
       previewStory,
     };
   },

@@ -1,12 +1,7 @@
 <template>
-  <div class="content h-full editor-story flex items-stretch">
+  <div class="relative content h-full editor-story flex items-stretch">
     <node-list></node-list>
-    <div
-      id="drawflow"
-      class="parent-drawflow flex-1 relative"
-      @drop="dropHandler"
-      @dragover="allowDrop"
-    >
+    <div id="drawflow" class="parent-drawflow flex-1" @drop="dropHandler" @dragover="allowDrop">
       <div class="bg-white rounded-xl p-2 absolute bottom-0 m-5 shadow-xl right-0 z-10">
         <button class="border-r pr-2 focus:outline-none" @click="editor.zoom_out()">
           <ui-icon name="minus"></ui-icon>
@@ -15,8 +10,8 @@
           <ui-icon name="plus"></ui-icon>
         </button>
       </div>
-      <chat-properties v-bind="{ editor }"></chat-properties>
     </div>
+    <chat-properties v-bind="{ editor }"></chat-properties>
     <settings-modal></settings-modal>
   </div>
 </template>

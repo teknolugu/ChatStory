@@ -1,9 +1,14 @@
 <template>
-  <aside class="bg-white h-full w-72 p-5 overflow-auto scroll">
+  <aside
+    class="bg-white node-list h-full w-full absolute z-50 lg:relative md:w-72 p-5 overflow-auto scroll transition"
+    :class="{ hide: !show }"
+  >
     <div class="flex items-center space-x-4 justify-between mb-2">
       <h4 class="text-xl">Blocks</h4>
+      <div class="flex-grow"></div>
+      <ui-icon name="x" class="lg:hidden" @click="show = false"></ui-icon>
     </div>
-    <ui-input v-model="searchQuery" placeholder="Search blocks..." class="flex-1">
+    <ui-input v-model="searchQuery" block placeholder="Search blocks..." class="flex-1">
       <template #prepend>
         <ui-icon name="search"></ui-icon>
       </template>
@@ -26,6 +31,7 @@
 </template>
 <script>
 import { ref, computed } from 'vue';
+import emitter from 'tiny-emitter/instance';
 import { nodes as nodesObj } from '@/utils/shared';
 
 export default {
@@ -43,6 +49,8 @@ export default {
     });
 
     const searchQuery = ref('');
+    const show = ref(true);
+
     const nodes = computed(() => {
       return nodesArry.filter(
         ({ title, id }) =>
@@ -52,9 +60,15 @@ export default {
 
     function dragHandler({ dataTransfer, target }) {
       dataTransfer.setData('node', target.dataset.node);
+      show.value = false;
     }
 
+    emitter.on('show-blocks', () => {
+      show.value = true;
+    });
+
     return {
+      show,
       nodes,
       dragHandler,
       searchQuery,
@@ -62,3 +76,14 @@ export default {
   },
 };
 </script>
+<style scoped>
+.node-list.hide {
+  transform: translateX(-100%);
+}
+
+@screen lg {
+  .node-list {
+    transform: none !important;
+  }
+}
+</style>

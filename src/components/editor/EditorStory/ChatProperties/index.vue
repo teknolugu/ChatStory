@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="state.show"
-    class="absolute h-full w-80 right-0 bg-white top-0 z-20 scroll flex flex-col"
+    class="absolute h-full w-full md:w-80 right-0 bg-white top-0 z-20 scroll flex flex-col"
   >
     <div class="flex justify-between items-center mb-2 pt-5 px-5">
       <p class="text-xl">Chats</p>
