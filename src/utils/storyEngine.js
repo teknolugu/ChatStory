@@ -76,8 +76,20 @@ class Story extends Node {
     this.chatIndex = 0;
     this.isDestroyed = false;
     this.chatContainer = chatContainer;
+    this.backgroundMusic = null;
 
+    this.init();
+  }
+
+  init() {
     this.chatHandler();
+
+    if (this.story.setting.backgroundMusic) {
+      this.backgroundMusic = new Audio('http://ccmixter.org/content/_ghost/_ghost_-_Reverie_(small_theme).mp3');
+
+      this.backgroundMusic.loop = true;
+      this.backgroundMusic.play();
+    }
   }
 
   start(id) {
@@ -190,6 +202,8 @@ class Story extends Node {
     this.events = {};
     this.chatIndex = 0;
     this.chatContainer.onclick = null;
+    this.backgroundMusic?.pause();
+    this.backgroundMusic = null;
   }
 }
 

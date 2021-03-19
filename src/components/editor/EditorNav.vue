@@ -27,7 +27,7 @@
         class="text-primary lg:hidden mr-2"
         @click="showBlocks"
       ></ui-icon>
-      <ui>
+      <ul>
         <li
           v-for="tab in tabs"
           :key="tab"
@@ -41,7 +41,7 @@
         >
           {{ tab.name }}
         </li>
-      </ui>
+      </ul>
     </div>
   </nav>
 </template>
