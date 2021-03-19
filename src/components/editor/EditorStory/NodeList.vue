@@ -49,7 +49,7 @@ export default {
     });
 
     const searchQuery = ref('');
-    const show = ref(true);
+    const show = ref(false);
 
     const nodes = computed(() => {
       return nodesArry.filter(

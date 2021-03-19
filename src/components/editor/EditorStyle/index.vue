@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-style flex items-stretch h-full">
+  <div class="editor-style flex items-stretch md:flex-row flex-col h-full">
     <teleport to="head">
       <link rel="preconnect" href="https://fonts.gstatic.com" />
       <link
@@ -7,7 +7,7 @@
         rel="stylesheet"
       />
     </teleport>
-    <element-list v-model:activeElement="activeElement"></element-list>
+    <element-list class="w-full md:w-80" v-model:activeElement="activeElement"></element-list>
     <div class="flex-1 p-5 flex items-center justify-center">
       <chat-container v-bind="{ activeElement }"></chat-container>
     </div>

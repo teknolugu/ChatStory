@@ -20,18 +20,20 @@
       </ui-button>
     </div>
     <div class="nav-tab flex items-center text-sm">
-      <ui-icon
-        v-show="activeTab === 'editor-story'"
-        v-tooltip="'Show blocks'"
-        name="view-grid"
-        class="text-primary lg:hidden mr-2"
-        @click="showBlocks"
-      ></ui-icon>
-      <ul>
-        <li
+      <button>
+        <ui-icon
+          v-show="activeTab === 'editor-story'"
+          v-tooltip="'Show blocks'"
+          name="view-grid"
+          class="text-primary lg:hidden mr-2"
+          @click="showBlocks"
+        ></ui-icon>
+      </button>
+      <div class="flex-1 overflow-auto w-10/12 whitespace-nowrap">
+        <div
           v-for="tab in tabs"
           :key="tab"
-          class="tab px-4 py-2 transition cursor-pointer capitalize inline-block"
+          class="tab px-4 py-2 transition whitespace-nowrap cursor-pointer capitalize inline-block"
           :class="[
             activeTab === tab.id
               ? 'border-b-2 border-primary text-primary'
@@ -40,8 +42,8 @@
           @click="$emit('update:activeTab', tab.id)"
         >
           {{ tab.name }}
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   </nav>
 </template>

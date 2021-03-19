@@ -48,7 +48,7 @@ export default {
     const router = useRouter();
 
     const state = shallowReactive({
-      activeTab: 'editor-details',
+      activeTab: 'editor-characters',
       showPreview: false,
       loading: true,
       story: {},

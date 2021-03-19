@@ -1,7 +1,7 @@
 <template>
   <div class="editor-characters p-5 container">
     <h3 class="text-xl mb-6 font-semibold">Characters</h3>
-    <div class="grid grid-cols-5 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
       <ui-card
         class="flex flex-col items-center justify-center cursor-pointer"
         hover
