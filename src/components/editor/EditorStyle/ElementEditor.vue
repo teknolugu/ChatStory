@@ -75,7 +75,7 @@
 <script>
 import { ref, watch, shallowReactive } from 'vue';
 import { useRoute } from 'vue-router';
-import debounce from '@/utils/debounce';
+import { debounce } from '@/utils/helper';
 import Style from '@/models/style';
 
 export default {

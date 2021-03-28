@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 /* eslint-disable-next-line */
-import routes from 'voie-pages';
+import { setupLayouts } from 'layouts-generated';
+import generatedRoutes from 'pages-generated';
+
+const routes = setupLayouts(generatedRoutes);
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

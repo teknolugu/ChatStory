@@ -17,7 +17,6 @@ class Story extends Model {
       description: this.string(''),
       mainCharacter: this.string(''),
       category: this.string(''),
-      tags: this.string(''),
       bannerImage: this.string(''),
       iconImage: this.string(''),
       characters: this.hasMany(Character, 'storyId'),

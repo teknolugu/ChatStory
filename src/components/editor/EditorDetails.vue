@@ -36,13 +36,6 @@
           label="Category*"
           placeholder="Select category"
         ></ui-select>
-        <ui-input
-          v-model="story.tags"
-          class="lg:w-6/12"
-          placeholder="tag 1, tag 2"
-          label="Tags (use comma as separator)"
-          block
-        ></ui-input>
       </div>
     </div>
     <div class="flex lg:flex-row flex-col mt-5">
@@ -104,7 +97,6 @@ export default {
     const story = reactive({
       title: '',
       description: '',
-      tags: '',
       category: '',
       bannerImage: '',
       iconImage: '',
@@ -113,7 +105,7 @@ export default {
     const rules = {
       title: {
         required,
-        minLength: minLength(3),
+        minLength: minLength(4),
         maxLength: maxLength(120),
       },
       description: {

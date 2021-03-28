@@ -7,7 +7,7 @@
         rel="stylesheet"
       />
     </teleport>
-    <element-list class="w-full md:w-80" v-model:activeElement="activeElement"></element-list>
+    <element-list v-model:activeElement="activeElement" class="w-full md:w-80"></element-list>
     <div class="flex-1 p-5 flex items-center justify-center">
       <chat-container v-bind="{ activeElement }"></chat-container>
     </div>

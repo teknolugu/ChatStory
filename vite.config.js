@@ -1,7 +1,8 @@
 import vue from '@vitejs/plugin-vue';
-import path from 'path';
-import voie from 'vite-plugin-voie';
 import eslint from '@rollup/plugin-eslint';
+import path from 'path';
+import pages from 'vite-plugin-pages';
+import layouts from 'vite-plugin-vue-layouts';
 
 /**
  * @type {import('vite').UserConfig}
@@ -9,7 +10,10 @@ import eslint from '@rollup/plugin-eslint';
 export default {
   plugins: [
     vue(),
-    voie(),
+    layouts(),
+    pages({
+      pagesDir: 'src/pages',
+    }),
     {
       ...eslint({
         include: ['./src/**/*.vue', './src/**/*.js'],

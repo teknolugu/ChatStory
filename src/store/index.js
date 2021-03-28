@@ -13,6 +13,10 @@ export default createStore({
   plugins: [VuexORM.install(database)],
   state: () => ({
     user: null,
+    feed: {
+      mostUpvoted: [],
+      recently: [],
+    },
     editor: {
       instance: null,
       showPreview: false,
@@ -22,11 +26,25 @@ export default createStore({
     updateState(state, { key, value }) {
       state[key] = value;
     },
+    pushFeedStory(state, { key, value }) {
+      state.feed[key]?.push(value);
+    },
   },
   actions: {
-    retrieveData() {
+    retrieveData({ commit }) {
       auth.listen((user) => {
-        console.log(user);
+        if (user) {
+          const { displayName, email, emailVerified } = user;
+
+          commit('updateState', {
+            key: 'user',
+            value: {
+              email,
+              displayName,
+              emailVerified,
+            },
+          });
+        }
       });
     },
   },

@@ -2,18 +2,21 @@
   <component
     :is="tag"
     role="button"
-    class="ui-button"
+    class="ui-button relative"
     :class="[
-      variants[variant],
+      color ? color : variants[variant],
       icon ? 'p-2' : 'py-2 px-4',
       round ? 'rounded-full' : 'rounded-xl',
-      { 'pointer-events-none opacity-70': disabled },
+      { 'opacity-70': disabled, 'pointer-events-none': loading || disabled },
     ]"
-    v-bind="{ disabled, ...$attrs }"
+    v-bind="{ disabled: loading || disabled, ...$attrs }"
   >
-    <span class="flex justify-center h-full items-center">
+    <span class="flex justify-center h-full items-center" :class="{ 'opacity-25': loading }">
       <slot></slot>
     </span>
+    <div v-if="loading" class="button-loading">
+      <ui-spinner :color="variant === 'default' ? 'text-primary' : 'text-white'"></ui-spinner>
+    </div>
   </component>
 </template>
 <script>
@@ -21,7 +24,12 @@ export default {
   props: {
     icon: Boolean,
     disabled: Boolean,
+    loading: Boolean,
     round: Boolean,
+    color: {
+      type: String,
+      default: '',
+    },
     tag: {
       type: String,
       default: 'button',
@@ -44,3 +52,11 @@ export default {
   },
 };
 </script>
+<style>
+.button-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>

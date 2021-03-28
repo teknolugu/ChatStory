@@ -1,6 +1,9 @@
 <template>
   <label class="relative" :class="[block ? 'block' : 'inline-block']">
-    <span v-if="label" class="text-gray-500 text-sm ml-2">{{ label }}</span>
+    <span v-if="label" class="text-gray-500 text-sm ml-2">
+      {{ label }}
+      <slot name="label"></slot>
+    </span>
     <div class="relative flex items-center">
       <span v-if="$slots.prepend" class="ml-3 left-0 absolute inline-block">
         <slot name="prepend"></slot>

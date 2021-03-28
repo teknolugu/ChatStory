@@ -85,7 +85,9 @@ class Story extends Node {
     this.chatHandler();
 
     if (this.story.setting.backgroundMusic) {
-      this.backgroundMusic = new Audio('http://ccmixter.org/content/_ghost/_ghost_-_Reverie_(small_theme).mp3');
+      this.backgroundMusic = new Audio(
+        'http://ccmixter.org/content/_ghost/_ghost_-_Reverie_(small_theme).mp3'
+      );
 
       this.backgroundMusic.loop = true;
       this.backgroundMusic.play();

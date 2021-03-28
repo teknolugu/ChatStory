@@ -58,7 +58,7 @@
 </template>
 <script>
 import { ref, onMounted, watch, computed } from 'vue';
-import debounce from '@/utils/debounce';
+import { debounce } from '@/utils/helper';
 import Node from '@/models/node';
 
 export default {

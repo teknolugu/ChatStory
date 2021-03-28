@@ -17,12 +17,16 @@ import UiDialog from './ui/Dialog.vue';
 import UiColorPicker from './ui/ColorPicker.vue';
 import UiExpansionPanel from './ui/ExpansionPanel.vue';
 import UiCheckbox from './ui/Checkbox.vue';
+import UiAlert from './ui/Alert.vue';
+import UiStoryCard from './ui/StoryCard.vue';
 
 import TransitionExpand from './transitions/Expand.vue';
 import TransitionGroupList from './transitions/GroupList.vue';
 import TransitionSlide from './transitions/Slide.vue';
 
 export default {
+  UiAlert,
+  UiStoryCard,
   UiCheckbox,
   UiExpansionPanel,
   UiColorPicker,

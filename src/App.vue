@@ -1,15 +1,21 @@
 <template>
   <div class="app text-gray-800">
-    <router-view></router-view>
+    <main>
+      <router-view></router-view>
+    </main>
     <ui-dialog></ui-dialog>
   </div>
 </template>
 <script>
+import { onMounted } from 'vue';
+import { useStore } from 'vuex';
 import Story from './models/story';
 import { nodesData } from './utils/shared';
 
 export default {
   setup() {
+    const store = useStore();
+
     Story.insert({
       data: {
         id: 'test',
@@ -35,6 +41,10 @@ export default {
       },
     }).then((data) => {
       console.log(data, Story.query().withAll().first());
+    });
+
+    onMounted(() => {
+      store.dispatch('retrieveData');
     });
   },
 };
