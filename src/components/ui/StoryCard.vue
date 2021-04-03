@@ -18,13 +18,17 @@
     </router-link>
     <p class="line-clamp text-gray-600">{{ story.description }}</p>
     <div class="mt-4 flex items-center">
-      <ui-img
-        :alt="`${story.author.username} profile`"
-        lazy
-        :src="story.author.photoURL ?? `https://ui-avatars.com/api/?name=${story.author.username}`"
-        class="inline-block w-[26px] h-[26px] overflow-hidden rounded-full mr-2"
-      ></ui-img>
-      <span class="flex-1 text-overflow pr-2">{{ story.author.username }}</span>
+      <router-link :to="`/${story.author.username}`" class="flex-1 text-overflow pr-2">
+        <ui-img
+          :alt="`${story.author.username} profile`"
+          lazy
+          :src="
+            story.author.photoURL ?? `https://ui-avatars.com/api/?name=${story.author.username}`
+          "
+          class="inline-block w-[26px] align-middle h-[26px] overflow-hidden rounded-full mr-2"
+        ></ui-img>
+        <span class="pr-2 align-middle">{{ story.author.username }}</span>
+      </router-link>
       <div class="likes text-gray-600 mr-2" title="Likes">
         <ui-icon name="heart" size="20"></ui-icon>
         <span class="align-middle inline-block ml-1">{{ story.likeCount || 0 }}</span>

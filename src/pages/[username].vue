@@ -1,11 +1,14 @@
 <template>
   <div class="container py-12">
-    <div v-if="state.loading" class="text-center py-12">
-      <ui-spinner></ui-spinner>
+    <div v-if="state.loading" class="text-center">
+      <ui-spinner size="36"></ui-spinner>
     </div>
     <template v-else>
       <div class="flex items-center">
-        <img src="https://picsum.photos/500" class="h-14 w-14 rounded-xl" />
+        <img
+          :src="state.data.photoURL ?? `https://ui-avatars.com/api/?name=${state.data.username}`"
+          class="h-14 w-14 rounded-full"
+        />
         <p class="ml-4 text-xl font-semibold">{{ $route.params.username }}</p>
       </div>
       <p class="mt-12 mb-5 text-gray-600 text-xl">Stories</p>
