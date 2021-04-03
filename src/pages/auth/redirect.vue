@@ -10,11 +10,21 @@ export default {
   setup() {
     const router = useRouter();
 
-    onMounted(() => {
-      const { email } = router.currentRoute.query;
+    onMounted(async () => {
+      try {
+        const { email, state } = router.currentRoute.value.query;
 
-      if (email) {
-        auth.fetchProfile();
+        if (email) {
+          await auth.fetchProfile();
+        }
+
+        if (state) {
+          await auth.handleSignInRedirect();
+        }
+
+        router.replace('/');
+      } catch (error) {
+        console.error(error);
       }
     });
   },

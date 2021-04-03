@@ -1,7 +1,7 @@
 <template>
   <div
     class="h-full bg-white md:max-w-sm w-full relative"
-    :style="convertToCss(story.style.general)"
+    :style="convertToCss(story.style?.general)"
   >
     <div
       class="px-5 absolute top-0 w-full h-14 flex items-center"
@@ -36,7 +36,6 @@
 </template>
 <script>
 import { onMounted, reactive, computed, onUnmounted, onUpdated, ref } from 'vue';
-import { useRoute } from 'vue-router';
 import { convertToCss } from '@/utils/helper';
 import Chat from './Chat.vue';
 import Annotation from './Annotation.vue';
@@ -46,9 +45,14 @@ import Story from '@/models/story';
 
 export default {
   components: { Chat, Annotation, Ending },
-  setup() {
-    const route = useRoute();
-
+  props: {
+    storyId: {
+      type: String,
+      default: '',
+      require: true,
+    },
+  },
+  setup(props) {
     const state = reactive({
       engine: null,
       chats: [],
@@ -56,7 +60,7 @@ export default {
     });
     const chatContainer = ref(null);
 
-    const story = computed(() => Story.query().withAll().where('id', route.params.storyid).first());
+    const story = computed(() => Story.query().withAll().where('id', props.storyId).first());
 
     function optionHandler({ id, text }) {
       state.options = [];
@@ -74,6 +78,7 @@ export default {
       chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
     });
     onMounted(() => {
+      console.log(story);
       const start = story.value.nodes.find((node) => node.type === 'start');
 
       const storyEngine = new StoryEngine(story.value, chatContainer.value);

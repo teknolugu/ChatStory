@@ -1,36 +1,40 @@
 <template>
-  <div class="ui-story-card">
-    <div class="h-44 overflow-hidden relative rounded-xl">
-      <div
-        :style="{ 'background-image': `url(${story.bannerImage})` }"
-        class="h-full bg-center bg-cover bg-no-repeat w-full ui-story-card__img"
-      ></div>
-    </div>
-    <ui-card class="mx-2 -mt-14 ui-story-card__content">
-      <p class="text-primary">Category</p>
-      <router-link :to="`/story/${story.id}`" class="font-semibold text-overflow capitalize">
-        {{ story.title }}
+  <ui-card hover class="group story">
+    <template #image>
+      <router-link :to="`/story/${story.id}`">
+        <ui-img
+          class="h-44 cursor-pointer w-full rounded-xl overflow-hidden"
+          lazy
+          :src="story.bannerImage"
+          :alt="`${story.title} banner image`"
+        ></ui-img>
       </router-link>
-      <div class="my-2">
-        <img src="https://picsum.photos/500" class="inline-block h-8 w-8 rounded-full mr-2" />
-        <div class="inline-block text-sm">
-          <p>Ahmad Kholid</p>
-          <p>25 may 2020</p>
-        </div>
+    </template>
+    <router-link
+      class="font-semibold text-overflow text-lg cursor-pointer leading-tight"
+      :to="`/story/${story.id}`"
+    >
+      {{ story.title }}
+    </router-link>
+    <p class="line-clamp text-gray-600">{{ story.description }}</p>
+    <div class="mt-4 flex items-center">
+      <ui-img
+        :alt="`${story.author.username} profile`"
+        lazy
+        :src="story.author.photoURL ?? `https://ui-avatars.com/api/?name=${story.author.username}`"
+        class="inline-block w-[26px] h-[26px] overflow-hidden rounded-full mr-2"
+      ></ui-img>
+      <span class="flex-1 text-overflow pr-2">{{ story.author.username }}</span>
+      <div class="likes text-gray-600 mr-2" title="Likes">
+        <ui-icon name="heart" size="20"></ui-icon>
+        <span class="align-middle inline-block ml-1">{{ story.likeCount || 0 }}</span>
       </div>
-      <p class="line-clamp text-gray-600">{{ story.description }}</p>
-      <div class="mt-4 flex text-gray-600 items-center">
-        <ui-button v-tooltip.bottom="'Upvote'" icon class="mr-2">
-          <ui-icon name="arrow-up" size="20"></ui-icon>
-        </ui-button>
-        <span class="text-gray-700">2k upvotes</span>
-        <div class="flex-grow"></div>
-        <ui-button v-tooltip.bottom="'Save'" icon>
-          <ui-icon name="bookmark" size="20"></ui-icon>
-        </ui-button>
+      <div class="played text-gray-600">
+        <ui-icon name="play" size="20"></ui-icon>
+        <span class="align-middle inline-block ml-1">{{ story.playedCount || 0 }}</span>
       </div>
-    </ui-card>
-  </div>
+    </div>
+  </ui-card>
 </template>
 <script>
 export default {
@@ -43,16 +47,12 @@ export default {
 };
 </script>
 <style scoped>
-.ui-story-card__img,
-.ui-story-card__content {
-  transition: all 200ms ease;
-}
-
-.ui-story-card:hover .ui-story-card__content {
-  @apply shadow-xl;
-  transform: translateY(-5px);
-}
-.ui-story-card:hover .ui-story-card__img {
-  transform: scale(1.05);
+.ui-card.story .image-content {
+  background-image: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0) 30%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 </style>

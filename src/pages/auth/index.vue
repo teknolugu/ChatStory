@@ -15,13 +15,14 @@
         v-model="formData.email"
         block
         label="Email"
+        type="email"
         placeholder="example@mail.com"
       ></ui-input>
       <ui-input
         v-model="formData.password"
         block
         label="Password"
-        type="password"
+        :type="state.showPassword ? 'text' : 'password'"
         placeholder="Enter your password"
         class="mt-6"
       >
@@ -32,6 +33,13 @@
           >
             Forgot your password?
           </router-link>
+        </template>
+        <template #append>
+          <ui-icon
+            class="text-gray-500"
+            :name="state.showPassword ? 'eye-off' : 'eye'"
+            @click="state.showPassword = !state.showPassword"
+          ></ui-icon>
         </template>
       </ui-input>
       <ui-button
@@ -48,13 +56,17 @@
 </template>
 <script>
 import { shallowReactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import auth from '@/utils/auth';
 
 export default {
   setup() {
+    const router = useRouter();
+
     const state = shallowReactive({
-      isLoading: false,
       isError: false,
+      isLoading: false,
+      showPassword: false,
     });
     const formData = shallowReactive({
       email: '',
@@ -66,7 +78,10 @@ export default {
         state.isLoading = true;
 
         await auth.signIn(formData.email, formData.password);
-        console.log(auth.user);
+
+        if (auth.user) {
+          router.replace('/');
+        }
       } catch (error) {
         console.error(error);
         state.isLoading = false;

@@ -1,16 +1,17 @@
 <template>
-  <label class="relative" :class="[block ? 'block' : 'inline-block']">
-    <span v-if="label" class="text-gray-500 text-sm ml-2">
+  <div class="relative" :class="[block ? 'block' : 'inline-block']">
+    <label v-if="label" class="text-gray-500 text-sm ml-2" :for="componentId">
       {{ label }}
       <slot name="label"></slot>
-    </span>
+    </label>
     <div class="relative flex items-center">
       <span v-if="$slots.prepend" class="ml-3 left-0 absolute inline-block">
         <slot name="prepend"></slot>
       </span>
       <input
-        class="w-full ui-input rounded-xl border border-gray-200 transition bg-transparent focus:ring focus:ring-opacity-50"
         v-bind="{ value: modelValue, type, placeholder }"
+        :id="componentId"
+        class="w-full ui-input rounded-xl border border-gray-200 transition bg-transparent focus:ring focus:ring-opacity-50"
         :class="[
           { 'hide-appearance': hideAppearance },
           error
@@ -27,13 +28,15 @@
     </div>
     <div
       v-if="(error && errorMessage) || showDetail"
-      class="text-sm ml-2 h-6 inline-block text-red-500"
+      class="text-sm ml-2 min-h-[1.5rem] text-red-500"
     >
-      <span v-if="error">{{ errorMessage }}</span>
+      <span v-if="error" class="inline-block leading-tight">{{ errorMessage }}</span>
     </div>
-  </label>
+  </div>
 </template>
 <script>
+import { useComponentId } from '@/composable/componentId';
+
 export default {
   props: {
     modelValue: {
@@ -63,6 +66,8 @@ export default {
   },
   emits: ['update:modelValue', 'input', 'change', 'blur'],
   setup(props, { emit }) {
+    const componentId = useComponentId('input');
+
     function emitValue({ target }) {
       emit('update:modelValue', target.value);
       emit('input', target.value);
@@ -71,6 +76,7 @@ export default {
 
     return {
       emitValue,
+      componentId,
     };
   },
 };

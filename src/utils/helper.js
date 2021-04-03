@@ -3,6 +3,8 @@ export function isAllEqual(array) {
 }
 
 export function convertToCss(obj) {
+  if (!obj) return;
+
   const copyObj = { ...obj };
 
   if (obj.fontFamily) {

@@ -2,7 +2,7 @@
   <transition name="ending" appear @after-enter="transitionComplete">
     <div
       v-if="show"
-      class="bg-gray-800 absolute h-full w-full top-0 ending left-0 flex justify-center items-center"
+      class="bg-white absolute h-full w-full top-0 ending left-0 flex justify-center items-center text-gray-700"
     >
       <p class="text-2xl">The End?</p>
     </div>

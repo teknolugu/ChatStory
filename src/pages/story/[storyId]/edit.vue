@@ -3,7 +3,7 @@
     <editor-nav
       v-model:activeTab="state.activeTab"
       :loading="state.loading"
-      :story="state.story"
+      :story="story"
       @showPreview="state.showPreview = true"
     ></editor-nav>
     <main class="h-screen" style="padding-top: 95px">
@@ -15,7 +15,7 @@
       </keep-alive>
     </main>
     <ui-modal v-if="!state.loading" v-model="state.showPreview" custom-content persist>
-      <chats-container>
+      <chats-container v-bind="{ story }">
         <template #header>
           <div class="flex-grow"></div>
           <ui-icon name="x" class="cursor-pointer" @click="state.showPreview = false"></ui-icon>
@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-import { shallowReactive, onMounted } from 'vue';
+import { shallowReactive, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import Story from '@/models/story';
 import EditorNav from '@/components/editor/EditorNav.vue';
@@ -47,19 +47,18 @@ export default {
   setup() {
     const router = useRouter();
 
+    const storyId = router.currentRoute.value.params.storyid;
+
     const state = shallowReactive({
       activeTab: 'editor-characters',
       showPreview: false,
       loading: true,
-      story: {},
     });
 
-    onMounted(() => {
-      console.log(router);
-      const storyId = router.currentRoute.value.params.storyid;
-      const story = Story.find(storyId);
+    const story = computed(() => Story.query().withAll().where('id', storyId).first());
 
-      if (!story) {
+    onMounted(() => {
+      if (!story.value) {
         router.push('/');
         return;
       }
@@ -69,6 +68,7 @@ export default {
     });
 
     return {
+      story,
       state,
     };
   },

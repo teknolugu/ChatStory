@@ -2,10 +2,13 @@
   <component
     :is="tag"
     v-bind="$attrs"
-    class="bg-white p-5 transform rounded-xl transition ui-card"
+    class="bg-white transform rounded-xl transition ui-card"
     :class="{ 'hover:shadow-xl hover:-translate-y-1': hover }"
   >
-    <slot></slot>
+    <slot name="image"></slot>
+    <div class="p-5">
+      <slot></slot>
+    </div>
   </component>
 </template>
 <script>

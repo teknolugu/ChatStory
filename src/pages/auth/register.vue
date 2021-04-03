@@ -9,26 +9,14 @@
       <router-link to="/auth" class="text-primary underline cursor-pointer"> Sign In </router-link>
     </p>
     <form class="mt-10" @submit.prevent="register">
-      <div class="flex items-center space-x-4">
-        <ui-input
-          v-model="v$.name.$model"
-          label="Name"
-          class="w-6/12"
-          block
-          :error="v$.name.$dirty && v$.name.$invalid"
-          :error-message="v$.name.$silentErrors[0]?.$message"
-          show-detail
-        ></ui-input>
-        <ui-input
-          v-model="v$.username.$model"
-          label="Username"
-          class="w-6/12"
-          block
-          :error="v$.username.$dirty && v$.username.$invalid"
-          :error-message="v$.username.$silentErrors[0]?.$message"
-          show-detail
-        ></ui-input>
-      </div>
+      <ui-input
+        v-model="v$.username.$model"
+        label="Username"
+        block
+        :error="v$.username.$dirty && v$.username.$invalid"
+        :error-message="v$.username.$silentErrors[0]?.$message"
+        show-detail
+      ></ui-input>
       <ui-input
         v-model="v$.email.$model"
         block
@@ -46,6 +34,7 @@
         placeholder="6+ Characters"
         :error="v$.password.$dirty && v$.password.$invalid"
         :error-message="v$.password.$silentErrors[0]?.$message"
+        show-detail
       >
         <template #append>
           <ui-icon
@@ -87,16 +76,10 @@ export default {
     const formData = shallowReactive({
       email: '',
       password: '',
-      name: '',
       username: '',
     });
 
     const rules = {
-      name: {
-        required,
-        minLength: minLength(3),
-        maxLength: maxLength(16),
-      },
       username: {
         required,
         minLength: minLength(3),
@@ -121,27 +104,21 @@ export default {
 
         state.loading = true;
 
-        const response = await fetchAPI('/user', {
+        const result = await fetchAPI('/user', {
           method: 'POST',
           body: JSON.stringify(formData),
         });
-        const result = await response.json();
 
-        if (response.ok) {
-          state.loading = false;
+        state.loading = false;
 
-          await auth.signIn(formData.email, formData.password);
-          await auth.sendOobCode('VERIFY_EMAIL', formData.email);
+        await auth.signIn(formData.email, formData.password);
+        await auth.sendOobCode('VERIFY_EMAIL', formData.email);
 
-          router.replace('/auth/verify');
-        } else {
-          state.error = true;
-          state.errorMessage = result.message;
-        }
+        router.replace('/auth/verify');
       } catch (error) {
-        console.error(error);
-        state.error = false;
+        state.error = true;
         state.errorMessage = 'Something went wrong';
+        console.error(error);
       }
     }
 
