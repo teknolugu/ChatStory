@@ -26,6 +26,7 @@ class Story extends Model {
       playedCount: this.number(0),
       isDataRetrieved: this.boolean(false),
       isLiked: this.boolean(false),
+      isInCollection: this.boolean(false),
       characters: this.hasMany(Character, 'storyId'),
       nodes: this.hasMany(Node, 'storyId'),
       style: this.hasOne(Style, 'storyId'),

@@ -4,7 +4,7 @@
     class="h-16 bg-white w-full z-50 transition"
     :class="{ hide: $route.name === 'story-view' && hide, fixed: $route.name === 'story-view' }"
   >
-    <div class="container flex items-center h-full">
+    <div class="px-6 flex items-center h-full">
       <p class="font-semibold text-lg">Myyy</p>
       <ui-input placeholder="Search..." class="w-72 ml-8">
         <template #prepend>
@@ -21,13 +21,18 @@
             />
           </template>
           <ui-list class="w-48 text-gray-600">
-            <ui-list-item small tag="router-link" :to="`/${user.username}`">
+            <ui-list-item small tag="router-link" :to="`/user/${user.username}`">
               <ui-icon name="user" class="mr-3"></ui-icon>
               My Profile
             </ui-list-item>
             <ui-list-item small tag="router-link" to="/settings?query=profile">
               <ui-icon name="pencil-alt" class="mr-3"></ui-icon>
               Edit Profile
+            </ui-list-item>
+            <hr class="my-2" />
+            <ui-list-item small tag="router-link" to="/collection">
+              <ui-icon name="bookmark" class="mr-3"></ui-icon>
+              My Collection
             </ui-list-item>
             <hr class="my-2" />
             <ui-list-item small class="text-red-500 cursor-pointer" @click="signOut">
@@ -37,8 +42,8 @@
           </ui-list>
         </ui-popover>
         <ui-button variant="primary">
-          <ui-icon name="plus" class="mr-1 -ml-2"></ui-icon>
-          <span>Story</span>
+          <ui-icon name="plus" class="md:-ml-2"></ui-icon>
+          <span class="ml-1 hidden md:block">Story</span>
         </ui-button>
       </template>
       <template v-else>

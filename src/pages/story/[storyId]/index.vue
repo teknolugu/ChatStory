@@ -6,7 +6,10 @@
         <div class="flex flex-col lg:flex-row items-start">
           <div class="flex-1">
             <h1 class="text-2xl font-semibold mb-2">{{ story.title }}</h1>
-            <router-link :to="`/${story.author.username}`" class="flex items-center my-4">
+            <router-link
+              :to="`/user/${story.author.username}`"
+              class="inline-flex items-center my-4"
+            >
               <ui-img
                 :alt="`${story.author.username} profile`"
                 lazy
@@ -32,7 +35,13 @@
                 <ui-icon name="heart" class="mr-2"></ui-icon>
                 {{ story.isLiked ? 'Remove like' : 'Like' }}
               </ui-button>
-              <ui-button v-tooltip="'Add to collection'" icon>
+              <ui-button
+                v-tooltip="story.isInCollection ? 'Remove from collection' : 'Add to collection'"
+                icon
+                :loading="state.loadingCollection"
+                :class="{ 'text-primary': story.isInCollection }"
+                @click="toggleCollection"
+              >
                 <ui-icon name="bookmark"></ui-icon>
               </ui-button>
             </div>
@@ -50,6 +59,15 @@
                 {{ story.playedCount }}x Played
               </li>
             </ul>
+            <ui-button
+              v-if="user.username === story.author.username"
+              class="mt-4 max-w-sm w-full"
+              tag="router-link"
+              :to="`/story/${story.id}/edit`"
+            >
+              <ui-icon name="pencil" class="mr-2 -ml-1"></ui-icon>
+              Edit
+            </ui-button>
           </div>
         </div>
       </div>
@@ -87,6 +105,7 @@ export default {
     const state = shallowReactive({
       retrieved: false,
       loadingLike: false,
+      loadingCollection: false,
     });
 
     const story = computed(() => Story.query().where('id', storyId).withAll().first());
@@ -120,6 +139,28 @@ export default {
         console.error(error);
       }
     }
+    async function toggleCollection() {
+      try {
+        state.loadingCollection = true;
+
+        const { isInCollection } = await fetchAPI('/user/my/collection', {
+          method: 'POST',
+          body: JSON.stringify({
+            storyId: story.value.id,
+          }),
+        });
+
+        await Story.update({
+          where: story.value.id,
+          data: { isInCollection },
+        });
+
+        state.loadingCollection = false;
+      } catch (error) {
+        state.loadingCollection = false;
+        console.error(error);
+      }
+    }
     function convertToRelativeTime(time) {
       return dayjs(time).fromNow();
     }
@@ -130,13 +171,11 @@ export default {
           state.retrieved = true;
 
           if (user.value) {
-            const { isLiked } = await fetchAPI(`/like/${storyId}`);
-
+            const data = await fetchAPI(`/story/${storyId}/user`);
+            console.log(data);
             await Story.update({
               where: story.value.id,
-              data: {
-                isLiked,
-              },
+              data,
             });
           }
 
@@ -161,6 +200,7 @@ export default {
       story,
       storyId,
       toggleLike,
+      toggleCollection,
       convertToRelativeTime,
     };
   },
