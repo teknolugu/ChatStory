@@ -29,6 +29,13 @@
     </template>
   </div>
 </template>
+<route>
+{
+  meta: {
+    middleware: 'auth'
+  }
+}
+</route>
 <script>
 import { onMounted, reactive } from 'vue';
 import { fetchAPI } from '@/utils/auth';

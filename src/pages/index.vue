@@ -13,7 +13,9 @@
           ></ui-story-card>
         </div>
         <div v-if="nextKey" class="text-center mt-12">
-          <ui-button>Load more stories</ui-button>
+          <ui-button :loading="state.loadingLoadMore" @click="loadMore"
+            >Load more stories</ui-button
+          >
         </div>
       </template>
     </div>
@@ -25,7 +27,7 @@
           :key="sort.id"
           :active="state.activeSort === sort.id"
           class="cursor-pointer"
-          @click="state.activeSort = sort.id"
+          @click="changeSort(sort.id)"
         >
           <ui-icon :name="sort.icon" class="mr-4"></ui-icon>
           <span class="capitalize">{{ sort.name }}</span>
@@ -42,40 +44,63 @@ import Story from '@/models/story';
 export default {
   setup() {
     const sorts = [
-      { name: 'most upvoted', icon: 'arrow-up', id: 'mostUpvoted' },
-      { name: 'recently', icon: 'clock', id: 'recent' },
+      { name: 'most liked', icon: 'heart', id: 'mostLiked' },
+      { name: 'recently', icon: 'clock', id: 'recently' },
     ];
 
     const store = useStore();
 
     const state = shallowReactive({
       isLoading: false,
-      activeSort: 'mostUpvoted',
+      loadingLoadMore: false,
+      activeSort: 'mostLiked',
     });
 
-    onMounted(() => {
-      if (store.state.feed[state.activeSort].isRetrieved) return;
+    const stories = computed(() => store.getters.getFeedStories(state.activeSort));
+    const nextKey = computed(() => store.state.feedKey[state.activeSort]);
 
-      state.isLoading = true;
+    function loadMore() {
+      state.loadingLoadMore = true;
 
       store
-        .dispatch('fetchFeed', { sortBy: 'mostUpvoted' })
+        .dispatch('fetchFeed', { sortBy: state.activeSort, nextKey: nextKey.value })
+        .then((stories) => {
+          state.loadingLoadMore = false;
+        })
+        .catch((error) => {
+          state.loadingLoadMore = false;
+        });
+    }
+    function fetchFeed() {
+      store
+        .dispatch('fetchFeed', { sortBy: state.activeSort })
         .then((stories) => {
           state.isLoading = false;
         })
         .catch((error) => {
           state.isLoading = false;
         });
-    });
+    }
+    function changeSort(sortId) {
+      state.activeSort = sortId;
+      fetchFeed();
+    }
 
-    const stories = computed(() => store.getters.getFeedStories(state.activeSort));
-    const nextKey = computed(() => store.state.feedKey[state.activeSort]);
+    onMounted(() => {
+      if (store.state.feed[state.activeSort].isRetrieved) return;
+
+      state.isLoading = true;
+
+      fetchFeed();
+    });
 
     return {
       state,
       sorts,
       nextKey,
       stories,
+      loadMore,
+      changeSort,
     };
   },
 };

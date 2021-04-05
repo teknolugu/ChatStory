@@ -12,7 +12,7 @@
           :src="story.iconImage"
           class="h-16 mb-4 w-16 overflow-hidden rounded-xl shadow-xl"
         ></ui-img>
-        <p class="mb-12 text-white text-lg">{{ story.title }}</p>
+        <p class="mb-12 text-white text-center px-5 text-lg">{{ story.title }}</p>
         <ui-spinner v-if="state.loading" size="32"></ui-spinner>
         <ui-button v-else class="w-48" variant="primary" @click="startPlaying"> Start </ui-button>
       </div>

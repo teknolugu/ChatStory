@@ -4,7 +4,7 @@
       <story-player :story="story" :story-id="storyId"></story-player>
       <div class="container pt-8 pb-16">
         <div class="flex flex-col lg:flex-row items-start">
-          <div class="flex-1">
+          <div class="flex-1 lg:mr-16">
             <h1 class="text-2xl font-semibold mb-2">{{ story.title }}</h1>
             <router-link
               :to="`/user/${story.author.username}`"

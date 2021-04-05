@@ -24,6 +24,11 @@
     </ui-modal>
   </div>
 </template>
+<route>
+{
+  name: 'edit-story'
+}
+</route>
 <script>
 import { shallowReactive, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';

@@ -1,3 +1,6 @@
+import store from '../store';
+
 export default function (to, from, next) {
-  console.log(to, from);
+  if (store.state.user) next();
+  else next({ path: '/' });
 }

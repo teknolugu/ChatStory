@@ -15,7 +15,7 @@ export default createStore({
     user: null,
     isRetrieved: false,
     feed: {
-      mostUpvoted: {
+      mostLiked: {
         isRetrieved: false,
         data: [],
       },
@@ -25,7 +25,7 @@ export default createStore({
       },
     },
     feedKey: {
-      mostUpvoted: null,
+      mostLiked: null,
       recently: null,
     },
     editor: {
@@ -50,29 +50,37 @@ export default createStore({
     },
   },
   actions: {
-    fetchFeed({ commit, state }, { sortBy, loadMore }) {
+    fetchFeed({ commit, state }, { sortBy, nextKey }) {
+      if (state.feed[sortBy].isRetrieved && !nextKey) return;
+
       return new Promise((resolve, reject) => {
-        fetchAPI(`/story?sortBy=${sortBy}`)
-          .then(({ nextKey, stories }) => {
-            const storyIds = stories.map(({ id }) => id);
+        let query = `sortBy=${sortBy}&limit=12`;
+
+        if (nextKey) {
+          query += `&nextPageId=${JSON.stringify(nextKey)}`;
+        }
+
+        fetchAPI(`/story?${query}`)
+          .then((data) => {
+            const storyIds = data.stories.map(({ id }) => id);
 
             models.Story.insertOrUpdate({
-              data: stories,
+              data: data.stories,
             });
 
             commit('updateState', {
               key: 'feedKey',
               value: {
                 ...state.feedKey,
-                [sortBy]: nextKey,
+                [sortBy]: data.nextKey,
               },
             });
             commit('pushFeedStory', {
               key: sortBy,
               value: storyIds,
             });
-
-            resolve(stories);
+            console.log(data);
+            resolve(data.stories);
           })
           .catch((error) => {
             reject(error);
