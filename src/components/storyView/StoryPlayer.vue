@@ -31,8 +31,10 @@
 </template>
 <script>
 import { ref, shallowReactive } from 'vue';
+import { useToast } from 'vue-toastification';
 import { fetchAPI } from '@/utils/auth';
 import Story from '@/models/story';
+import Style from '@/models/style';
 import ChatContainer from '../chats/Container.vue';
 
 export default {
@@ -48,8 +50,11 @@ export default {
     },
   },
   setup(props) {
+    const toast = useToast();
+
     const state = shallowReactive({
       playing: false,
+      start: false,
       loading: false,
     });
     const container = ref(null);
@@ -90,6 +95,14 @@ export default {
           `/story/data?dataId=${props.story.data}&storyId=${props.story.id}`
         );
 
+        if (!result.style) {
+          await Style.insertOrUpdate({
+            data: {
+              storyId: props.story.id,
+            },
+          });
+        }
+
         await Story.insertOrUpdate({
           data: {
             ...props.story,
@@ -102,7 +115,8 @@ export default {
         state.playing = state.start = true;
         state.loading = false;
       } catch (error) {
-        state.loading = false;
+        state.start = state.loading = state.playing = false;
+        toast.error('Something went wrong');
         console.error(error);
       }
     }

@@ -60,7 +60,7 @@ export default {
     });
     const chatContainer = ref(null);
 
-    const story = computed(() => Story.query().withAll().where('id', props.storyId).first());
+    const story = computed(() => Story.query().where('id', props.storyId).withAll().first());
 
     function optionHandler({ id, text }) {
       state.options = [];
