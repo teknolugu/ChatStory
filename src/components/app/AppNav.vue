@@ -2,13 +2,21 @@
   <nav
     ref="nav"
     class="h-16 bg-white w-full z-50 transition"
-    :class="{ hide: $route.name === 'story-view' && hide, fixed: $route.name === 'story-view' }"
+    :class="{
+      hide: $route.name === 'story-view' && state.hide,
+      fixed: $route.name === 'story-view',
+    }"
   >
     <div class="px-6 flex items-center h-full">
       <p class="font-semibold text-lg">Myyy</p>
-      <ui-input placeholder="Search..." class="w-72 ml-8">
+      <ui-input
+        v-model="state.search"
+        placeholder="Search..."
+        class="w-72 ml-8"
+        @keyup.enter="search"
+      >
         <template #prepend>
-          <ui-icon name="search" class="mr-2 text-gray-600"></ui-icon>
+          <ui-icon name="search" class="mr-2 text-gray-600" @click="search"></ui-icon>
         </template>
       </ui-input>
       <div class="flex-grow"></div>
@@ -54,8 +62,8 @@
   </nav>
 </template>
 <script>
-import { computed, onMounted, onUnmounted, shallowRef, watch } from 'vue';
-import { useRoute, onBeforeRouteLeave } from 'vue-router';
+import { computed, onMounted, onUnmounted, shallowReactive, watch } from 'vue';
+import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import { useStore } from 'vuex';
 import { debounce } from '@/utils/helper';
 import auth from '@/utils/auth';
@@ -63,18 +71,21 @@ import auth from '@/utils/auth';
 export default {
   setup() {
     const store = useStore();
-    const route = useRoute();
+    const router = useRouter();
 
-    const hide = shallowRef(true);
+    const state = shallowReactive({
+      hide: true,
+      search: '',
+    });
 
     const user = computed(() => store.state.user);
 
     const scrollHandler = debounce(() => {
-      if (route.name !== 'story-view') return;
+      if (router.currentRoute.value.name !== 'story-view') return;
 
       const position = window.pageYOffset;
 
-      hide.value = position <= 50;
+      state.hide = position <= 50;
     }, 200);
 
     function signOut() {
@@ -84,6 +95,9 @@ export default {
         window.location.href = '/';
       }, 100);
     }
+    function search() {
+      router.push(`/search?q=${state.search}`);
+    }
 
     onMounted(() => {
       window.addEventListener('scroll', scrollHandler);
@@ -91,12 +105,13 @@ export default {
     });
     onUnmounted(() => {
       window.removeEventListener('scroll', scrollHandler);
-      hide.value = false;
+      state.hide = false;
     });
 
     return {
-      hide,
       user,
+      state,
+      search,
       signOut,
     };
   },

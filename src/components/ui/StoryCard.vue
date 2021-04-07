@@ -72,13 +72,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.ui-card.story .image-content {
-  background-image: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.5) 0%,
-    rgba(0, 0, 0, 0) 30%,
-    rgba(0, 0, 0, 0) 100%
-  );
-}
-</style>
