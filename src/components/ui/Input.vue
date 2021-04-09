@@ -9,15 +9,19 @@
         <slot name="prepend"></slot>
       </span>
       <input
-        v-bind="{ value: modelValue, type, placeholder }"
+        v-bind="{ value: modelValue, type, placeholder, disabled, readonly }"
         :id="componentId"
-        class="w-full ui-input rounded-xl border border-gray-200 transition bg-transparent focus:ring focus:ring-opacity-50"
+        class="w-full ui-input rounded-xl border border-gray-200 transition focus:ring focus:ring-opacity-50"
         :class="[
-          { 'hide-appearance': hideAppearance },
           error
             ? 'focus:ring-red-500 focus:border-red-500 border-red-500'
             : 'focus:border-primary focus:ring-primary',
-          { 'pr-10': $slots.append, 'pl-10': $slots.prepend },
+          disabled ? 'bg-gray-100 text-gray-500' : 'bg-transparent',
+          {
+            'pr-10': $slots.append,
+            'pl-10': $slots.prepend,
+            'hide-appearance': hideAppearance,
+          },
         ]"
         @input="emitValue"
         @blur="$emit('blur', $event)"
@@ -62,6 +66,8 @@ export default {
     hideAppearance: Boolean,
     error: Boolean,
     block: Boolean,
+    readonly: Boolean,
+    disabled: Boolean,
     showDetail: Boolean,
   },
   emits: ['update:modelValue', 'input', 'change', 'blur'],

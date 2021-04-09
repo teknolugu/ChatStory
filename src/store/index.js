@@ -88,7 +88,10 @@ export default createStore({
       });
     },
     retrieveData({ commit }) {
-      auth.listen(async (user) => {
+      auth.listen(async () => {
+        const user = auth?.user ?? null;
+        console.log(auth, user);
+
         if (user) {
           try {
             const { displayName, email, emailVerified, photoUrl } = user;
@@ -99,7 +102,7 @@ export default createStore({
               value: {
                 username,
                 email,
-                photoUrl,
+                photoURL: photoUrl,
                 emailVerified,
               },
             });

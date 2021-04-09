@@ -1,3 +1,5 @@
+import { helpers } from '@vuelidate/validators';
+
 export function isAllEqual(array) {
   return array.every((item) => array[0] === item);
 }
@@ -42,3 +44,8 @@ export function debounce(func, wait, immediate) {
     if (callNow) func.apply(context, args);
   };
 }
+
+export const usernameValidation = helpers.withMessage(
+  "Username can only contain letters, numbers and '_'",
+  (value) => /^[a-zA-Z0-9\_]+$/.test(value)
+);
