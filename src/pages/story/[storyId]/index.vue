@@ -1,8 +1,8 @@
 <template>
-  <div class="story">
+  <div class="story container py-12">
     <template v-if="state.retrieved">
       <story-player :story="story" :story-id="storyId"></story-player>
-      <div class="container pt-8 pb-16">
+      <div class="mt-12">
         <div class="flex flex-col lg:flex-row items-start">
           <div class="flex-1 lg:mr-16">
             <h1 class="text-2xl font-semibold mb-2">{{ story.title }}</h1>

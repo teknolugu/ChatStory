@@ -1,12 +1,5 @@
 <template>
-  <nav
-    ref="nav"
-    class="h-16 bg-white w-full z-50 transition"
-    :class="{
-      hide: $route.name === 'story-view' && state.hide,
-      fixed: $route.name === 'story-view',
-    }"
-  >
+  <nav ref="nav" class="h-16 bg-white w-full z-50 transition">
     <div class="px-8 flex items-center h-full">
       <p class="font-semibold text-lg">Myyy</p>
       <ui-input
