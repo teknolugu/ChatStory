@@ -1,8 +1,4 @@
 class Node {
-  findNodeBy(key, value) {
-    return this.story.nodes.find((node) => node[key] === value);
-  }
-
   chatNode({ outputs, data }) {
     return new Promise((resolve) => {
       const { connections } = outputs.output_1;
@@ -47,12 +43,32 @@ class Node {
         return arr;
       }, []);
 
-      this.addChat({
-        type: 'options',
-        options,
-      });
+      if (this.progress.length !== 0) {
+        const currentOption = this.progress.shift();
+        const selectedOption = options.find(({ id }) => id === currentOption);
 
-      resolve();
+        this.addChat({
+          type: 'chat',
+          message: selectedOption.text,
+          characterId: this.story.mainCharacter,
+        });
+
+        if (this.progress.length === 0) {
+          this.dispatch('progress-loaded', this.chats);
+          this.chats = [];
+          this.loadProgress = false;
+        }
+
+        resolve(selectedOption.id);
+      } else {
+        this.addChat({
+          type: 'options',
+          options,
+        });
+
+        resolve();
+      }
+
     });
   }
   endNode() {
@@ -73,8 +89,9 @@ class Story extends Node {
 
     this.chats = [];
     this.events = {};
-    this.chatIndex = 0;
+    this.progress = [];
     this.isDestroyed = false;
+    this.loadProgress = false;
     this.chatContainer = chatContainer;
     this.backgroundMusic = null;
 
@@ -85,9 +102,7 @@ class Story extends Node {
     this.chatHandler();
 
     if (this.story.setting.backgroundMusic) {
-      this.backgroundMusic = new Audio(
-        'http://ccmixter.org/content/_ghost/_ghost_-_Reverie_(small_theme).mp3'
-      );
+      this.backgroundMusic = new Audio(this.story.setting.backgroundMusic);
 
       this.backgroundMusic.loop = true;
       this.backgroundMusic.play();
@@ -95,9 +110,9 @@ class Story extends Node {
   }
 
   start(id) {
-    const startNode = this.findNodeBy('name', 'start');
+    const startNode = this.findNodeBy('type', 'start');
     const paramNode = this.findNodeBy('id', id);
-    const node = paramNode ? paramNode : startNode;
+    const node = paramNode || startNode;
 
     if (!node) {
       console.error(`Can't find the start node or the ID that you passing is not found`);
@@ -107,17 +122,12 @@ class Story extends Node {
     this.nodeHandler(node);
   }
   nodeHandler(node) {
-    if (!node) return;
+    if (!node || this.isDestroyed) return;
 
     const eventName = `${node.type}Node`;
     const event = this[eventName] && this[eventName](node);
 
     event?.then((nextNodeId) => {
-      if (nextNodeId === 'end') {
-        this.destroy();
-        return;
-      }
-
       if (!nextNodeId) return;
 
       const nextNode = this.findNodeBy('id', nextNodeId);
@@ -128,36 +138,49 @@ class Story extends Node {
   chatHandler() {
     if (this.isDestroyed) return;
 
-    const currentChat = this.chats[this.chatIndex];
+    const currentChat = this.chats.shift();
 
-    if (currentChat) {
+    if (currentChat && !this.loadProgress) {
       const { type } = currentChat;
 
       if (type === 'options') {
         this.dispatch('options', currentChat.options);
       } else if (type === 'ending') {
         this.dispatch('chat-added', currentChat);
+        this.dispatch('end');
         this.destroy();
-        console.log('and in the end...');
         return;
       } else {
         this.dispatch('chat-added', currentChat);
       }
-
-      this.chatIndex += 1;
     }
 
-    const chatDelay = this.story.settings?.chatDelay ?? 1000;
+    const chatDelay = this.story.setting?.chatDelay ?? 1000;
     const timeout = setTimeout(() => {
+      clearTimeout(timeout);
       this.chatHandler();
     }, chatDelay);
 
     this.chatContainer.onclick = () => {
-      this.chatHandler();
       clearTimeout(timeout);
+      this.chatHandler();
     };
   }
+  findNodeBy(key, value) {
+    return this.story.nodes.find((node) => node[key] === value);
+  }
 
+  load(progress = []) {
+    const startNode = this.findNodeBy('type', 'start');
+
+    if (!startNode || !Array.isArray(progress)) {
+      return console.error('Start node is not found');
+    }
+
+    this.progress = progress;
+    this.loadProgress = true;
+    this.nodeHandler(startNode);
+  }
   on(name, callback) {
     if (typeof callback !== 'function') {
       console.error('The callback must be a function');
@@ -202,7 +225,6 @@ class Story extends Node {
     this.isDestroyed = true;
     this.chats = [];
     this.events = {};
-    this.chatIndex = 0;
     this.chatContainer.onclick = null;
     this.backgroundMusic?.pause();
     this.backgroundMusic = null;

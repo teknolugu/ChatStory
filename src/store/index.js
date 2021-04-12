@@ -79,7 +79,7 @@ export default createStore({
               key: sortBy,
               value: storyIds,
             });
-            console.log(data);
+
             resolve(data.stories);
           })
           .catch((error) => {
@@ -90,7 +90,6 @@ export default createStore({
     retrieveData({ commit }) {
       auth.listen(async () => {
         const user = auth?.user ?? null;
-        console.log(auth, user);
 
         if (user) {
           try {

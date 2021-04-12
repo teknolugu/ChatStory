@@ -60,7 +60,7 @@
               </li>
             </ul>
             <ui-button
-              v-if="user.username === story.author.username"
+              v-if="user && user.username === story.author.username"
               class="mt-4 max-w-sm w-full"
               tag="router-link"
               :to="`/story/${story.id}/edit`"

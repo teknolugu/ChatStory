@@ -16,7 +16,7 @@
       >
         <defs>
           <filter id="blur">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="20"></feGaussianBlur>
+            <feGaussianBlur in="SourceGraphic" stdDeviation="15"></feGaussianBlur>
           </filter>
         </defs>
       </svg>
@@ -26,7 +26,28 @@
       ></ui-img>
     </template>
     <div class="w-full md:max-w-sm mx-auto h-full relative">
-      <chat-container v-if="state.playing" :story-id="storyId"></chat-container>
+      <chat-container
+        v-if="state.playing"
+        ref="storyContainer"
+        :story-id="storyId"
+        @end="state.isFinished = true"
+      >
+        <template #header>
+          <ui-button
+            v-if="user"
+            v-tooltip="'Save progress'"
+            icon
+            class="bg-opacity-10 hover:bg-opacity-10 ml-4"
+            :loading="state.loadingSave"
+            @click="saveProgress"
+          >
+            <ui-icon name="save" view-box="0 0 24 24"></ui-icon>
+          </ui-button>
+          <!-- <ui-button icon class="bg-opacity-10 hover:bg-opacity-10 ml-2">
+            <ui-icon name="cog"></ui-icon>
+          </ui-button> -->
+        </template>
+      </chat-container>
       <div v-else class="h-full flex justify-center items-center flex-col">
         <ui-button
           circle
@@ -67,7 +88,8 @@
   </div>
 </template>
 <script>
-import { ref, shallowReactive } from 'vue';
+import { ref, shallowReactive, computed } from 'vue';
+import { useStore } from 'vuex';
 import { useToast } from 'vue-toastification';
 import { fetchAPI } from '@/utils/auth';
 import Story from '@/models/story';
@@ -87,15 +109,21 @@ export default {
     },
   },
   setup(props) {
+    const store = useStore();
     const toast = useToast();
 
     const state = shallowReactive({
       playing: false,
       loading: false,
       fullscreen: false,
+      isFinished: false,
+      loadingSave: false,
       darkBackground: false,
     });
     const container = ref(null);
+    const storyContainer = ref(null);
+
+    const user = computed(() => store.state.user);
 
     async function toggleFullscreen() {
       if (document.fullscreenElement) {
@@ -104,18 +132,6 @@ export default {
       } else {
         state.fullscreen = true;
         await container.value.requestFullscreen();
-      }
-    }
-    function addStoryId(data) {
-      if (Array.isArray(data)) {
-        const newData = data.map((item) => ({ ...item, storyId: props.story.id, $id: item.id }));
-
-        return newData;
-      } else if (typeof data === 'object' && data !== null) {
-        data.storyId = props.story.id;
-        data.$id = data.id;
-
-        return data;
       }
     }
     async function startPlaying() {
@@ -135,7 +151,7 @@ export default {
           `/story/data?dataId=${props.story.data}&storyId=${props.story.id}`
         );
 
-        if (!result.style) {
+        if (!result.data.style) {
           await Style.insertOrUpdate({
             data: {
               storyId: props.story.id,
@@ -143,14 +159,16 @@ export default {
           });
         }
 
-        await Story.insertOrUpdate({
+        const test = await Story.insertOrUpdate({
           data: {
             ...props.story,
-            ...result,
+            ...result.data,
+            progress: result.progress,
             isDataRetrieved: true,
             playedCount: props.story.playedCount + 1,
           },
         });
+        console.log(test);
 
         state.playing = true;
         state.loading = false;
@@ -160,11 +178,33 @@ export default {
         console.error(error);
       }
     }
+    function saveProgress() {
+      state.loadingSave = true;
+
+      fetchAPI('/user/my/saved-progress', {
+        method: 'POST',
+        body: JSON.stringify({
+          storyId: props.story.id,
+          options: storyContainer.value.state.selectedOptions,
+          isFinished: state.isFinished,
+        }),
+      })
+        .then(() => {
+          state.loadingSave = false;
+        })
+        .catch((error) => {
+          console.error(error);
+          state.loadingSave = false;
+        });
+    }
 
     return {
+      user,
       state,
       container,
       startPlaying,
+      saveProgress,
+      storyContainer,
       toggleFullscreen,
     };
   },

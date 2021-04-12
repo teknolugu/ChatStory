@@ -13,6 +13,9 @@ body {
 [role="button"] {
   @apply focus:outline-none focus:ring transition;
 }
+a[role="button"] {
+  display: inline-block;
+}
 
 .line-clamp {
   display: -webkit-box;
@@ -26,6 +29,10 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.Vue-Toastification__toast {
+  font-family: inherit !important;
 }
 
 .scroll::-webkit-scrollbar {

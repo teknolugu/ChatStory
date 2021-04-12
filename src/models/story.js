@@ -4,6 +4,7 @@ import Character from './character';
 import Node from './node';
 import Style from './style';
 import Setting from './setting';
+import Progress from './progress';
 
 class Story extends Model {
   static entity = 'stories';
@@ -31,6 +32,7 @@ class Story extends Model {
       nodes: this.hasMany(Node, 'storyId'),
       style: this.hasOne(Style, 'storyId'),
       setting: this.hasOne(Setting, 'storyId'),
+      progress: this.hasOne(Progress, 'storyId'),
     };
   }
 }
