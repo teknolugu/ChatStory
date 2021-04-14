@@ -1,22 +1,43 @@
 <template>
   <nav class="bg-white z-50 w-full px-5 shadow-sm fixed top-0">
     <div class="nav-content py-2 flex items-center border-b border-gray-100">
-      <p>{{ story.title }}</p>
+      <p class="text-overflow mr-2">{{ story.title }}</p>
+      <span
+        v-if="!story.isPublished"
+        class="inline-block px-2 py-1 bg-purple-500 mr-2 rounded-full text-sm text-white"
+      >
+        Draft
+      </span>
       <div class="flex-grow"></div>
-      <ui-button v-tooltip="'Preview'" :disabled="loading" class="mr-2" icon @click="previewStory">
-        <ui-icon name="play" class="icon-ui"></ui-icon>
+      <ui-popover class="mr-2">
+        <template #trigger>
+          <ui-button icon>
+            <ui-icon name="dots-vertical"></ui-icon>
+          </ui-button>
+        </template>
+        <ui-list class="space-y-1">
+          <ui-list-item class="cursor-pointer" v-if="story.isPublished" @click="setAsDraft" :disabled="state.loadingSetDraft">Set as draft</ui-list-item>
+          <ui-list-item class="cursor-pointer" @click="previewStory">Preview</ui-list-item>
+        </ui-list>
+      </ui-popover>
+      <ui-button
+        v-if="!story.isPublished"
+        v-tooltip="'Save draft'"
+        icon
+        class="text-primary mr-2"
+        :loading="state.saveBtn"
+        :disabled="validation.$invalid"
+        @click="updateStory(false, 'saveBtn')"
+      >
+        <ui-icon name="save" view-box="0 0 24 24"></ui-icon>
       </ui-button>
-      <ui-button v-tooltip="'Save draft'" icon class="text-primary mr-2">
-        <ui-icon name="save"></ui-icon>
-      </ui-button>
-      <ui-button variant="primary">
-        <ui-icon
-          name="paper-airplane"
-          class="icon-ui mr-2 transform rotate-45 -mt-1"
-          size="20"
-          :disabled="loading"
-        ></ui-icon>
-        Publish
+      <ui-button
+        variant="primary"
+        :loading="state.loadingPrimaryBtn"
+        :disabled="validation.$invalid"
+        @click="updateStory(true, 'loadingPrimaryBtn')"
+      >
+        {{ story.isPublished ? 'Update' : 'Publish' }}
       </ui-button>
     </div>
     <div class="nav-tab flex items-center text-sm">
@@ -48,8 +69,11 @@
   </nav>
 </template>
 <script>
-import { ref } from 'vue';
+import { shallowReactive } from 'vue';
 import emitter from 'tiny-emitter/instance';
+import { fetchAPI } from '@/utils/auth';
+import { convertStoryObj } from '@/utils/helper';
+import Story from '@/models/Story';
 
 export default {
   props: {
@@ -57,11 +81,11 @@ export default {
       type: String,
       default: '',
     },
-    loading: {
-      type: Boolean,
-      default: true,
-    },
     story: {
+      type: Object,
+      default: () => ({}),
+    },
+    validation: {
       type: Object,
       default: () => ({}),
     },
@@ -75,6 +99,12 @@ export default {
       { id: 'editor-style', name: 'chat style' },
     ];
 
+    const state = shallowReactive({
+      saveBtn: false,
+      loadingPrimaryBtn: false,
+      loadingSetDraft: false,
+    });
+
     function previewStory() {
       emit('showPreview');
       emitter.emit('preview-story');
@@ -82,10 +112,66 @@ export default {
     function showBlocks() {
       emitter.emit('show-blocks');
     }
+    async function updateStory(isPublished, buttonId) {
+      try {
+        state[buttonId] = true;
+
+        const data = convertStoryObj(props.story);
+
+        await fetchAPI(`/story/${props.story.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            ...data,
+            isPublished,
+          }),
+        });
+
+        if (isPublished) {
+          await Story.update({
+            where: props.story.id,
+            data: {
+              isPublished,
+            },
+          });
+        }
+
+        state[buttonId] = false;
+      } catch (error) {
+        state[buttonId] = false;
+        console.error(error);
+      }
+    }
+    async function setAsDraft() {
+      try {
+        state.loadingSetDraft = true;
+
+        await fetchAPI(`/story/${props.story.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            isPublished: false,
+          }),
+        });
+
+        await Story.update({
+          where: props.story.id,
+          data: {
+            isPublished: false,
+          },
+        });
+
+        state.loadingSetDraft = false;
+      } catch (error) {
+        state.loadingSetDraft = false;
+        console.error(error);
+      }
+    }
 
     return {
       tabs,
+      state,
       showBlocks,
+      setAsDraft,
+      updateStory,
       previewStory,
     };
   },

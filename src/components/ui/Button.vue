@@ -20,7 +20,10 @@
   </component>
 </template>
 <script>
+import UiSpinner from './Spinner.vue';
+
 export default {
+  components: { UiSpinner },
   props: {
     icon: Boolean,
     disabled: Boolean,

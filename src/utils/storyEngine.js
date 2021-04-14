@@ -68,7 +68,6 @@ class Node {
 
         resolve();
       }
-
     });
   }
   endNode() {

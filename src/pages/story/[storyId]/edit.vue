@@ -1,38 +1,49 @@
 <template>
   <div class="editor">
-    <editor-nav
-      v-model:activeTab="state.activeTab"
-      :loading="state.loading"
-      :story="story"
-      @showPreview="state.showPreview = true"
-    ></editor-nav>
-    <main class="h-screen" style="padding-top: 95px">
-      <div v-if="state.loading" class="py-10 text-center">
-        <ui-spinner size="36"></ui-spinner>
-      </div>
-      <keep-alive v-else>
-        <component :is="state.activeTab"></component>
-      </keep-alive>
-    </main>
-    <ui-modal v-if="!state.loading" v-model="state.showPreview" custom-content persist>
-      <chats-container v-bind="{ story }">
-        <template #header>
-          <div class="flex-grow"></div>
-          <ui-icon name="x" class="cursor-pointer" @click="state.showPreview = false"></ui-icon>
-        </template>
-      </chats-container>
-    </ui-modal>
+    <div v-if="state.loading" class="py-10 text-center">
+      <ui-spinner size="36"></ui-spinner>
+    </div>
+    <template v-else>
+      <editor-nav
+        v-model:activeTab="state.activeTab"
+        v-bind="{ story, validation }"
+        :loading="state.loading"
+        :story="story"
+        @showPreview="state.showPreview = true"
+      ></editor-nav>
+      <main class="h-screen" style="padding-top: 95px">
+        <keep-alive>
+          <component :is="state.activeTab"></component>
+        </keep-alive>
+      </main>
+      <ui-modal v-model="state.showPreview" custom-content persist>
+        <chats-container :story-id="storyId">
+          <template #header>
+            <div class="flex-grow"></div>
+            <ui-icon name="x" class="cursor-pointer" @click="state.showPreview = false"></ui-icon>
+          </template>
+        </chats-container>
+      </ui-modal>
+    </template>
   </div>
 </template>
 <route>
 {
-  name: 'edit-story'
+  name: 'edit-story',
+  meta: {
+    middleware: 'auth'
+  }
 }
 </route>
 <script>
 import { shallowReactive, onMounted, computed } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { useVuelidate } from '@vuelidate/core';
+import { fetchAPI } from '@/utils/auth';
 import Story from '@/models/story';
+import Style from '@/models/style';
 import EditorNav from '@/components/editor/EditorNav.vue';
 import EditorStory from '@/components/editor/EditorStory/index.vue';
 import EditorCharacters from '@/components/editor/EditorCharacters.vue';
@@ -51,30 +62,69 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const store = useStore();
+    const validation = useVuelidate({}, {}, { $scope: 'detail' });
 
     const storyId = router.currentRoute.value.params.storyid;
 
     const state = shallowReactive({
-      activeTab: 'editor-characters',
+      activeTab: 'editor-details',
       showPreview: false,
       loading: true,
     });
 
     const story = computed(() => Story.query().withAll().where('id', storyId).first());
+    const user = computed(() => store.state.user);
 
-    onMounted(() => {
-      if (!story.value) {
-        router.push('/');
-        return;
+    onMounted(async () => {
+      try {
+        state.loading = true;
+
+        if (!story.value || !story.value.isDataRetrieved) {
+          const result = await fetchAPI(`/story/${storyId}?withData=true`);
+
+          if (result.author.username !== user.value.username) {
+            return router.replace('/404');
+          }
+
+          const { data } = result;
+
+          delete result.data;
+
+          if (!data.style) {
+            await Style.insertOrUpdate({
+              data: {
+                storyId,
+              },
+            });
+          }
+
+          await Story.insertOrUpdate({
+            data: {
+              ...result,
+              ...data,
+              isDataRetrieved: true,
+            },
+          });
+        }
+
+        state.loading = false;
+      } catch (error) {
+        console.error(error);
       }
+    });
+    onBeforeRouteLeave((to, from) => {
+      const answer = window.confirm('Do you really want to leave? you have unsaved changes!');
 
-      state.story = story;
-      state.loading = false;
+      if (!answer) return false;
+      else window.location.pathname = to.path;
     });
 
     return {
       story,
       state,
+      storyId,
+      validation,
     };
   },
 };

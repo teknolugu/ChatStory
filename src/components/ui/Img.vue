@@ -1,21 +1,23 @@
 <template>
-  <div ref="imageContainer" class="image-ui flex justify-center items-center relative">
-    <slot v-if="state.loading" name="loading">
-      <div class="absolute h-full rounded-lg bg-input-dark w-full animate-pulse"></div>
-    </slot>
-    <slot v-else-if="state.error" name="error">
-      <p class="text-lighter text-center">Failed to load image</p>
-    </slot>
-    <div
-      v-else
-      :style="{
-        backgroundImage: `url(${src})`,
-        backgroundSize: contain ? 'contain' : 'cover',
-      }"
-      v-bind="{ role: alt ? 'img' : null, 'aria-label': alt }"
-      class="h-full absolute top-0 left-0 w-full bg-no-repeat bg-center"
-    >
-      <slot></slot>
+  <div ref="imageContainer" class="image-ui relative">
+    <div class="flex justify-center items-center">
+      <slot v-if="state.loading" name="loading">
+        <div class="absolute h-full rounded-lg bg-input-dark w-full animate-pulse"></div>
+      </slot>
+      <slot v-else-if="state.error" name="error">
+        <p class="text-lighter text-center">Failed to load image</p>
+      </slot>
+      <div
+        v-else
+        :style="{
+          backgroundImage: `url(${src})`,
+          backgroundSize: contain ? 'contain' : 'cover',
+        }"
+        v-bind="{ role: alt ? 'img' : null, 'aria-label': alt }"
+        class="h-full absolute top-0 left-0 w-full bg-no-repeat bg-center"
+      >
+        <slot></slot>
+      </div>
     </div>
   </div>
 </template>

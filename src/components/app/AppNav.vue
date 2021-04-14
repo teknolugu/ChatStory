@@ -35,6 +35,10 @@
               <ui-icon name="bookmark" class="mr-3"></ui-icon>
               My Collection
             </ui-list-item>
+            <ui-list-item small tag="router-link" to="/draft">
+              <ui-icon name="document-text" class="mr-3"></ui-icon>
+              Story Draft
+            </ui-list-item>
             <hr class="my-2" />
             <ui-list-item small class="text-red-500 cursor-pointer" @click="signOut">
               <ui-icon name="logout" class="mr-3"></ui-icon>

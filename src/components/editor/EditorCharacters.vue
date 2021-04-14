@@ -3,7 +3,7 @@
     <h3 class="text-xl mb-6 font-semibold">Characters</h3>
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
       <ui-card
-        class="flex flex-col items-center justify-center cursor-pointer"
+        class="flex flex-col items-center justify-center text-center cursor-pointer"
         hover
         @click="showModal('add')"
       >

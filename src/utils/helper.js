@@ -49,3 +49,42 @@ export const usernameValidation = helpers.withMessage(
   "Username can only contain letters, numbers and '_'",
   (value) => /^[a-zA-Z0-9\_]+$/.test(value)
 );
+
+export function convertStoryObj(story) {
+  const copy = { ...story };
+
+  const dataKeys = ['nodes', 'characters', 'style', 'setting'];
+  const deleteKeys = [
+    'isInCollection',
+    'isLiked',
+    'isDataRetrieved',
+    'author',
+    '$id',
+    'id',
+    'createdAt',
+    'likeCount',
+    'playedCount',
+    'progress',
+    ...dataKeys,
+  ];
+
+  copy.data = {};
+
+  dataKeys.forEach((key) => {
+    copy.data[key] = copy[key];
+
+    if (Array.isArray(copy.data[key])) {
+      copy.data[key].forEach((item) => {
+        delete item.$id;
+        delete item.storyId;
+      });
+    } else {
+      delete copy.data[key].storyId;
+      delete copy.data[key].$id;
+      delete copy.data[key].id;
+    }
+  });
+  deleteKeys.forEach((key) => delete copy[key]);
+
+  return copy;
+}
