@@ -113,12 +113,15 @@ export default {
       }
     }
 
-    watch(story, debounce(() => {
-      Story.update({
-        where: storyId,
-        data: story,
-      });
-    }, 200));
+    watch(
+      story,
+      debounce(() => {
+        Story.update({
+          where: storyId,
+          data: story,
+        });
+      }, 200)
+    );
 
     onMounted(() => {
       const data = Story.find(storyId);

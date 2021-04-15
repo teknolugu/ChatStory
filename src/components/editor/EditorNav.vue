@@ -16,7 +16,13 @@
           </ui-button>
         </template>
         <ui-list class="space-y-1">
-          <ui-list-item class="cursor-pointer" v-if="story.isPublished" @click="setAsDraft" :disabled="state.loadingSetDraft">Set as draft</ui-list-item>
+          <ui-list-item
+            v-if="story.isPublished"
+            class="cursor-pointer"
+            :disabled="state.loadingSetDraft"
+            @click="setAsDraft"
+            >Set as draft</ui-list-item
+          >
           <ui-list-item class="cursor-pointer" @click="previewStory">Preview</ui-list-item>
         </ui-list>
       </ui-popover>

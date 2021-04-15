@@ -11,7 +11,7 @@
         </div>
         <p class="text-gray-600">You have no collection</p>
       </div>
-      <div v-else class="mt-6 grid grid-cols-4">
+      <div v-else class="mt-6 grid grid-cols-4 gap-6">
         <ui-story-card v-for="story in state.collection" :key="story.id" v-bind="{ story }">
           <template #image>
             <ui-button

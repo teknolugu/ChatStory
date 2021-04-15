@@ -5,7 +5,14 @@
       <div class="mt-12">
         <div class="flex flex-col lg:flex-row items-start">
           <div class="flex-1 lg:mr-16">
-            <h1 class="text-2xl font-semibold">{{ story.title }}</h1>
+            <h1 class="text-2xl font-semibold">
+              {{ story.title }}
+              <span
+                v-if="!story.isPublished"
+                class="inline-block px-2 py-1 text-sm text-white rounded-full bg-purple-500 ml-2 font-normal"
+                >Draft</span
+              >
+            </h1>
             <router-link
               :to="`/user/${story.author.username}`"
               class="inline-flex items-center my-4"
