@@ -8,7 +8,6 @@
   </div>
 </template>
 <script>
-import { onMounted } from 'vue';
 import { useStore } from 'vuex';
 import AppNav from './components/app/AppNav.vue';
 import Story from './models/story';
@@ -18,7 +17,7 @@ export default {
   components: { AppNav },
   setup() {
     const store = useStore();
-    const excludeNav = ['edit-story'];
+    const excludeNav = ['edit-story', 'auth'];
 
     Story.insert({
       data: {
@@ -47,9 +46,7 @@ export default {
       console.log(data, Story.query().withAll().first());
     });
 
-    onMounted(() => {
-      store.dispatch('retrieveData');
-    });
+    store.dispatch('retrieveData');
 
     return {
       excludeNav,

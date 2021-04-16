@@ -9,6 +9,20 @@
         Draft
       </span>
       <div class="flex-grow"></div>
+      <ui-popover v-if="validation.$errors.length !== 0" trigger="mouseenter click">
+        <template #trigger>
+          <ui-button icon color="bg-red-100" class="mr-2 text-red-500">
+            <ui-icon name="exclamaction"></ui-icon>
+          </ui-button>
+        </template>
+        <p class="mb-2">Errors</p>
+        <ul class="list-disc ml-6 w-48">
+          <li v-for="(error, index) in validation.$errors" :key="index">
+            <span class="font-semibold capitalize">{{ error.$property }}:</span>
+            <p>{{ error.$message }}</p>
+          </li>
+        </ul>
+      </ui-popover>
       <ui-popover class="mr-2">
         <template #trigger>
           <ui-button icon>
@@ -21,8 +35,9 @@
             class="cursor-pointer"
             :disabled="state.loadingSetDraft"
             @click="setAsDraft"
-            >Set as draft</ui-list-item
           >
+            Set as draft
+          </ui-list-item>
           <ui-list-item class="cursor-pointer" @click="previewStory">Preview</ui-list-item>
         </ui-list>
       </ui-popover>

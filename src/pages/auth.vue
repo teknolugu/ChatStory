@@ -20,6 +20,11 @@
     </section>
   </div>
 </template>
+<route>
+{
+  name: 'auth'
+}
+</route>
 <script>
 import auth from '@/utils/auth';
 import googleLogoSvg from '../assets/svg/google-logo.svg';

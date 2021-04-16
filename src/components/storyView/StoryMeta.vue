@@ -1,6 +1,6 @@
 <template>
   <div class="w-full lg:w-60 mt-8 lg:mt-0">
-    <div class="flex mb-6">
+    <div v-if="story.isPublished" class="flex mb-6">
       <ui-button
         class="flex-1 mr-4 max-w-xs"
         :variant="story.isLiked ? 'primary' : 'default'"
@@ -55,6 +55,7 @@
 import { shallowReactive } from 'vue';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { fetchAPI } from '@/utils/auth';
 import Story from '@/models/story';
 
 dayjs.extend(relativeTime);
@@ -83,15 +84,15 @@ export default {
         const result = await fetchAPI('/like', {
           method: 'POST',
           body: JSON.stringify({
-            storyId: story.value.id,
+            storyId: props.story.id,
           }),
         });
 
         const { isLiked } = result;
-        const currentLikeCount = story.value.likeCount;
+        const currentLikeCount = props.story.likeCount;
 
         await Story.update({
-          where: story.value.id,
+          where: props.story.id,
           data: {
             isLiked,
             likeCount: isLiked ? currentLikeCount + 1 : currentLikeCount - 1,
@@ -111,12 +112,12 @@ export default {
         const { isInCollection } = await fetchAPI('/user/my/collection', {
           method: 'POST',
           body: JSON.stringify({
-            storyId: story.value.id,
+            storyId: props.story.id,
           }),
         });
 
         await Story.update({
-          where: story.value.id,
+          where: props.story.id,
           data: { isInCollection },
         });
 

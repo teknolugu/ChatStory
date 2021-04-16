@@ -1,18 +1,32 @@
 <template>
-  <nav ref="nav" class="h-16 bg-white w-full z-50 transition">
+  <nav ref="nav" class="h-16 bg-white w-full z-50 transition relative">
     <div class="px-8 flex items-center h-full">
       <p class="font-semibold text-lg">Myyy</p>
       <ui-input
         v-model="state.search"
-        placeholder="Search..."
-        class="w-72 ml-8"
+        placeholder="Search story"
+        class="w-72 ml-8 hidden md:block"
         @keyup.enter="search"
       >
         <template #prepend>
           <ui-icon name="search" class="mr-2 text-gray-600" @click="search"></ui-icon>
         </template>
       </ui-input>
+      <div
+        v-if="state.showSearch"
+        class="absolute bottom-0 w-full transform translate-y-[100%] left-0 bg-white px-8 pb-4 md:hidden"
+      >
+        <hr class="mb-4 mt-1" />
+        <ui-input v-model="state.search" block placeholder="Search story" @keyup.enter="search">
+          <template #prepend>
+            <ui-icon name="search" class="mr-2 text-gray-600" @click="search"></ui-icon>
+          </template>
+        </ui-input>
+      </div>
       <div class="flex-grow"></div>
+      <ui-button icon class="mr-2 md:hidden" @click="state.showSearch = !state.showSearch">
+        <ui-icon :name="state.showSearch ? 'x' : 'search'"></ui-icon>
+      </ui-button>
       <template v-if="user">
         <ui-popover trigger="mouseenter click" class="mr-4">
           <template #trigger>
@@ -21,6 +35,14 @@
               class="h-10 w-10 overflow-hidden rounded-full mt-1"
             />
           </template>
+          <ui-button
+            variant="primary"
+            class="w-full mb-2 md:hidden"
+            @click="state.newStoryModal = true"
+          >
+            <ui-icon name="plus" class="-ml-3"></ui-icon>
+            <span class="ml-1">Story</span>
+          </ui-button>
           <ui-list class="w-48 text-gray-600">
             <ui-list-item small tag="router-link" :to="`/user/${user.username}`">
               <ui-icon name="user" class="mr-3"></ui-icon>
@@ -46,16 +68,19 @@
             </ui-list-item>
           </ui-list>
         </ui-popover>
-        <ui-button variant="primary">
+        <ui-button variant="primary" class="hidden md:block" @click="state.newStoryModal = true">
           <ui-icon name="plus" class="md:-ml-2"></ui-icon>
-          <span class="ml-1 hidden md:block">Story</span>
+          <span class="ml-1">Story</span>
         </ui-button>
       </template>
       <template v-else>
-        <ui-button variant="primary" tag="router-link" to="/auth/register"> Sign up </ui-button>
+        <ui-button variant="primary" tag="router-link" to="/auth/register" class="hidden md:block">
+          Sign up
+        </ui-button>
         <ui-button tag="router-link" to="/auth" class="ml-2"> Sign in </ui-button>
       </template>
     </div>
+    <new-story v-model="state.newStoryModal"></new-story>
   </nav>
 </template>
 <script>
@@ -63,9 +88,11 @@ import { computed, onMounted, onUnmounted, shallowReactive, watch } from 'vue';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import { useStore } from 'vuex';
 import { debounce } from '@/utils/helper';
+import NewStory from './NewStory.vue';
 import auth from '@/utils/auth';
 
 export default {
+  components: { NewStory },
   setup() {
     const store = useStore();
     const router = useRouter();
@@ -73,6 +100,8 @@ export default {
     const state = shallowReactive({
       hide: true,
       search: '',
+      showSearch: false,
+      newStoryModal: false,
     });
 
     const user = computed(() => store.state.user);

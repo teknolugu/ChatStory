@@ -20,7 +20,7 @@
     "snarkdown": "^2.0.0",
     "tiny-emitter": "^2.1.0",
     "tippy.js": "^6.2.7",
-    "vite-ssr": "^0.6.6",
+    "vitedge": "^0.10.5",
     "vue": "^3.0.5",
     "vue-router": "^4.0.3",
     "vue-slicksort": "^2.0.0-alpha.2",

@@ -7,6 +7,11 @@
         :src="story.bannerImage"
         :alt="`${story.title} banner image`"
       >
+        <router-link
+          v-show="!$slots.image"
+          :to="`/story/${story.id}`"
+          class="absolute h-full w-full top-0 left-0"
+        ></router-link>
         <slot name="image"></slot>
       </ui-img>
     </template>
