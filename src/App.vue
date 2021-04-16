@@ -1,6 +1,6 @@
 <template>
   <div class="app text-gray-800">
-    <app-nav v-if="!excludeNav.includes($route.name)"></app-nav>
+    <app-nav v-if="!excludeNav.test($route.name)"></app-nav>
     <main>
       <router-view></router-view>
     </main>
@@ -17,7 +17,7 @@ export default {
   components: { AppNav },
   setup() {
     const store = useStore();
-    const excludeNav = ['edit-story', 'auth'];
+    const excludeNav = /edit-story|auth/;
 
     Story.insert({
       data: {

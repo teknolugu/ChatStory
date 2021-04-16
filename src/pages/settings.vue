@@ -1,8 +1,16 @@
 <template>
-  <div class="py-12 container">
-    <p class="text-2xl font-semibold">Settings</p>
-    <div class="mt-8 flex items-start">
-      <ui-list class="w-64 space-y-2 mr-8">
+  <div class="py-6 lg:py-12 container">
+    <p class="lg:text-2xl text-xl font-semibold">Settings</p>
+    <div class="lg:mt-8 flex flex-col lg:flex-row items-start">
+      <ui-select
+        block
+        :model-value="activeTab"
+        class="mt-2 lg:hidden max-w-md w-full mb-8"
+        @change="activeTab = $event"
+      >
+        <option v-for="tab in tabs" :key="tab.id" :value="tab.id">{{ tab.name }}</option>
+      </ui-select>
+      <ui-list class="w-64 space-y-2 mr-8 hidden lg:block">
         <ui-list-item
           v-for="tab in tabs"
           :key="tab.id"
@@ -14,7 +22,7 @@
           <span class="ml-3">{{ tab.name }}</span>
         </ui-list-item>
       </ui-list>
-      <ui-card class="flex-1">
+      <ui-card class="w-full">
         <component :is="`setting-${activeTab}`"></component>
       </ui-card>
     </div>

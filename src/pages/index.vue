@@ -1,11 +1,11 @@
 <template>
-  <div class="flex container py-12">
+  <div class="flex container py-6 lg:py-12 flex-col-reverse lg:flex-row">
     <div class="flex-1">
       <div v-if="state.isLoading" class="text-center">
         <ui-spinner size="36"></ui-spinner>
       </div>
       <template v-else>
-        <div class="stories grid grid-cols-3 mr-8 gap-6">
+        <div class="stories grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:mr-8 gap-6">
           <ui-story-card
             v-for="story in stories"
             :key="story.id"
@@ -19,9 +19,19 @@
         </div>
       </template>
     </div>
-    <div class="w-64">
+    <div class="w-full lg:w-64 mb-10 lg:mb-0">
       <p class="font-semibold">Sort by</p>
-      <ui-list class="w-full space-y-2 mt-4">
+      <ui-select
+        block
+        :model-value="state.activeSort"
+        class="mt-2 lg:hidden max-w-md"
+        @change="changeSort"
+      >
+        <option v-for="sort in sorts" :key="sort.id" :value="sort.id" class="capitalize">
+          {{ sort.name }}
+        </option>
+      </ui-select>
+      <ui-list class="w-full space-y-2 mt-4 hidden lg:block">
         <ui-list-item
           v-for="sort in sorts"
           :key="sort.id"

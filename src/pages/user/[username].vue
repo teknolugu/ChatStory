@@ -12,7 +12,7 @@
         <p class="ml-4 text-xl font-semibold">{{ $route.params.username }}</p>
       </div>
       <p class="mt-12 mb-5 text-gray-600 text-xl">Stories</p>
-      <div class="grid grid-cols-4 mr-8 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <ui-story-card
           v-for="story in state.stories"
           :key="story.id"

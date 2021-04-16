@@ -106,7 +106,7 @@ export default {
         })
         .catch((error) => {
           loading.value = false;
-          console.log(error);
+          console.error(error);
         });
     }
 

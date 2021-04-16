@@ -1,7 +1,7 @@
 <template>
   <nav ref="nav" class="h-16 bg-white w-full z-50 transition relative">
     <div class="px-8 flex items-center h-full">
-      <p class="font-semibold text-lg">Myyy</p>
+      <router-link to="/" class="font-semibold text-lg">Myyy</router-link>
       <ui-input
         v-model="state.search"
         placeholder="Search story"
@@ -74,9 +74,9 @@
         </ui-button>
       </template>
       <template v-else>
-        <ui-button variant="primary" tag="router-link" to="/auth/register" class="hidden md:block">
-          Sign up
-        </ui-button>
+        <router-link to="/auth/register">
+          <ui-button variant="primary" class="hidden md:block"> Sign up </ui-button>
+        </router-link>
         <ui-button tag="router-link" to="/auth" class="ml-2"> Sign in </ui-button>
       </template>
     </div>

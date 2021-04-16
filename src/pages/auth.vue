@@ -1,13 +1,13 @@
 <template>
-  <div class="flex overflow-auto h-screen">
+  <div class="flex lg:overflow-auto lg:h-screen">
     <section
-      class="w-[450px] bg-gradient-to-br from-purple-500 to-indigo-500 text-white px-12 py-24"
+      class="w-[450px] bg-gradient-to-br from-purple-500 to-indigo-500 text-white px-12 py-24 hidden lg:block"
     >
       <p class="mb-6">Logo</p>
       <h3 class="text-2xl font-semibold">A few clicks away to start create your own story</h3>
     </section>
     <section class="flex flex-1 items-center justify-center overflow-auto relative">
-      <div class="inline-block w-full md:max-w-md py-12">
+      <div class="inline-block w-full md:max-w-md px-8 lg:px-0 py-12">
         <router-view></router-view>
         <template v-if="['auth', 'auth-register'].includes($route.name)">
           <hr class="my-8 divider text-center relative overflow-visible" />

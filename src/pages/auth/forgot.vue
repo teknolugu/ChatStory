@@ -3,10 +3,10 @@
     <ui-alert v-model="state.showAlert" :variant="state.alertVariant">
       {{ state.alertMessage }}
     </ui-alert>
-    <ui-button icon class="absolute top-0 left-0 m-10" tag="router-link" to="/auth">
+    <ui-button icon class="absolute top-0 left-0 m-8 lg:m-10" tag="router-link" to="/auth">
       <ui-icon name="arrow-narrow-left"></ui-icon>
     </ui-button>
-    <div class="mt-6">
+    <div class="mt-8 md:mt-6">
       <h3 class="text-2xl font-semibold">Forgot your password?</h3>
       <p class="text-gray-500">Enter your email below to start reset your password</p>
     </div>

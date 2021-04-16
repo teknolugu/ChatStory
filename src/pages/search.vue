@@ -1,5 +1,5 @@
 <template>
-  <div class="container w-full py-12">
+  <div class="container w-full py-6 lg:py-12">
     <div v-if="state.loading" class="text-center">
       <ui-spinner size="36"></ui-spinner>
     </div>
@@ -10,7 +10,7 @@
       <div v-if="state.stories.length === 0" class="text-center">
         <p>No results found</p>
       </div>
-      <div v-else class="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-6">
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <ui-story-card
           v-for="story in state.stories"
           :key="story.id"
