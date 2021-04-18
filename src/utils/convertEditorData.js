@@ -14,12 +14,13 @@ function toNode(storyId, drawflowData) {
       data: { inputs, outputs, pos_x, pos_y },
     });
   });
-  console.log(Node.all(), data);
 }
 function toDrawflow(nodes) {
   const data = nodes.reduce((obj, node) => {
     obj[node.id] = {
       ...node,
+      inputs: node.inputs || {},
+      outputs: node.outputs || {},
       data: {},
       class: node.type,
       html: node.type,

@@ -1,45 +1,55 @@
 <template>
   <div class="story lg:py-12 pb-12">
-    <template v-if="state.retrieved">
-      <div class="lg:container">
-        <story-player :story="story" :story-id="storyId"></story-player>
-      </div>
-      <div class="lg:mt-12 mt-6 container">
-        <div class="flex flex-col lg:flex-row items-start">
-          <div class="flex-1 lg:mr-16">
-            <h1 class="text-2xl font-semibold">
-              {{ story.title }}
-              <span
-                v-if="!story.isPublished"
-                class="inline-block px-2 py-1 text-sm text-white rounded-full bg-purple-500 ml-2 font-normal"
-              >
-                Draft
-              </span>
-            </h1>
-            <router-link
-              :to="`/user/${story.author.username}`"
-              class="inline-flex items-center my-4"
-            >
-              <ui-img
-                :alt="`${story.author.username} profile`"
-                lazy
-                :src="
-                  story.author.photoURL ??
-                  `https://ui-avatars.com/api/?name=${story.author.username}`
-                "
-                class="inline-block h-10 w-10 overflow-hidden rounded-full mr-2"
-              ></ui-img>
-              <p class="ml-2">{{ story.author.username }}</p>
-            </router-link>
-            <p>{{ story.description }}</p>
-          </div>
-          <story-meta v-bind="{ story, user }"></story-meta>
+    <ui-alert v-if="state.isError" class="mx-12" variant="error">
+      Something went wrong
+      <template #append>
+        <ui-button variant="danger" class="bg-opacity-60 hover:bg-opacity-60" @click="fetchStory">
+          Try again
+        </ui-button>
+      </template>
+    </ui-alert>
+    <template v-else>
+      <template v-if="state.retrieved">
+        <div class="lg:container">
+          <story-player :story="story" :story-id="storyId"></story-player>
         </div>
+        <div class="lg:mt-12 mt-6 container">
+          <div class="flex flex-col lg:flex-row items-start">
+            <div class="flex-1 lg:mr-16">
+              <h1 class="text-2xl font-semibold">
+                {{ story.title }}
+                <span
+                  v-if="!story.isPublished"
+                  class="inline-block px-2 py-1 text-sm text-white rounded-full bg-purple-500 ml-2 font-normal"
+                >
+                  Draft
+                </span>
+              </h1>
+              <router-link
+                :to="`/user/${story.author.username}`"
+                class="inline-flex items-center my-4"
+              >
+                <ui-img
+                  :alt="`${story.author.username} profile`"
+                  lazy
+                  :src="
+                    story.author.photoURL ??
+                    `https://ui-avatars.com/api/?name=${story.author.username}`
+                  "
+                  class="inline-block h-10 w-10 overflow-hidden rounded-full mr-2"
+                ></ui-img>
+                <p class="ml-2">{{ story.author.username }}</p>
+              </router-link>
+              <p>{{ story.description }}</p>
+            </div>
+            <story-meta v-bind="{ story, user }"></story-meta>
+          </div>
+        </div>
+      </template>
+      <div v-else class="py-12 text-center">
+        <ui-spinner size="36"></ui-spinner>
       </div>
     </template>
-    <div v-else class="py-12 text-center">
-      <ui-spinner size="36"></ui-spinner>
-    </div>
   </div>
 </template>
 <route>
@@ -65,14 +75,17 @@ export default {
     const storyId = router.currentRoute.value.params.storyid;
 
     const state = shallowReactive({
+      isError: false,
       retrieved: false,
     });
 
     const story = computed(() => Story.query().where('id', storyId).withAll().first());
     const user = computed(() => store.state.user);
 
-    onMounted(async () => {
+    async function fetchStory() {
       try {
+        state.isError = false;
+
         if (story.value) {
           state.retrieved = true;
 
@@ -99,16 +112,20 @@ export default {
         if (error.statusCode === 404) {
           router.replace('/404');
         } else {
+          state.isError = true;
           console.error(error);
         }
       }
-    });
+    }
+
+    fetchStory();
 
     return {
       user,
       state,
       story,
       storyId,
+      fetchStory,
     };
   },
 };

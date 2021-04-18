@@ -1,22 +1,32 @@
 <template>
   <div class="flex container py-6 lg:py-12 flex-col-reverse lg:flex-row">
     <div class="flex-1">
-      <div v-if="state.isLoading" class="text-center">
-        <ui-spinner size="36"></ui-spinner>
-      </div>
+      <ui-alert v-if="state.isError" class="lg:mr-12" variant="error">
+        Something went wrong
+        <template #append>
+          <ui-button variant="danger" class="bg-opacity-60 hover:bg-opacity-60" @click="fetchFeed">
+            Try again
+          </ui-button>
+        </template>
+      </ui-alert>
       <template v-else>
-        <div class="stories grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:mr-8 gap-6">
-          <ui-story-card
-            v-for="story in stories"
-            :key="story.id"
-            v-bind="{ story }"
-          ></ui-story-card>
+        <div v-if="state.isLoading" class="text-center">
+          <ui-spinner size="36"></ui-spinner>
         </div>
-        <div v-if="nextKey" class="text-center mt-12">
-          <ui-button :loading="state.loadingLoadMore" @click="loadMore"
-            >Load more stories</ui-button
-          >
-        </div>
+        <template v-else>
+          <div class="stories grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:mr-8 gap-6">
+            <ui-story-card
+              v-for="story in stories"
+              :key="story.id"
+              v-bind="{ story }"
+            ></ui-story-card>
+          </div>
+          <div v-if="nextKey" class="text-center mt-12">
+            <ui-button :loading="state.loadingLoadMore" @click="loadMore"
+              >Load more stories</ui-button
+            >
+          </div>
+        </template>
       </template>
     </div>
     <div class="w-full lg:w-64 mb-10 lg:mb-0">
@@ -61,7 +71,8 @@ export default {
     const store = useStore();
 
     const state = shallowReactive({
-      isLoading: false,
+      isError: false,
+      isLoading: true,
       loadingLoadMore: false,
       activeSort: 'mostLiked',
     });
@@ -82,12 +93,16 @@ export default {
         });
     }
     function fetchFeed() {
+      state.isError = false;
+      state.isLoading = true;
+
       store
         .dispatch('fetchFeed', { sortBy: state.activeSort })
         .then((stories) => {
           state.isLoading = false;
         })
         .catch((error) => {
+          state.isError = true;
           state.isLoading = false;
         });
     }
@@ -96,13 +111,7 @@ export default {
       fetchFeed();
     }
 
-    onMounted(() => {
-      if (store.state.feed[state.activeSort].isRetrieved) return;
-
-      state.isLoading = true;
-
-      fetchFeed();
-    });
+    fetchFeed();
 
     return {
       state,
@@ -110,6 +119,7 @@ export default {
       nextKey,
       stories,
       loadMore,
+      fetchFeed,
       changeSort,
     };
   },

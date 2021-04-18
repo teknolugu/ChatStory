@@ -72,9 +72,6 @@ export default function ({ element, storyId, data }) {
       },
     });
   });
-  editor.on('click', (event) => {
-    console.log(event);
-  });
 
   if (data) {
     editor.import(data);

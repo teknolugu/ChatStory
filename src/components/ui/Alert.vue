@@ -2,7 +2,7 @@
   <div
     v-if="modelValue"
     :class="variants[variant].color"
-    class="ui-alert flex items-start rounded-xl p-4"
+    class="ui-alert flex items-center rounded-xl p-4"
   >
     <div class="ui-alert__prepend mr-2">
       <slot name="prepend"></slot>
@@ -13,7 +13,12 @@
     </div>
     <div class="ui-alert__append ml-2">
       <slot name="append"></slot>
-      <ui-icon name="x" class="opacity-60 cursor-pointer" @click="close"></ui-icon>
+      <ui-icon
+        v-if="dismissible"
+        name="x"
+        class="opacity-60 cursor-pointer"
+        @click="close"
+      ></ui-icon>
     </div>
   </div>
 </template>
