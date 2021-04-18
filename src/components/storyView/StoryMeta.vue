@@ -44,7 +44,7 @@
         <ui-icon name="pencil" class="mr-2 -ml-1"></ui-icon>
         Edit
       </ui-button>
-      <ui-button class="w-6/12 text-red-500" @click="deleteStory">
+      <ui-button class="w-6/12 text-red-500" :loading="state.loadingDeleteBtn" @click="deleteStory">
         <ui-icon name="trash" class="mr-2 -ml-1"></ui-icon>
         Delete
       </ui-button>
@@ -53,8 +53,10 @@
 </template>
 <script>
 import { shallowReactive } from 'vue';
+import { useRouter } from 'vue-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useDialog } from '@/composable/dialog';
 import { fetchAPI } from '@/utils/auth';
 import Story from '@/models/story';
 
@@ -72,11 +74,42 @@ export default {
     },
   },
   setup(props) {
+    const dialog = useDialog();
+    const router = useRouter();
+
     const state = shallowReactive({
       loadingLike: false,
+      loadingDeleteBtn: false,
       loadingCollection: false,
     });
 
+    function deleteStory() {
+      state.loadingDeleteBtn = true;
+
+      dialog.confirm({
+        title: 'Delete story',
+        body: 'Are you sure you want to delete this story? This action cannot be undone.',
+        okVariant: 'danger',
+        okText: 'Delete',
+        onConfirm: () => {
+          fetchAPI(`/story/${props.story.id}`, {
+            method: 'DELETE',
+          })
+            .then(() => {
+              state.loadingDeleteBtn = false;
+              console.log('berhasil!!!');
+              router.replace('/');
+            })
+            .catch((error) => {
+              state.loadingDeleteBtn = false;
+              console.error(error);
+            });
+        },
+        onCancel: () => {
+          state.loadingDeleteBtn = false;
+        },
+      });
+    }
     async function toggleLike() {
       try {
         state.loadingLike = true;
@@ -127,9 +160,6 @@ export default {
         console.error(error);
       }
     }
-    function deleteStory() {
-      console.log(props.story.id);
-    }
     function convertToRelativeTime(time) {
       return dayjs(time).fromNow();
     }
@@ -137,6 +167,7 @@ export default {
     return {
       state,
       toggleLike,
+      deleteStory,
       toggleCollection,
       convertToRelativeTime,
     };

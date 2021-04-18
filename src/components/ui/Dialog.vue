@@ -9,7 +9,7 @@
       :placeholder="state.options.placeholder"
       :label="state.options.label"
     ></ui-input>
-    <p v-else class="text-gray-500">{{ state.options.body }}</p>
+    <p v-else class="text-gray-600">{{ state.options.body }}</p>
     <div class="mt-8 flex space-x-2">
       <ui-button class="w-6/12" @click="fireCallback('onCancel')">
         {{ state.options.cancelText }}

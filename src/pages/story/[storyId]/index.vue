@@ -49,7 +49,7 @@
 </route>
 <script>
 import { onMounted, computed, shallowReactive } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { fetchAPI } from '@/utils/auth';
 import Story from '@/models/story';
@@ -59,10 +59,10 @@ import StoryMeta from '@/components/storyView/StoryMeta.vue';
 export default {
   components: { StoryPlayer, StoryMeta },
   setup() {
-    const route = useRoute();
+    const router = useRouter();
     const store = useStore();
 
-    const storyId = route.params.storyid;
+    const storyId = router.currentRoute.value.params.storyid;
 
     const state = shallowReactive({
       retrieved: false,
@@ -96,7 +96,11 @@ export default {
 
         state.retrieved = true;
       } catch (error) {
-        console.error(error);
+        if (error.statusCode === 404) {
+          router.replace('/404');
+        } else {
+          console.error(error);
+        }
       }
     });
 
