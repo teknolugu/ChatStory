@@ -91,6 +91,7 @@
 </template>
 <script>
 import { shallowReactive } from 'vue';
+import { useToast } from 'vue-toastification';
 import emitter from 'tiny-emitter/instance';
 import { fetchAPI } from '@/utils/auth';
 import { convertStoryObj } from '@/utils/helper';
@@ -119,6 +120,8 @@ export default {
       { id: 'editor-characters', name: 'characters' },
       { id: 'editor-style', name: 'chat style' },
     ];
+
+    const toast = useToast();
 
     const state = shallowReactive({
       saveBtn: false,
@@ -159,6 +162,7 @@ export default {
         state[buttonId] = false;
       } catch (error) {
         state[buttonId] = false;
+        toast.error('Something went wrong');
         console.error(error);
       }
     }
@@ -183,6 +187,7 @@ export default {
         state.loadingSetDraft = false;
       } catch (error) {
         state.loadingSetDraft = false;
+        toast.error('Something went wrong');
         console.error(error);
       }
     }

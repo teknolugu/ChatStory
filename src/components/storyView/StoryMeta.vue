@@ -97,7 +97,6 @@ export default {
           })
             .then(() => {
               state.loadingDeleteBtn = false;
-              console.log('berhasil!!!');
               router.replace('/');
             })
             .catch((error) => {

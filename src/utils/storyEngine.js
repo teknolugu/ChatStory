@@ -47,6 +47,12 @@ class Node {
         const currentOption = this.progress.shift();
         const selectedOption = options.find(({ id }) => id === currentOption);
 
+        if (!selectedOption) {
+          this.loadProgress = false;
+
+          return resolve();
+        }
+
         this.addChat({
           type: 'chat',
           message: selectedOption.text,
@@ -100,7 +106,7 @@ class Story extends Node {
   init() {
     this.chatHandler();
 
-    if (this.story.setting.backgroundMusic) {
+    if (this.story.setting?.backgroundMusic) {
       this.backgroundMusic = new Audio(this.story.setting.backgroundMusic);
 
       this.backgroundMusic.loop = true;
@@ -169,6 +175,11 @@ class Story extends Node {
     return this.story.nodes.find((node) => node[key] === value);
   }
 
+  playBackgroundMusic(play = true) {
+    if (!this.backgroundMusic) return;
+
+    play ? this.backgroundMusic.play() : this.backgroundMusic.pause();
+  }
   load(progress = []) {
     const startNode = this.findNodeBy('type', 'start');
 

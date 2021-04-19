@@ -43,9 +43,13 @@
           >
             <ui-icon name="save" view-box="0 0 24 24"></ui-icon>
           </ui-button>
-          <!-- <ui-button icon class="bg-opacity-10 hover:bg-opacity-10 ml-2">
+          <ui-button
+            icon
+            class="bg-opacity-10 hover:bg-opacity-10 ml-2"
+            @click="state.showSetting = true"
+          >
             <ui-icon name="cog"></ui-icon>
-          </ui-button> -->
+          </ui-button>
         </template>
       </chat-container>
       <div v-else class="h-full flex justify-center items-center flex-col">
@@ -85,6 +89,26 @@
         ></ui-icon>
       </ui-button>
     </div>
+    <ui-modal v-model="state.showSetting" content-class="max-w-sm">
+      <template #header>
+        <p>Settings</p>
+      </template>
+      <ui-checkbox
+        class="mt-2"
+        :model-value="state.playBackgroundMusic"
+        @change="toggleBackgroundMusic"
+      >
+        Enable background music
+      </ui-checkbox>
+      <ui-button
+        v-if="user"
+        class="w-full mt-4"
+        :loading="state.loadingReset"
+        @click="resetProgress"
+      >
+        Reset Progress
+      </ui-button>
+    </ui-modal>
   </div>
 </template>
 <script>
@@ -118,7 +142,10 @@ export default {
       fullscreen: false,
       isFinished: false,
       loadingSave: false,
+      showSetting: false,
+      loadingReset: false,
       darkBackground: false,
+      playBackgroundMusic: true,
     });
     const container = ref(null);
     const storyContainer = ref(null);
@@ -132,6 +159,15 @@ export default {
       } else {
         state.fullscreen = true;
         await container.value.requestFullscreen();
+      }
+    }
+    function toggleBackgroundMusic() {
+      state.playBackgroundMusic = !state.playBackgroundMusic;
+
+      const engine = storyContainer.value.state.engine;
+
+      if (engine) {
+        engine.playBackgroundMusic(state.playBackgroundMusic);
       }
     }
     async function startPlaying() {
@@ -159,7 +195,7 @@ export default {
           });
         }
 
-        const test = await Story.insertOrUpdate({
+        await Story.insertOrUpdate({
           data: {
             ...props.story,
             ...result.data,
@@ -168,7 +204,6 @@ export default {
             playedCount: props.story.playedCount + 1,
           },
         });
-        console.log(test);
 
         state.playing = true;
         state.loading = false;
@@ -178,24 +213,42 @@ export default {
         console.error(error);
       }
     }
-    function saveProgress() {
-      state.loadingSave = true;
+    function updateProgress(loadingKey, data) {
+      return new Promise((resolve, reject) => {
+        state[loadingKey] = true;
 
-      fetchAPI('/user/my/saved-progress', {
-        method: 'POST',
-        body: JSON.stringify({
-          storyId: props.story.id,
-          options: storyContainer.value.state.selectedOptions,
-          isFinished: state.isFinished,
-        }),
-      })
-        .then(() => {
-          state.loadingSave = false;
+        fetchAPI('/user/my/saved-progress', {
+          method: 'POST',
+          body: JSON.stringify({
+            storyId: props.story.id,
+            ...data,
+          }),
         })
-        .catch((error) => {
-          console.error(error);
-          state.loadingSave = false;
-        });
+          .then(() => {
+            state[loadingKey] = false;
+            resolve();
+          })
+          .catch((error) => {
+            console.error(error);
+            toast.error('Something went wrong');
+            state[loadingKey] = false;
+            reject();
+          });
+      });
+    }
+    function saveProgress() {
+      updateProgress('loadingSave', {
+        options: storyContainer.value.state.selectedOptions,
+        isFinished: state.isFinished,
+      });
+    }
+    function resetProgress() {
+      updateProgress('loadingReset', {
+        options: [],
+        isFinished: false,
+      }).then(() => {
+        window.location.reload();
+      });
     }
 
     return {
@@ -204,8 +257,10 @@ export default {
       container,
       startPlaying,
       saveProgress,
+      resetProgress,
       storyContainer,
       toggleFullscreen,
+      toggleBackgroundMusic,
     };
   },
 };

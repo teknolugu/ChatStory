@@ -99,10 +99,10 @@ export default {
         body: JSON.stringify(state),
       })
         .then((story) => {
-          close();
           Object.assign(state, initialState);
           loading.value = false;
           router.push(`/story/${story.id}/edit`);
+          close();
         })
         .catch((error) => {
           loading.value = false;

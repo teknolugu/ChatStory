@@ -22,7 +22,7 @@
     >
       {{ story.title }}
     </router-link>
-    <p class="line-clamp text-gray-600">{{ story.description }}</p>
+    <p class="line-clamp text-gray-600 h-12">{{ story.description }}</p>
     <div class="mt-4 flex items-center">
       <router-link
         :to="story.author ? `/user/${story.author.username}` : ''"
@@ -46,9 +46,9 @@
       </div>
       <div class="played text-gray-600">
         <ui-icon name="play" size="20"></ui-icon>
-        <span class="align-middle inline-block ml-1">{{
-          formatNumber(story.playedCount || 0)
-        }}</span>
+        <span class="align-middle inline-block ml-1">
+          {{ formatNumber(story.playedCount || 0) }}
+        </span>
       </div>
     </div>
   </ui-card>

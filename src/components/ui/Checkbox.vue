@@ -22,9 +22,9 @@ export default {
   },
   emits: ['update:modelValue', 'change'],
   setup(props, { emit }) {
-    function changeHandler(event) {
-      console.log(event);
-      // emit('update:modelValue', )
+    function changeHandler({ target: { checked } }) {
+      emit('update:modelValue', checked);
+      emit('change', checked);
     }
 
     return {
