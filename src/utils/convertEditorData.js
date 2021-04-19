@@ -1,17 +1,21 @@
 import Node from '@/models/Node';
 
 function toNode(storyId, drawflowData) {
-  const nodes = Node.query().where('storyId', storyId).get();
-  const { data } = drawflowData.drawflow.Home;
+  return new Promise((resolve) => {
+    const nodes = Node.query().where('storyId', storyId).get();
+    const { data } = drawflowData.drawflow.Home;
 
-  nodes.forEach(({ id, type }) => {
-    if (!data[id]) return;
+    nodes.forEach(({ id, type }, index) => {
+      if (!data[id]) return;
 
-    const { inputs, outputs, pos_y, pos_x } = data[id];
+      const { inputs, outputs, pos_y, pos_x } = data[id];
 
-    Node.update({
-      where: (node) => node.id === id && node.storyId === storyId,
-      data: { inputs, outputs, pos_x, pos_y },
+      Node.update({
+        where: (node) => node.id === id && node.storyId === storyId,
+        data: { inputs, outputs, pos_x, pos_y },
+      });
+
+      if (nodes.length - 1 === index) resolve();
     });
   });
 }

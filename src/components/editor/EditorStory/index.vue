@@ -46,8 +46,10 @@ export default {
       event.preventDefault();
     }
 
-    emitter.on('preview-story', () => {
-      console.log(editor.value.export());
+    emitter.on('save-node', (callback) => {
+      convertEditorData.toNode(storyId, editor.value.export()).then(() => {
+        callback && callback();
+      });
     });
 
     onMounted(() => {

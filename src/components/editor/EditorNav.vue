@@ -93,9 +93,9 @@
 import { shallowReactive } from 'vue';
 import { useToast } from 'vue-toastification';
 import emitter from 'tiny-emitter/instance';
+import Story from '@/models/Story';
 import { fetchAPI } from '@/utils/auth';
 import { convertStoryObj } from '@/utils/helper';
-import Story from '@/models/Story';
 
 export default {
   props: {
@@ -130,41 +130,44 @@ export default {
     });
 
     function previewStory() {
-      emit('showPreview');
-      emitter.emit('preview-story');
+      emitter.emit('save-node', () => {
+        emit('showPreview');
+      });
     }
     function showBlocks() {
       emitter.emit('show-blocks');
     }
-    async function updateStory(isPublished, buttonId) {
-      try {
-        state[buttonId] = true;
+    function updateStory(isPublished, buttonId) {
+      state[buttonId] = true;
 
-        const data = convertStoryObj(props.story);
+      emitter.emit('save-node', async () => {
+        try {
+          const data = convertStoryObj(props.story);
 
-        await fetchAPI(`/story/${props.story.id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({
-            ...data,
-            isPublished,
-          }),
-        });
-
-        if (isPublished) {
-          await Story.update({
-            where: props.story.id,
-            data: {
+          await fetchAPI(`/story/${props.story.id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+              ...data,
               isPublished,
-            },
+            }),
           });
-        }
 
-        state[buttonId] = false;
-      } catch (error) {
-        state[buttonId] = false;
-        toast.error('Something went wrong');
-        console.error(error);
-      }
+          if (isPublished) {
+            await Story.update({
+              where: props.story.id,
+              data: {
+                isPublished,
+              },
+            });
+          }
+
+          state[buttonId] = false;
+        } catch (error) {
+          state[buttonId] = false;
+          toast.error('Something went wrong');
+          console.error(error);
+        }
+      });
     }
     async function setAsDraft() {
       try {
