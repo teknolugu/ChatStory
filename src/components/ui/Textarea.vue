@@ -3,7 +3,7 @@
     <span v-if="label" class="text-gray-500 text-sm ml-2 block">{{ label }}</span>
     <textarea
       ref="textarea"
-      v-bind="{ value: modelValue, placeholder }"
+      v-bind="{ value: modelValue, placeholder, maxlength: max }"
       class="ui-textarea w-full ui-input rounded-xl border border-gray-200 transition bg-transparent focus:ring focus:ring-opacity-50"
       :class="[
         { 'overflow-hidden resize-none': autoresize },
@@ -15,10 +15,18 @@
       @input="emitValue"
     ></textarea>
     <div
-      v-if="(error && errorMessage) || showDetail"
-      class="text-sm ml-2 h-6 inline-block text-red-500"
+      v-if="max || error || showDetail"
+      class="text-sm ml-2 min-h-[1.5rem] flex items-start justify-between"
     >
-      <span v-if="error">{{ errorMessage }}</span>
+      <span
+        v-if="error && errorMessage"
+        class="inline-block leading-tight text-red-500 flex-1 text-overflow"
+        :title="errorMessage"
+      >
+        {{ errorMessage }}
+      </span>
+      <span class="flex-grow"></span>
+      <span v-if="max">{{ modelValue.length }}/{{ max }}</span>
     </div>
   </label>
 </template>
@@ -51,6 +59,7 @@ export default {
       type: [Number, String],
       default: '',
     },
+    max: [Number, String],
     error: Boolean,
     block: Boolean,
     showDetail: Boolean,
@@ -65,8 +74,13 @@ export default {
       textarea.value.style.height = 'auto';
       textarea.value.style.height = `${textarea.value.scrollHeight}px`;
     }
-    function emitValue({ target }) {
-      const { value } = target;
+    function emitValue(event) {
+      let { value } = event.target;
+      const maxLength = Math.abs(props.max);
+
+      if (value.length > maxLength) {
+        value = value.slice(0, maxLength);
+      }
 
       emit('update:modelValue', value);
       emit('change', value);

@@ -2,9 +2,17 @@
   <transition name="ending" appear @after-enter="transitionComplete">
     <div
       v-if="show"
-      class="bg-white absolute h-full w-full top-0 ending left-0 flex justify-center items-center text-gray-700"
+      class="bg-white absolute h-full w-full top-0 ending left-0 text-gray-700 p-5 overflow-auto"
+      :class="{ 'flex items-center justify-center': !data.text }"
     >
-      <p class="text-2xl">The End?</p>
+      <template v-if="data.text">
+        <div class="flex items-center mb-6">
+          <p class="font-semibold flex-grow text-lg">The End</p>
+          <ui-icon name="x" class="cursor-pointer" @click="show = false"></ui-icon>
+        </div>
+        <p>{{ data.text }}</p>
+      </template>
+      <p v-else class="text-2xl">The End</p>
     </div>
   </transition>
 </template>
@@ -12,12 +20,20 @@
 import { shallowRef } from 'vue';
 
 export default {
-  setup() {
+  props: {
+    data: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  setup(props) {
     const show = shallowRef(true);
 
     function transitionComplete() {
       setTimeout(() => {
-        show.value = false;
+        if (!props.data.text) {
+          show.value = false;
+        }
       }, 2000);
     }
 

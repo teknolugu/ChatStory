@@ -76,9 +76,10 @@ class Node {
       }
     });
   }
-  endNode() {
+  endNode(node) {
     return new Promise((resolve) => {
       this.addChat({
+        text: node.data?.text ?? '',
         type: 'ending',
       });
 

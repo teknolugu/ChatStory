@@ -16,7 +16,7 @@
           <component :is="state.activeTab"></component>
         </keep-alive>
       </main>
-      <ui-modal v-model="state.showPreview" custom-content persist>
+      <ui-modal v-model="state.showPreview" custom-content>
         <chats-container :story-id="storyId">
           <template #header>
             <div class="flex-grow"></div>

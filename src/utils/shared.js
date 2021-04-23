@@ -68,6 +68,9 @@ export const nodes = {
     output: 0,
     allowedInput: [],
     maxConnection: 0,
+    data: {
+      text: '',
+    },
     colorGradient: 'from-purple-500 to-indigo-500',
     textColor: 'text-purple-500',
   },

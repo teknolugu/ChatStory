@@ -52,6 +52,7 @@
         label="Profile Image URL"
         class="w-full mt-4"
         placeholder="https://example.com/image.png"
+        type="url"
         :error="validation.profileUrl.$dirty && validation.profileUrl.$invalid"
         :error-message="validation.profileUrl.$silentErrors[0]?.$message"
       ></ui-input>

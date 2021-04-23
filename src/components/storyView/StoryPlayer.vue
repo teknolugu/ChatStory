@@ -201,7 +201,9 @@ export default {
             ...result.data,
             progress: result.progress,
             isDataRetrieved: true,
-            playedCount: props.story.playedCount + 1,
+            playedCount: props.story.isPublished
+              ? props.story.playedCount + 1
+              : props.story.playedCount,
           },
         });
 

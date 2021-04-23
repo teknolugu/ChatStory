@@ -5,6 +5,8 @@ function toNode(storyId, drawflowData) {
     const nodes = Node.query().where('storyId', storyId).get();
     const { data } = drawflowData.drawflow.Home;
 
+    if (nodes.length === 0) return resolve();
+
     nodes.forEach(({ id, type }, index) => {
       if (!data[id]) return;
 

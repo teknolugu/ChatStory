@@ -17,7 +17,8 @@
           <textarea
             v-model="newChat.message"
             class="border-none w-full text-base p-0 focus:ring-0 bg-transparent scroll resize-none"
-            placeholder="Message here..."
+            placeholder="Message here... (max 512)"
+            maxlength="512"
           ></textarea>
           <div
             v-if="newChat.imageUrl"

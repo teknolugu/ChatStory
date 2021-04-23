@@ -4,8 +4,8 @@
       <ui-icon :name="node.icon"></ui-icon>
       <p class="ml-2">Annotation</p>
     </div>
-    <div class="flex items-center mt-4 space-x-2">
-      <ui-input v-model="text" class="w-44" placeholder="Annotation..." />
+    <div class="flex items-start mt-4 space-x-2">
+      <ui-input v-model="text" max="120" class="w-44" placeholder="Annotation..." />
       <ui-button icon class="text-red-500" @click="deleteNode">
         <ui-icon name="trash"></ui-icon>
       </ui-button>

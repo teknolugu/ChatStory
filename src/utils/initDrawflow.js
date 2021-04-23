@@ -13,7 +13,6 @@ import '@/assets/css/drawflow.css';
 
 export default function ({ element, storyId, data }) {
   const editor = new Drawflow(element, Vue);
-  const componentProps = { editor, name: 'test' };
 
   editor.useuuid = true;
 
@@ -21,11 +20,11 @@ export default function ({ element, storyId, data }) {
 
   editor.registerNode('start', NodeStart);
   editor.registerNode('settings', NodeSettings);
-  editor.registerNode('chat', NodeChat, componentProps, {});
-  editor.registerNode('option', NodeOption, componentProps, {});
-  editor.registerNode('annotation', NodeAnnotation, componentProps, {});
-  editor.registerNode('transition', NodeTransition, componentProps, {});
-  editor.registerNode('end', NodeEnd);
+  editor.registerNode('chat', NodeChat, { editor }, {});
+  editor.registerNode('option', NodeOption, { editor }, {});
+  editor.registerNode('annotation', NodeAnnotation, { editor }, {});
+  editor.registerNode('transition', NodeTransition, { editor }, {});
+  editor.registerNode('end', NodeEnd, { editor }, {});
 
   editor.removeNodeId = function (id) {
     const nodeId = id.slice(5);

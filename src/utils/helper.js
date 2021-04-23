@@ -78,7 +78,7 @@ export function convertStoryObj(story) {
         delete item.$id;
         delete item.storyId;
       });
-    } else {
+    } else if (typeof copy.data[key] === 'object' && copy.data[key] !== null) {
       delete copy.data[key].storyId;
       delete copy.data[key].$id;
       delete copy.data[key].id;

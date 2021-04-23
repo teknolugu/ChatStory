@@ -9,7 +9,7 @@
         <slot name="prepend"></slot>
       </span>
       <input
-        v-bind="{ value: modelValue, type, placeholder, disabled, readonly }"
+        v-bind="{ value: modelValue, type, placeholder, disabled, readonly, maxlength: max }"
         :id="componentId"
         class="w-full ui-input rounded-xl border border-gray-200 transition focus:ring focus:ring-opacity-50"
         :class="[
@@ -30,11 +30,16 @@
         <slot name="append"></slot>
       </span>
     </div>
-    <div
-      v-if="(error && errorMessage) || showDetail"
-      class="text-sm ml-2 min-h-[1.5rem] text-red-500"
-    >
-      <span v-if="error" class="inline-block leading-tight">{{ errorMessage }}</span>
+    <div v-if="max || error || showDetail" class="text-sm ml-2 min-h-[1.5rem] flex items-start">
+      <span
+        v-if="error && errorMessage"
+        class="inline-block leading-tight text-red-500 flex-1 text-overflow"
+        :title="errorMessage"
+      >
+        {{ errorMessage }}
+      </span>
+      <span class="flex-grow"></span>
+      <span v-if="max">{{ modelValue.length }}/{{ max }}</span>
     </div>
   </div>
 </template>
@@ -63,6 +68,7 @@ export default {
       type: String,
       default: '',
     },
+    max: [Number, String],
     hideAppearance: Boolean,
     error: Boolean,
     block: Boolean,
@@ -74,10 +80,17 @@ export default {
   setup(props, { emit }) {
     const componentId = useComponentId('input');
 
-    function emitValue({ target }) {
-      emit('update:modelValue', target.value);
-      emit('input', target.value);
-      emit('change', target.value);
+    function emitValue(event) {
+      let { value } = event.target;
+      const maxLength = Math.abs(props.max);
+
+      if (value.length > maxLength) {
+        value = value.slice(0, maxLength);
+      }
+
+      emit('update:modelValue', value);
+      emit('input', value);
+      emit('change', value);
     }
 
     return {
