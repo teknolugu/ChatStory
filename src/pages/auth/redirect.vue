@@ -4,7 +4,7 @@
 <script>
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import auth from '@/utils/auth';
+import auth, { fetchAPI } from '@/utils/auth';
 
 export default {
   setup() {
@@ -19,7 +19,8 @@ export default {
         }
 
         if (state) {
-          await auth.handleSignInRedirect();
+          const user = await auth.handleSignInRedirect();
+          await fetchAPI('/user/social');
         }
 
         router.replace('/');

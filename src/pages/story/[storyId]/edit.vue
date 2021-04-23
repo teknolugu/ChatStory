@@ -71,6 +71,7 @@ export default {
       activeTab: 'editor-details',
       showPreview: false,
       loading: true,
+      showAlert: false,
     });
 
     const story = computed(() => Story.query().withAll().where('id', storyId).first());
@@ -84,7 +85,7 @@ export default {
           const result = await fetchAPI(`/story/${storyId}?withData=true`);
 
           if (result.author.username !== user.value.username) {
-            return router.replace('/404');
+            return router.replace(result.isPublished ? `/story/${storyId}` : '/404');
           }
 
           const { data } = result;
@@ -109,11 +110,14 @@ export default {
         }
 
         state.loading = false;
+        state.showAlert = true;
       } catch (error) {
         console.error(error);
       }
     });
     onBeforeRouteLeave((to, from) => {
+      if (!state.showAlert) return true;
+
       const answer = window.confirm('Do you really want to leave? you have unsaved changes!');
 
       if (!answer) return false;

@@ -1,10 +1,8 @@
-import store from '../store';
+import auth from '@/utils/auth';
 
 export default function (to, from, next) {
-  const { user } = store.state;
-
-  if (user) {
-    if (!user.emailVerified) {
+  if (auth.user) {
+    if (!auth.user.emailVerified) {
       return next('/auth/verify');
     }
 
