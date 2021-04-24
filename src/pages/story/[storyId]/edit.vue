@@ -41,6 +41,7 @@ import { onBeforeRouteLeave } from 'vue-router';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
+import { useHead } from '@vueuse/head';
 import { fetchAPI } from '@/utils/auth';
 import Story from '@/models/story';
 import Style from '@/models/style';
@@ -76,6 +77,10 @@ export default {
 
     const story = computed(() => Story.query().withAll().where('id', storyId).first());
     const user = computed(() => store.state.user);
+
+    useHead({
+      title: computed(() => `Edit - ${story.value.title}`),
+    });
 
     onMounted(async () => {
       try {

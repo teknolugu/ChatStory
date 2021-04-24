@@ -30,6 +30,7 @@
 import { shallowReactive } from 'vue';
 import { email, required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
+import { useHead } from '@vueuse/head';
 import auth from '@/utils/auth';
 
 export default {
@@ -40,6 +41,10 @@ export default {
       showAlert: false,
       alertVariant: 'primary',
       alertMessage: '',
+    });
+
+    useHead({
+      title: 'Forgot Password | Chat Story',
     });
 
     const v$ = useVuelidate(

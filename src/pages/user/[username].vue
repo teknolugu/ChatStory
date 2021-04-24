@@ -9,9 +9,9 @@
           :src="state.user.photoURL ?? `https://ui-avatars.com/api/?name=${state.user.username}`"
           class="h-14 w-14 rounded-full"
         />
-        <p class="ml-4 text-xl font-semibold">{{ $route.params.username }}</p>
+        <p class="ml-4 text-2xl font-semibold">{{ $route.params.username }}</p>
       </div>
-      <p class="mt-12 mb-5 text-gray-600 text-xl">Stories</p>
+      <p class="mt-12 mb-5 font-semibold text-xl">Stories</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <ui-story-card
           v-for="story in state.stories"
@@ -28,6 +28,7 @@
 <script>
 import { computed, onMounted, shallowReactive } from 'vue';
 import { useRouter } from 'vue-router';
+import { useHead } from '@vueuse/head';
 import { fetchAPI } from '@/utils/auth';
 import Story from '@/models/story';
 
@@ -42,6 +43,12 @@ export default {
       loadingLoadMore: false,
     });
 
+    const { username } = router.currentRoute.value.params;
+
+    useHead({
+      title: `${username} | Chat Story`,
+    });
+
     async function loadMore() {
       try {
         state.loadingLoadMore = true;
@@ -54,7 +61,6 @@ export default {
         state.stories.push(...stories);
         state.nextKey = nextKey;
         state.loadingLoadMore = false;
-        console.log(nextKey);
       } catch (error) {
         state.loadingLoadMore = false;
         console.error(error);
@@ -65,7 +71,7 @@ export default {
       state.loading = true;
 
       try {
-        const user = await fetchAPI(`/user/${router.currentRoute.value.params.username}`);
+        const user = await fetchAPI(`/user/${username}`);
         const { stories, nextKey } = await fetchAPI(`/story?sortBy=recently&author=${user._id}`);
 
         state.user = user;

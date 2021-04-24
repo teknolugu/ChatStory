@@ -10,9 +10,14 @@
 </template>
 <script>
 import notFoundSvg from '../assets/svg/404.svg';
+import { useHead } from '@vueuse/head';
 
 export default {
   setup() {
+    useHead({
+      title: 'Page Not Found',
+    });
+
     return {
       notFoundSvg,
     };

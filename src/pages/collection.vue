@@ -38,6 +38,7 @@
 </route>
 <script>
 import { onMounted, reactive } from 'vue';
+import { useHead } from '@vueuse/head';
 import { fetchAPI } from '@/utils/auth';
 
 export default {
@@ -46,6 +47,10 @@ export default {
       loading: false,
       collection: [],
       removeBtnLoading: false,
+    });
+
+    useHead({
+      title: 'My Collection',
     });
 
     async function removeStory(storyId) {

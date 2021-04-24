@@ -58,6 +58,7 @@
 </template>
 <script>
 import { ref, computed, onMounted, shallowReactive } from 'vue';
+import { useHead } from '@vueuse/head';
 import { useStore } from 'vuex';
 import Story from '@/models/story';
 
@@ -79,6 +80,10 @@ export default {
 
     const stories = computed(() => store.getters.getFeedStories(state.activeSort));
     const nextKey = computed(() => store.state.feedKey[state.activeSort]);
+
+    useHead({
+      title: 'Chat Story',
+    });
 
     function loadMore() {
       state.loadingLoadMore = true;

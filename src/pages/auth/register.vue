@@ -61,10 +61,15 @@ import { shallowReactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { email, required, minLength, maxLength } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
+import { useHead } from '@vueuse/head';
 import auth, { fetchAPI } from '@/utils/auth';
 
 export default {
   setup() {
+    useHead({
+      title: 'Sign Up | Chat Story',
+    });
+
     const router = useRouter();
 
     const state = shallowReactive({

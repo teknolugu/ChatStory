@@ -14,11 +14,16 @@ import { shallowRef } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { useToast } from 'vue-toastification';
+import { useHead } from '@vueuse/head';
 import auth from '@/utils/auth';
 import emailSentSVG from '../../assets/svg/mail-sent.svg';
 
 export default {
   setup() {
+    useHead({
+      title: 'Verify Email | Chat Story',
+    });
+
     const router = useRouter();
     const toast = useToast();
     const store = useStore();

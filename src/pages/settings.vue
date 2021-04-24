@@ -38,6 +38,7 @@
 <script>
 import { onMounted, shallowRef } from 'vue';
 import { useRoute } from 'vue-router';
+import { useHead } from '@vueuse/head';
 import SettingProfile from '@/components/settings/SettingProfile.vue';
 
 export default {
@@ -47,6 +48,10 @@ export default {
     const route = useRoute();
 
     const activeTab = shallowRef('profile');
+
+    useHead({
+      title: 'Settings',
+    });
 
     onMounted(() => {
       const { tab } = route.query;

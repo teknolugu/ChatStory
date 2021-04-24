@@ -26,6 +26,7 @@
 <script>
 import { shallowReactive, onMounted } from 'vue';
 import { useRouter, onBeforeRouteUpdate } from 'vue-router';
+import { useHead } from '@vueuse/head';
 import { fetchAPI } from '@/utils/auth';
 
 export default {
@@ -37,6 +38,12 @@ export default {
       stories: [],
       nextKey: null,
       loadingLoadMore: false,
+    });
+
+    const query = router.currentRoute.value.query.q;
+
+    useHead({
+      title: `Search: ${query} | Chat Story`,
     });
 
     async function fetchStories(query) {
@@ -59,7 +66,6 @@ export default {
       try {
         state.loadingLoadMore = true;
 
-        const query = router.currentRoute.value.query.q;
         const { stories, nextKey } = await fetchAPI(
           `/story?sortBy=mostLiked&search=${query}&nextPageId=${state.nextKey}`
         );
@@ -74,7 +80,7 @@ export default {
     }
 
     onMounted(async () => {
-      await fetchStories(router.currentRoute.value.query.q);
+      await fetchStories(query);
     });
     onBeforeRouteUpdate(async (to, from) => {
       if (to.query.q !== from.query.q) {

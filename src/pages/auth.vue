@@ -3,7 +3,7 @@
     <section
       class="w-[450px] bg-gradient-to-br from-purple-500 to-indigo-500 text-white px-12 py-24 hidden lg:block"
     >
-      <p class="mb-6">Logo</p>
+      <router-link class="mb-12 text-xl inline-block" to="/"><b>Chat</b>Story</router-link>
       <h3 class="text-2xl font-semibold">A few clicks away to start create your own story</h3>
     </section>
     <section class="flex flex-1 items-center justify-center overflow-auto relative">

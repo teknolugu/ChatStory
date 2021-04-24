@@ -61,6 +61,7 @@
 import { onMounted, computed, shallowReactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { useHead } from '@vueuse/head';
 import { fetchAPI } from '@/utils/auth';
 import Story from '@/models/story';
 import StoryPlayer from '@/components/storyView/StoryPlayer.vue';
@@ -81,6 +82,26 @@ export default {
 
     const story = computed(() => Story.query().where('id', storyId).withAll().first());
     const user = computed(() => store.state.user);
+
+    useHead({
+      title: computed(() => `${story.value?.title} | Chat Story`),
+      meta: [
+        {
+          name: 'description',
+          content: computed(() => story.value?.description),
+        },
+      ],
+      link: [
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.gstatic.com',
+        },
+        {
+          rel: 'stylesheet',
+          href: computed(() => `https://fonts.googleapis.com/css2?family=${story.value?.style?.general?.fontFamily ?? 'Poppins'}&display=swap`),
+        },
+      ],
+    });
 
     async function fetchStory() {
       try {

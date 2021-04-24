@@ -57,10 +57,15 @@
 <script>
 import { shallowReactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useHead } from '@vueuse/head';
 import auth from '@/utils/auth';
 
 export default {
   setup() {
+    useHead({
+      title: 'Sign In | Chat Story',
+    });
+
     const router = useRouter();
 
     const state = shallowReactive({
