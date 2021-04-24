@@ -94,7 +94,6 @@ export default {
       })
         .then(() => {
           state.loading = false;
-          console.log('the fuck?');
           store.commit('updateState', {
             key: 'user',
             value: {
