@@ -15,9 +15,9 @@
         </button>
         <ui-input
           :model-value="option"
-          placeholder="Option..."
+          placeholder="Option... (max 256)"
           class="flex-1"
-          max="512"
+          max="256"
           @blur="updateOption('updateValue', index, $event)"
         ></ui-input>
       </div>

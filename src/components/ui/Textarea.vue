@@ -15,7 +15,7 @@
       @input="emitValue"
     ></textarea>
     <div
-      v-if="max || error || showDetail"
+      v-if="error || showDetail"
       class="text-sm ml-2 min-h-[1.5rem] flex items-start justify-between"
     >
       <span

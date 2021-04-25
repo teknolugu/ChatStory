@@ -11,6 +11,7 @@
         height="120px"
         :model-value="text"
         max="512"
+        show-detail
         placeholder="Message"
         @change="updateText"
       ></ui-textarea>

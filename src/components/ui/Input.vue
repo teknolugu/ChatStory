@@ -30,7 +30,7 @@
         <slot name="append"></slot>
       </span>
     </div>
-    <div v-if="max || error || showDetail" class="text-sm ml-2 min-h-[1.5rem] flex items-start">
+    <div v-if="error || showDetail" class="text-sm ml-2 min-h-[1.5rem] flex items-start">
       <span
         v-if="error && errorMessage"
         class="inline-block leading-tight text-red-500 flex-1 text-overflow"

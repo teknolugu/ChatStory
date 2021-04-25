@@ -5,7 +5,7 @@
       <p class="ml-2">Annotation</p>
     </div>
     <div class="flex items-start mt-4 space-x-2">
-      <ui-input v-model="text" max="120" class="w-44" placeholder="Annotation..." />
+      <ui-input v-model="text" max="120" show-detail class="w-44" placeholder="Annotation..." />
       <ui-button icon class="text-red-500" @click="deleteNode">
         <ui-icon name="trash"></ui-icon>
       </ui-button>
