@@ -69,7 +69,7 @@ export default {
     const storyId = router.currentRoute.value.params.storyid;
 
     const state = shallowReactive({
-      activeTab: 'editor-details',
+      activeTab: 'editor-story',
       showPreview: false,
       loading: true,
       showAlert: false,
