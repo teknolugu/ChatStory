@@ -1,4 +1,4 @@
-import Node from '@/models/Node';
+import Node from '@/models/node';
 
 function toNode(storyId, drawflowData) {
   return new Promise((resolve) => {
