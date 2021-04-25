@@ -46,7 +46,7 @@
             :class="isActive('character-chat')"
             :style="convertToCss(style.characterChat)"
           >
-            Fuck you!
+            What do you think abotu this image?
           </p>
           <img
             src="https://picsum.photos/400"
@@ -64,7 +64,7 @@
             :class="isActive('main-character')"
             :style="convertToCss(style.mainCharacter)"
           >
-            What?
+            Hi,
           </p>
         </div>
         <img
@@ -105,7 +105,7 @@ export default {
     const route = useRoute();
 
     const storyId = route.params.storyid;
-    const options = ['Fuck you!', 'Execuse me'];
+    const options = ["It's nice", "What's that?"];
 
     const style = computed(() => Style.query().where('storyId', storyId).first());
 
