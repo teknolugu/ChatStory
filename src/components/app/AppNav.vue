@@ -9,7 +9,7 @@
         @keyup.enter="search"
       >
         <template #prepend>
-          <ui-icon name="search" class="mr-2 text-gray-600" @click="search"></ui-icon>
+          <ui-icon name="search" class="mr-1 text-gray-600" @click="search"></ui-icon>
         </template>
       </ui-input>
       <div

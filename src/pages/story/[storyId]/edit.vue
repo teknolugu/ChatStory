@@ -79,7 +79,7 @@ export default {
     const user = computed(() => store.state.user);
 
     useHead({
-      title: computed(() => `Edit - ${story.value.title}`),
+      title: computed(() => `Edit - ${story.value?.title}`),
     });
 
     onMounted(async () => {

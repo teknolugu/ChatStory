@@ -38,7 +38,6 @@
       >
         {{ errorMessage }}
       </span>
-      <span class="flex-grow"></span>
       <span v-if="max">{{ modelValue.length }}/{{ max }}</span>
     </div>
   </div>
