@@ -98,7 +98,12 @@ export default {
         },
         {
           rel: 'stylesheet',
-          href: computed(() => `https://fonts.googleapis.com/css2?family=${story.value?.style?.general?.fontFamily ?? 'Poppins'}&display=swap`),
+          href: computed(
+            () =>
+              `https://fonts.googleapis.com/css2?family=${
+                story.value?.style?.general?.fontFamily ?? 'Poppins'
+              }&display=swap`
+          ),
         },
       ],
     });

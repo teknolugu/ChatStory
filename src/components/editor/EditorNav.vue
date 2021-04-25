@@ -93,7 +93,7 @@
 import { shallowReactive } from 'vue';
 import { useToast } from 'vue-toastification';
 import emitter from 'tiny-emitter/instance';
-import Story from '@/models/Story';
+import Story from '@/models/story';
 import { fetchAPI } from '@/utils/auth';
 import { convertStoryObj } from '@/utils/helper';
 
