@@ -15,6 +15,7 @@ export default function ({ element, storyId, data }) {
   const editor = new Drawflow(element, Vue);
 
   editor.useuuid = true;
+  editor.reroute = true;
 
   editor.start();
 

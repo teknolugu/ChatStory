@@ -4,11 +4,11 @@
     :class="{ hide: !show }"
   >
     <div class="flex items-center space-x-4 justify-between mb-2">
-      <h4 class="text-xl">Blocks</h4>
+      <h4 class="text-xl">Nodes</h4>
       <div class="flex-grow"></div>
       <ui-icon name="x" class="lg:hidden" @click="show = false"></ui-icon>
     </div>
-    <ui-input v-model="searchQuery" block placeholder="Search blocks..." class="flex-1">
+    <ui-input v-model="searchQuery" block placeholder="Search" class="flex-1">
       <template #prepend>
         <ui-icon name="search"></ui-icon>
       </template>
@@ -63,7 +63,7 @@ export default {
       show.value = false;
     }
 
-    emitter.on('show-blocks', () => {
+    emitter.on('show-nodes', () => {
       show.value = true;
     });
 

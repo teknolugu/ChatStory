@@ -38,10 +38,10 @@
         <textarea
           v-if="isEditing"
           v-model="tempData.message"
-          class="resize-none p-0 bg-transparent text-gray-500 border-none h-16"
+          class="resize-none p-0 bg-transparent scroll text-gray-500 border-none h-16"
           placeholder="Message here"
         ></textarea>
-        <p v-else class="leading-tight line-clamp mt-1 text-gray-500">
+        <p v-else class="leading-tight mt-1 text-gray-500">
           {{ chat.message }}
         </p>
       </div>

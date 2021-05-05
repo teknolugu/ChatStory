@@ -14,7 +14,7 @@ export const nodes = {
     icon: 'chat-alt2',
     input: 1,
     output: 1,
-    allowedInput: ['option', 'end', 'annotation'],
+    allowedInput: ['option', 'end', 'annotation', 'chat'],
     maxConnection: 1,
     colorGradient: 'from-green-400 to-cyan-500',
     textColor: 'text-primary',

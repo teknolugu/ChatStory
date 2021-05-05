@@ -65,10 +65,10 @@
       <button>
         <ui-icon
           v-show="activeTab === 'editor-story'"
-          v-tooltip="'Show blocks'"
+          v-tooltip="'Show nodes'"
           name="view-grid"
           class="text-primary lg:hidden mr-2"
-          @click="showBlocks"
+          @click="showNodes"
         ></ui-icon>
       </button>
       <div class="flex-1 overflow-auto w-10/12 whitespace-nowrap">
@@ -134,8 +134,8 @@ export default {
         emit('showPreview');
       });
     }
-    function showBlocks() {
-      emitter.emit('show-blocks');
+    function showNodes() {
+      emitter.emit('show-nodes');
     }
     function updateStory(isPublished, buttonId) {
       state[buttonId] = true;
@@ -198,7 +198,7 @@ export default {
     return {
       tabs,
       state,
-      showBlocks,
+      showNodes,
       setAsDraft,
       updateStory,
       previewStory,

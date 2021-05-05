@@ -42,7 +42,7 @@ export default {
 
       if (!node) return '';
 
-      return node.data.text;
+      return node.data?.text ?? '';
     });
 
     function updateText(text) {
