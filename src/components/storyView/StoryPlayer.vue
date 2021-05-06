@@ -5,7 +5,7 @@
     style="height: 600px"
     :class="[
       state.darkBackground ? 'bg-gray-600' : 'bg-gray-200',
-      { 'lg:rounded-xl': !state.fullscreen },
+      state.fullscreen ? 'transform rotate-90 md:rotate-0' : 'lg:rounded-xl',
     ]"
   >
     <template v-if="!state.playing">

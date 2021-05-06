@@ -12,7 +12,7 @@ class Setting extends Model {
       backgroundMusic: this.string(''),
       chatDelay: this.number(1000),
       storyId: this.attr(null),
-      autoScroll: this.boolean(false),
+      autoPlay: this.boolean(true),
     };
   }
 }

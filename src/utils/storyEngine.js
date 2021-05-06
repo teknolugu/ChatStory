@@ -109,7 +109,6 @@ class Story extends Node {
 
     if (this.story.setting?.backgroundMusic) {
       this.backgroundMusic = new Audio(this.story.setting.backgroundMusic);
-
       this.backgroundMusic.loop = true;
       this.backgroundMusic.play();
     }
@@ -161,16 +160,20 @@ class Story extends Node {
       }
     }
 
-    const chatDelay = this.story.setting?.chatDelay ?? 1000;
-    const timeout = setTimeout(() => {
-      clearTimeout(timeout);
-      this.chatHandler();
-    }, chatDelay);
+    if (this.story.setting?.autoPlay) {
+      const chatDelay = this.story.setting?.chatDelay ?? 1000;
+      const timeout = setTimeout(() => {
+        clearTimeout(timeout);
+        this.chatHandler();
+      }, chatDelay);
 
-    this.chatContainer.onclick = () => {
-      clearTimeout(timeout);
-      this.chatHandler();
-    };
+      this.chatContainer.onclick = () => {
+        clearTimeout(timeout);
+        this.chatHandler();
+      };
+    } else {
+      this.chatContainer.onclick = this.chatHandler.bind(this);
+    }
   }
   findNodeBy(key, value) {
     return this.story.nodes.find((node) => node[key] === value);

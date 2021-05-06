@@ -2,7 +2,7 @@
   <label class="inline-flex items-center">
     <input
       type="checkbox"
-      class="rounded border-gray-300 text-primary shadow-sm focus:border-primary focus:ring focus:ring-primary transition h-5 w-5 focus:ring-opacity-50"
+      class="rounded border-gray-300 text-primary shadow-sm cursor-pointer focus:border-primary focus:ring focus:ring-primary transition h-5 w-5 focus:ring-opacity-50"
       :value="modelValue"
       v-bind="{ checked: modelValue }"
       @change="changeHandler"

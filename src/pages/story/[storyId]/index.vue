@@ -1,6 +1,6 @@
 <template>
   <div class="story lg:py-12 pb-12">
-    <ui-alert v-if="state.isError" class="mx-12" variant="error">
+    <ui-alert v-if="status === 'error'" class="mx-12" variant="error">
       Something went wrong
       <template #append>
         <ui-button variant="danger" class="bg-opacity-60 hover:bg-opacity-60" @click="fetchStory">
@@ -8,48 +8,46 @@
         </ui-button>
       </template>
     </ui-alert>
-    <template v-else>
-      <template v-if="state.retrieved">
-        <div class="lg:container">
-          <story-player :story="story" :story-id="storyId"></story-player>
-        </div>
-        <div class="lg:mt-12 mt-6 container">
-          <div class="flex flex-col lg:flex-row items-start">
-            <div class="flex-1 lg:mr-16">
-              <h1 class="text-2xl font-semibold">
-                {{ story.title }}
-                <span
-                  v-if="!story.isPublished"
-                  class="inline-block px-2 py-1 text-sm text-white rounded-full bg-purple-500 ml-2 font-normal"
-                >
-                  Draft
-                </span>
-              </h1>
-              <router-link
-                :to="`/user/${story.author.username}`"
-                class="inline-flex items-center my-4"
+    <template v-if="status === 'idle'">
+      <div class="lg:container">
+        <story-player :story="story" :story-id="storyId"></story-player>
+      </div>
+      <div class="lg:mt-12 mt-6 container">
+        <div class="flex flex-col lg:flex-row items-start">
+          <div class="flex-1 lg:mr-16">
+            <h1 class="text-2xl font-semibold">
+              {{ story.title }}
+              <span
+                v-if="!story.isPublished"
+                class="inline-block px-2 py-1 text-sm text-white rounded-full bg-purple-500 ml-2 font-normal"
               >
-                <ui-img
-                  :alt="`${story.author.username} profile`"
-                  lazy
-                  :src="
-                    story.author.photoURL ??
-                    `https://ui-avatars.com/api/?name=${story.author.username}`
-                  "
-                  class="inline-block h-10 w-10 overflow-hidden rounded-full mr-2"
-                ></ui-img>
-                <p class="ml-2">{{ story.author.username }}</p>
-              </router-link>
-              <p>{{ story.description }}</p>
-            </div>
-            <story-meta v-bind="{ story, user }"></story-meta>
+                Draft
+              </span>
+            </h1>
+            <router-link
+              :to="`/user/${story.author.username}`"
+              class="inline-flex items-center my-4"
+            >
+              <ui-img
+                :alt="`${story.author.username} profile`"
+                lazy
+                :src="
+                  story.author.photoURL ??
+                  `https://ui-avatars.com/api/?name=${story.author.username}`
+                "
+                class="inline-block h-10 w-10 overflow-hidden rounded-full mr-2"
+              ></ui-img>
+              <p class="ml-2">{{ story.author.username }}</p>
+            </router-link>
+            <p>{{ story.description }}</p>
           </div>
+          <story-meta v-bind="{ story, user }"></story-meta>
         </div>
-      </template>
-      <div v-else class="py-12 text-center">
-        <ui-spinner size="36"></ui-spinner>
       </div>
     </template>
+    <div v-if="status === 'loading'" class="py-12 text-center">
+      <ui-spinner size="36"></ui-spinner>
+    </div>
   </div>
 </template>
 <route>
@@ -58,7 +56,7 @@
 }
 </route>
 <script>
-import { onMounted, computed, shallowReactive } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { useHead } from '@vueuse/head';
@@ -75,10 +73,7 @@ export default {
 
     const storyId = router.currentRoute.value.params.storyid;
 
-    const state = shallowReactive({
-      isError: false,
-      retrieved: false,
-    });
+    const status = ref('loading');
 
     const story = computed(() => Story.query().where('id', storyId).withAll().first());
     const user = computed(() => store.state.user);
@@ -110,10 +105,10 @@ export default {
 
     async function fetchStory() {
       try {
-        state.isError = false;
+        status.value = 'loading';
 
         if (story.value) {
-          state.retrieved = true;
+          status.value = 'idle';
 
           if (user.value) {
             const data = await fetchAPI(`/story/${storyId}/user`);
@@ -133,12 +128,12 @@ export default {
           data: result,
         });
 
-        state.retrieved = true;
+        status.value = 'idle';
       } catch (error) {
         if (error.statusCode === 404) {
           router.replace('/404');
         } else {
-          state.isError = true;
+          status.value = 'error';
           console.error(error);
         }
       }
@@ -148,8 +143,8 @@ export default {
 
     return {
       user,
-      state,
       story,
+      status,
       storyId,
       fetchStory,
     };
