@@ -21,6 +21,7 @@
         :error="v$.chatDelay.$dirty && v$.chatDelay.$invalid"
         :error-message="v$.chatDelay.$silentErrors[0]?.$message"
       ></ui-input>
+      <ui-checkbox v-model="settings.autoScroll"> Chat auto scroll </ui-checkbox>
     </div>
     <ui-button class="w-full mt-12" variant="primary" :disabled="v$.$invalid" @click="saveData">
       Save
@@ -43,6 +44,7 @@ export default {
     const settings = shallowReactive({
       backgroundMusic: '',
       chatDelay: 500,
+      autoScroll: true,
     });
 
     const storyId = route.params.storyid;
@@ -86,6 +88,7 @@ export default {
 
     return {
       v$,
+      settings,
       saveData,
       showModal,
     };

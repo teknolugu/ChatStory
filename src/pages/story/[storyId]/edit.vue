@@ -47,7 +47,7 @@ import Story from '@/models/story';
 import Style from '@/models/style';
 import EditorNav from '@/components/editor/EditorNav.vue';
 import EditorStory from '@/components/editor/EditorStory/index.vue';
-import EditorCharacters from '@/components/editor/EditorCharacters.vue';
+import EditorCharacters from '@/components/editor/EditorCharacters/index.vue';
 import EditorStyle from '@/components/editor/EditorStyle/index.vue';
 import EditorDetails from '@/components/editor/EditorDetails.vue';
 import ChatsContainer from '@/components/chats/Container.vue';

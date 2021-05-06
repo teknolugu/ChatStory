@@ -20,7 +20,7 @@
         />
         <p class="text-lg text-overflow mt-2">{{ character.name }}</p>
         <div class="flex mt-6 space-x-2 items-center">
-          <ui-button class="flex-1" @click="showModal('edit', character)">
+          <ui-button class="flex-1" @click="showModal('edit', character.id)">
             <ui-icon size="20" name="pencil" class="mr-2 -ml-1"></ui-icon>
             <span>Edit</span>
           </ui-button>
@@ -38,67 +38,30 @@
         </div>
       </ui-card>
     </div>
-    <ui-modal v-model="state.showModal" content-class="max-w-sm">
-      <template #header>
-        <p class="capitalize">{{ state.modalType }} Character</p>
-      </template>
-      <img
-        :src="tempCharacter.profileUrl"
-        :alt="tempCharacter.name"
-        class="h-28 w-28 rounded-full mx-auto"
-      />
-      <ui-input
-        v-model="validation.profileUrl.$model"
-        label="Profile Image URL"
-        class="w-full mt-4"
-        placeholder="https://example.com/image.png"
-        type="url"
-        :error="validation.profileUrl.$dirty && validation.profileUrl.$invalid"
-        :error-message="validation.profileUrl.$silentErrors[0]?.$message"
-      ></ui-input>
-      <ui-input
-        v-model="validation.name.$model"
-        label="Name"
-        class="w-full mt-2"
-        placeholder="John Doe"
-        show-detail
-        :error="validation.name.$dirty && validation.name.$invalid"
-        :error-message="validation.name.$silentErrors[0]?.$message"
-      ></ui-input>
-      <div class="mt-8 flex space-x-2">
-        <ui-button class="w-6/12" @click="state.showModal = false"> Cancel </ui-button>
-        <ui-button
-          class="w-6/12"
-          variant="primary"
-          :disabled="validation.$invalid"
-          @click="saveBtnHandler"
-        >
-          Save
-        </ui-button>
-      </div>
-    </ui-modal>
+    <edit-character-modal
+      v-model="state.showModal"
+      :character-id="state.characterId"
+      :type="state.modalType"
+      :story-id="storyId"
+    ></edit-character-modal>
   </div>
 </template>
 <script>
 import { computed, shallowReactive, shallowRef } from 'vue';
 import { useRoute } from 'vue-router';
-import { useVuelidate } from '@vuelidate/core';
-import { minLength, url, required } from '@vuelidate/validators';
 import { useDialog } from '@/composable/dialog';
 import Character from '@/models/character';
 import Story from '@/models/story';
+import EditCharacterModal from './EditCharacterModal.vue';
 
 export default {
+  components: { EditCharacterModal },
   setup() {
     const route = useRoute();
     const dialog = useDialog();
 
     const storyId = route.params.storyid;
 
-    const tempCharacter = shallowReactive({
-      profileUrl: '',
-      name: '',
-    });
     const state = shallowReactive({
       characterId: '',
       showModal: false,
@@ -112,38 +75,10 @@ export default {
       return Story.find(storyId)?.mainCharacter || '';
     });
 
-    const rules = {
-      name: { required, minLength: minLength(4) },
-      profileUrl: { required, url },
-    };
-    const validation = useVuelidate(rules, tempCharacter);
-
-    function showModal(type, character = {}) {
-      state.characterId = character?.id || '';
-      tempCharacter.profileUrl = character?.profileUrl || '';
-      tempCharacter.name = character?.name || '';
-
-      validation.value.$reset();
-
+    function showModal(type, characterId) {
+      state.characterId = characterId || '';
       state.modalType = type;
       state.showModal = true;
-    }
-    function saveBtnHandler() {
-      if (state.modalType === 'edit') {
-        Character.update({
-          where: state.characterId,
-          data: tempCharacter,
-        });
-      } else if (state.modalType === 'add') {
-        Character.insert({
-          data: {
-            storyId,
-            ...tempCharacter,
-          },
-        });
-      }
-
-      state.showModal = false;
     }
     function deleteCharacter({ id, name }) {
       dialog.confirm({
@@ -167,12 +102,10 @@ export default {
 
     return {
       state,
+      storyId,
       showModal,
       characters,
-      validation,
       mainCharacter,
-      tempCharacter,
-      saveBtnHandler,
       deleteCharacter,
       changeMainCharacter,
     };

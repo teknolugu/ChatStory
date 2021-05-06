@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import VuexORM from '@vuex-orm/core';
+import router from '../router';
 import * as models from '@/models';
 import auth, { fetchAPI } from '@/utils/auth';
 
@@ -109,6 +110,13 @@ export default createStore({
               key: 'isRetrieved',
               value: true,
             });
+
+            const firstTime = localStorage.getItem('firstTime');
+
+            if (firstTime === null) {
+              router.push(`/story/${import.meta.env.VITE_TUTORIAL_ID}`);
+              localStorage.setItem('firstTime', false);
+            }
           } catch (error) {
             console.error(error);
           }

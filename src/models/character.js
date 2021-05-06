@@ -20,7 +20,9 @@ class Character extends Model {
     const nodes = Node.query().where('storyId', model.storyId).get();
 
     nodes.forEach(({ id, data }) => {
-      const chats = data.chats.filter(({ characterId }) => characterId !== model.id);
+      if (data === null) return;
+
+      const chats = data?.chats.filter(({ characterId }) => characterId !== model.id);
 
       Node.update({
         where: id,
