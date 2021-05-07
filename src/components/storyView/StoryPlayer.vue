@@ -112,7 +112,7 @@
   </div>
 </template>
 <script>
-import { ref, shallowReactive, computed } from 'vue';
+import { ref, shallowReactive, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { useToast } from 'vue-toastification';
 import { fetchAPI } from '@/utils/auth';
@@ -154,10 +154,8 @@ export default {
 
     async function toggleFullscreen() {
       if (document.fullscreenElement) {
-        state.fullscreen = false;
         await document.exitFullscreen();
       } else {
-        state.fullscreen = true;
         await container.value.requestFullscreen();
       }
     }
@@ -252,6 +250,12 @@ export default {
         window.location.reload();
       });
     }
+
+    onMounted(() => {
+      container.value.onfullscreenchange = () => {
+        state.fullscreen = document.fullscreenElement !== null;
+      };
+    });
 
     return {
       user,
