@@ -3,7 +3,7 @@
     <div v-if="story.isPublished" class="flex mb-6">
       <ui-button
         class="flex-1 mr-4 max-w-xs"
-        :variant="story.isLiked ? 'primary' : 'default'"
+        :variant="story.isLiked ? 'default' : 'primary'"
         :loading="state.loadingLike"
         :disabled="!user"
         @click="toggleLike"
