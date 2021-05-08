@@ -1,5 +1,9 @@
 <template>
-  <ui-modal :model-value="modelValue" content-class="max-w-sm">
+  <ui-modal
+    :model-value="modelValue"
+    content-class="max-w-sm"
+    @close="$emit('update:modelValue', false)"
+  >
     <template #header>
       <p class="capitalize">{{ type }} Character</p>
     </template>

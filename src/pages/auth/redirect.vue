@@ -24,7 +24,7 @@ export default {
         }
 
         if (state) {
-          const user = await auth.handleSignInRedirect();
+          await auth.handleSignInRedirect();
           await fetchAPI('/user/social');
         }
 

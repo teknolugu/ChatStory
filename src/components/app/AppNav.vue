@@ -1,6 +1,6 @@
 <template>
   <nav ref="nav" class="h-16 bg-white w-full z-50 transition relative">
-    <div class="px-8 flex items-center h-full">
+    <div class="px-4 lg:px-8 flex items-center h-full">
       <router-link to="/" class="text-lg"><b>Chat</b>Story</router-link>
       <ui-input
         v-model="state.search"
