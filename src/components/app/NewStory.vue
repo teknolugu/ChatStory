@@ -45,6 +45,7 @@ import { useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 import { url, required, minLength, maxLength } from '@vuelidate/validators';
 import { fetchAPI } from '@/utils/auth';
+import Story from '@/models/story';
 
 export default {
   props: {
@@ -98,7 +99,16 @@ export default {
         method: 'POST',
         body: JSON.stringify(state),
       })
-        .then((story) => {
+        .then(async (story) => {
+          await Story.insert({
+            data: {
+              ...state,
+              id: story.id,
+              setting: {},
+              style: {},
+            },
+          });
+
           Object.assign(state, initialState);
           loading.value = false;
           router.push(`/story/${story.id}/edit`);
