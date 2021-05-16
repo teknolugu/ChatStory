@@ -56,7 +56,7 @@ export default {
       },
       chatDelay: {
         minValue: minValue(500),
-        maxValue: maxValue(1000),
+        maxValue: maxValue(10000),
       },
     };
     const v$ = useVuelidate(rules, settings);
