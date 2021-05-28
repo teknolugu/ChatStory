@@ -7,20 +7,27 @@
     <template #header>
       <p class="capitalize">{{ type }} Character</p>
     </template>
-    <img
-      :src="tempCharacter.profileUrl || tempCharacter.hiddenProfileUrl"
-      :alt="tempCharacter.name"
-      class="h-28 w-28 rounded-full mx-auto"
-    />
-    <ui-input
-      v-model="validation.profileUrl.$model"
-      label="Profile Image URL"
-      class="w-full mt-4"
-      placeholder="https://example.com/image.png"
-      type="url"
-      :error="validation.profileUrl.$dirty && validation.profileUrl.$invalid"
-      :error-message="validation.profileUrl.$silentErrors[0]?.$message"
-    ></ui-input>
+    <div class="text-center">
+      <label
+        :style="{
+          backgroundImage: `url(${tempCharacter.profileUrl || tempCharacter.hiddenProfileUrl})`,
+        }"
+        class="rounded-full mx-auto bg-gray-100 h-32 w-32 bg-cover bg-center bg-no-repeat relative inline-block"
+      >
+        <div class="absolute p-2 rounded-full bg-primary bottom-0 right-0 cursor-pointer">
+          <input
+            ref="fileForm"
+            accept="image/png, .jpg, .jpeg, image/gif"
+            type="file"
+            class="hidden"
+            @change="handleFileChange"
+          />
+          <ui-spinner v-if="uploadLoading" color="text-white"></ui-spinner>
+          <ui-icon v-else name="pencil" class="text-white"></ui-icon>
+        </div>
+      </label>
+    </div>
+    <p class="text-center text-gray-500 text-sm mt-2">Character Profile Image (max. 240KB)</p>
     <ui-input
       v-model="validation.name.$model"
       label="Name"
@@ -44,10 +51,11 @@
   </ui-modal>
 </template>
 <script>
-import { shallowReactive, watch } from 'vue';
+import { shallowReactive, watch, ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { minLength, url, required, maxLength } from '@vuelidate/validators';
 import { debounce } from '@/utils/helper';
+import upload from '@/utils/upload';
 import Character from '@/models/character';
 
 export default {
@@ -68,6 +76,7 @@ export default {
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
+    const uploadLoading = ref(false);
     const tempCharacter = shallowReactive({
       name: '',
       profileUrl: '',
@@ -75,8 +84,7 @@ export default {
     });
 
     const rules = {
-      name: { required, minLength: minLength(4), maxLength: maxLength(24) },
-      profileUrl: { url },
+      name: { required, minLength: minLength(3), maxLength: maxLength(24) },
     };
     const validation = useVuelidate(rules, tempCharacter);
 
@@ -101,6 +109,23 @@ export default {
       }
 
       emit('update:modelValue', false);
+    }
+    function handleFileChange({ target }) {
+      uploadLoading.value = true;
+      const [file] = target.files;
+
+      if (file) {
+        upload
+          .image(file, props.storyid)
+          .then(({ imageUrl }) => {
+            uploadLoading.value = false;
+            tempCharacter.profileUrl = imageUrl;
+          })
+          .catch((error) => {
+            uploadLoading.value = false;
+            console.error(error);
+          });
+      }
     }
 
     watch(
@@ -133,7 +158,9 @@ export default {
     return {
       validation,
       tempCharacter,
+      uploadLoading,
       saveBtnHandler,
+      handleFileChange,
     };
   },
 };

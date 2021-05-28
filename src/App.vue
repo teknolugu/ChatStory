@@ -12,7 +12,6 @@ import { onMounted } from 'vue';
 import { useStore } from 'vuex';
 import AppNav from './components/app/AppNav.vue';
 import Story from './models/story';
-import { nodesData } from './utils/shared';
 
 export default {
   components: { AppNav },

@@ -15,12 +15,22 @@
     >
       <template #item="{ element, index }">
         <chat-list
-          v-bind="{ chat: element, characters, index, nodeId: state.nodeId, chats }"
+          v-bind="{
+            chat: element,
+            storyId: $route.params.storyid,
+            characters,
+            index,
+            nodeId: state.nodeId,
+            chats,
+          }"
           @update="updateNodeData('chats', $event)"
         ></chat-list>
       </template>
     </draggable>
-    <add-chat class="px-5 pb-5" v-bind="{ characters, node: nodeData }"></add-chat>
+    <add-chat
+      class="px-5 pb-5"
+      v-bind="{ characters, node: nodeData, storyId: $route.params.storyid }"
+    ></add-chat>
   </div>
 </template>
 <script>

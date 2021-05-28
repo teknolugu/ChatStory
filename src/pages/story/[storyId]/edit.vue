@@ -85,7 +85,6 @@ export default {
     onMounted(async () => {
       try {
         state.loading = true;
-        console.log(story.value);
 
         if (!story.value || !story.value.isDataRetrieved) {
           const result = await fetchAPI(`/story/${storyId}?withData=true`);
