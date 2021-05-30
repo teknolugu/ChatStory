@@ -1,14 +1,26 @@
 import auth from './auth';
-import { useToast } from 'vue-toastification';
 
-const toast = useToast();
+function validateFile(file, types, maxSize) {
+  if (!types.includes(file.type)) {
+    return {
+      invalid: true,
+      message: 'Invalid file',
+    };
+  }
+  if (file.size >= maxSize) {
+    return {
+      invalid: true,
+      message: `File too large (max. ${maxSize / 1024}KB)`,
+    };
+  }
+
+  return { invalid: false };
+}
 
 class Upload {
   static async api(path, file, folder) {
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/upload/${path}?folder=${
-        folder || 'images'
-      }`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/upload/${path}?folder=${folder || ''}`;
       const formData = new FormData();
 
       formData.append(path, file);
@@ -24,28 +36,35 @@ class Upload {
 
       return result;
     } catch (error) {
+      console.error(error);
       return error;
-      toast.error('Something went wrong');
     }
   }
 
   static image(file, folder) {
-    if (!file) return toast.error('File is required');
+    if (!file) return 'File is required';
 
     const validFileType = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'];
+    const { invalid, message } = validateFile(file, validFileType, 245760);
 
-    if (!validFileType.includes(file.type)) {
-      toast.error('Invalid file');
-
-      return Promise.reject('Invalid file');
-    }
-    if (file.size > 240000) {
-      toast.error('Image too large (Max 240KB)');
-
-      return Promise.reject('Image too large');
+    if (invalid) {
+      return Promise.reject(message);
     }
 
     return this.api('image', file, folder);
+  }
+
+  static audio(file, folder) {
+    if (!file) return 'File is required';
+
+    const validFileType = ['audio/wav', 'audio/mpeg'];
+    const { invalid, message } = validateFile(file, validFileType, 368640);
+
+    if (invalid) {
+      return Promise.reject(message);
+    }
+
+    return this.api('audio', file, folder);
   }
 }
 

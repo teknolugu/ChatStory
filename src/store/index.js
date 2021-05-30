@@ -94,15 +94,16 @@ export default createStore({
 
         if (user) {
           try {
-            const { displayName, email, emailVerified, photoUrl } = user;
-            const { username } = await fetchAPI('/user');
+            const { displayName, email, localId, emailVerified } = user;
+            const { username, photoURL } = await fetchAPI('/user');
 
             commit('updateState', {
               key: 'user',
               value: {
+                id: localId,
                 username,
                 email,
-                photoURL: photoUrl,
+                photoURL,
                 emailVerified,
               },
             });

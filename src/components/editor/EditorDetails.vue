@@ -76,6 +76,7 @@ import { onMounted, reactive, watch, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 import { url, required, minLength, maxLength } from '@vuelidate/validators';
+import { useToast } from 'vue-toastification';
 import Story from '@/models/story';
 import upload from '@/utils/upload';
 import { debounce } from '@/utils/helper';
@@ -83,6 +84,8 @@ import { debounce } from '@/utils/helper';
 export default {
   setup() {
     const route = useRoute();
+    const toast = useToast();
+
     const storyId = route.params.storyid;
 
     const story = reactive({
@@ -123,6 +126,7 @@ export default {
           })
           .catch((error) => {
             console.error(error);
+            toast.error(error);
             uploadLoading.value = false;
           });
       }

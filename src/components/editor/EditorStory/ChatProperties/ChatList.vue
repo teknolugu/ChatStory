@@ -75,6 +75,7 @@
 </template>
 <script>
 import { ref, onMounted, watch, computed } from 'vue';
+import { useToast } from 'vue-toastification';
 import { debounce } from '@/utils/helper';
 import upload from '@/utils/upload';
 import Node from '@/models/node';
@@ -104,6 +105,8 @@ export default {
   },
   emits: ['update'],
   setup(props, { emit }) {
+    const toast = useToast();
+
     const isEditing = ref(false);
     const uploadLoading = ref(false);
     const fileForm = ref(null);
@@ -143,6 +146,7 @@ export default {
           })
           .catch((error) => {
             console.error(error);
+            toast.error(error.message || error);
             uploadLoading.value = false;
           });
       }

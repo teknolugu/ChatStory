@@ -43,6 +43,7 @@
         class="w-6/12"
         variant="primary"
         :disabled="validation.$invalid"
+        :loading="uploadLoading"
         @click="saveBtnHandler"
       >
         Save
@@ -54,6 +55,7 @@
 import { shallowReactive, watch, ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { minLength, url, required, maxLength } from '@vuelidate/validators';
+import { useToast } from 'vue-toastification';
 import { debounce } from '@/utils/helper';
 import upload from '@/utils/upload';
 import Character from '@/models/character';
@@ -76,9 +78,12 @@ export default {
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
+    const toast = useToast();
+
     const uploadLoading = ref(false);
     const tempCharacter = shallowReactive({
       name: '',
+      imgFile: null,
       profileUrl: '',
       hiddenProfileUrl: '',
     });
@@ -88,43 +93,51 @@ export default {
     };
     const validation = useVuelidate(rules, tempCharacter);
 
-    function saveBtnHandler() {
+    async function saveBtnHandler() {
       validation.value.$touch();
 
       if (validation.value.$invalid) return;
 
-      if (props.type === 'edit') {
-        Character.update({
-          where: props.characterId,
-          data: tempCharacter,
-        });
-      } else if (props.type === 'add') {
-        Character.insert({
-          data: {
-            storyId: props.storyId,
-            name: tempCharacter.name,
-            profileUrl: tempCharacter.profileUrl || tempCharacter.hiddenProfileUrl,
-          },
-        });
-      }
+      try {
+        uploadLoading.value = true;
 
-      emit('update:modelValue', false);
+        if (tempCharacter.imgFile) {
+          const { imageUrl } = await upload.image(tempCharacter.imgFile, props.storyid);
+
+          tempCharacter.profileUrl = imageUrl;
+          tempCharacter.imgFile = null;
+        }
+
+        if (props.type === 'edit') {
+          Character.update({
+            where: props.characterId,
+            data: tempCharacter,
+          });
+        } else if (props.type === 'add') {
+          Character.insert({
+            data: {
+              storyId: props.storyId,
+              name: tempCharacter.name,
+              profileUrl: tempCharacter.profileUrl || tempCharacter.hiddenProfileUrl,
+            },
+          });
+        }
+
+        uploadLoading.value = false;
+
+        emit('update:modelValue', false);
+      } catch (error) {
+        uploadLoading.value = false;
+        toast.error(error.message || error);
+        console.error(error);
+      }
     }
     function handleFileChange({ target }) {
-      uploadLoading.value = true;
       const [file] = target.files;
 
       if (file) {
-        upload
-          .image(file, props.storyid)
-          .then(({ imageUrl }) => {
-            uploadLoading.value = false;
-            tempCharacter.profileUrl = imageUrl;
-          })
-          .catch((error) => {
-            uploadLoading.value = false;
-            console.error(error);
-          });
+        tempCharacter.imgFile = file;
+        tempCharacter.profileUrl = URL.createObjectURL(file);
       }
     }
 

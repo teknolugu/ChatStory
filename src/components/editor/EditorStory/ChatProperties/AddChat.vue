@@ -38,23 +38,6 @@
           </div>
         </div>
         <div class="flex items-center">
-          <!-- <ui-popover placement="bottom">
-            <template #trigger>
-              <ui-button id="add-image" icon class="mr-2 text-gray-600">
-                <ui-icon name="photograph"></ui-icon>
-              </ui-button>
-            </template>
-            <div class="w-56">
-              <ui-file-uploader></ui-file-uploader>
-              <ui-input
-                :model-value="newChat.imageUrl"
-                label="Image URL"
-                class="w-full mt-2"
-                placeholder="https://example.com/image.png"
-                @update:model-value="updateImageUrl"
-              ></ui-input>
-            </div>
-          </ui-popover> -->
           <ui-button
             v-tooltip="'Add image (max. 240KB)'"
             icon
@@ -93,6 +76,7 @@
 import { shallowReactive, computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { nanoid } from 'nanoid';
+import { useToast } from 'vue-toastification';
 import Node from '@/models/node';
 import { debounce } from '@/utils/helper';
 import upload from '@/utils/upload';
@@ -113,6 +97,8 @@ export default {
     },
   },
   setup(props) {
+    const toast = useToast();
+
     const newChat = shallowReactive({
       message: '',
       imageUrl: '',
@@ -157,8 +143,8 @@ export default {
         uploadLoading.value = false;
       } catch (error) {
         console.error(error);
+        toast.error(error.message || error);
         uploadLoading.value = false;
-        // Do noting
       }
     }
     function openFileDiaglog() {
