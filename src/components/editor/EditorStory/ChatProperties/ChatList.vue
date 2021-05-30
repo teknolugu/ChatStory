@@ -45,20 +45,39 @@
           {{ chat.message }}
         </p>
       </div>
-      <ui-input
-        v-if="isEditing"
-        v-model="tempData.imageUrl"
-        class="mb-2"
-        label="Image URL"
-        placeholder="https://example.com/image.png"
-      ></ui-input>
+      <div v-if="isEditing" class="mb-2 flex items-end">
+        <ui-button
+          v-tooltip="'Add image (max. 240KB)'"
+          icon
+          class="mr-2"
+          :loading="uploadLoading"
+          @click="() => fileForm.click()"
+        >
+          <ui-icon name="photograph"></ui-icon>
+        </ui-button>
+        <ui-input
+          v-model="tempData.imageUrl"
+          class="flex-1"
+          label="Image URL"
+          placeholder="https://example.com/image.png"
+        ></ui-input>
+      </div>
       <img v-if="chat.imageUrl" :src="chat.imageUrl" class="max-w-full mt-2 rounded-xl" />
     </div>
+    <input
+      ref="fileForm"
+      accept="image/png, .jpg, .jpeg, image/gif"
+      type="file"
+      class="hidden"
+      @change="handleFileChange"
+    />
   </div>
 </template>
 <script>
 import { ref, onMounted, watch, computed } from 'vue';
+import { useToast } from 'vue-toastification';
 import { debounce } from '@/utils/helper';
+import upload from '@/utils/upload';
 import Node from '@/models/node';
 
 export default {
@@ -79,10 +98,18 @@ export default {
       type: String,
       default: '',
     },
+    storyId: {
+      type: String,
+      default: '',
+    },
   },
   emits: ['update'],
   setup(props, { emit }) {
+    const toast = useToast();
+
     const isEditing = ref(false);
+    const uploadLoading = ref(false);
+    const fileForm = ref(null);
     const tempData = ref({});
 
     const character = computed(() =>
@@ -106,6 +133,24 @@ export default {
 
       emit('update', node.chats);
     }
+    function handleFileChange() {
+      uploadLoading.value = true;
+      const [file] = fileForm.value.files;
+
+      if (file) {
+        upload
+          .image(file, props.storyid)
+          .then(({ imageUrl }) => {
+            uploadLoading.value = false;
+            tempData.value.imageUrl = imageUrl;
+          })
+          .catch((error) => {
+            console.error(error);
+            toast.error(error.message || error);
+            uploadLoading.value = false;
+          });
+      }
+    }
 
     watch(
       () => tempData,
@@ -120,10 +165,13 @@ export default {
     });
 
     return {
+      fileForm,
       tempData,
       isEditing,
       character,
       updateNode,
+      uploadLoading,
+      handleFileChange,
     };
   },
 };

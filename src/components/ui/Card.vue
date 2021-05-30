@@ -2,7 +2,7 @@
   <component
     :is="tag"
     v-bind="$attrs"
-    class="bg-white transform rounded-xl transition ui-card"
+    class="bg-white transform rounded-xl transition-transform ui-card"
     :class="{ 'hover:shadow-xl hover:-translate-y-1': hover }"
   >
     <slot name="image"></slot>

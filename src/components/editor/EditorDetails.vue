@@ -38,51 +38,62 @@
     <div class="flex lg:flex-row flex-col mt-5">
       <p class="font-semibold lg:w-2/12 align-top mb-4 lg:mb-0">Graphic assets</p>
       <div class="space-y-3 border-b pb-5 inline-block flex-1">
-        <div class="flex flex-col lg:flex-row">
-          <ui-input
-            v-model="story.bannerImage"
-            class="lg:w-6/12"
-            block
-            label="Banner*"
-            :error="validation.bannerImage.$dirty && validation.bannerImage.$invalid"
-            :error-message="validation.bannerImage.$silentErrors[0]?.$message"
-            placeholder="https://example.com/image.png"
-          ></ui-input>
-          <div class="mt-6 lg:ml-4">
+        <div class="mt-6 lg:ml-4">
+          <div class="flex">
             <div
               class="bg-cover bg-center rounded-xl bg-no-repeat"
               :style="{
                 'background-image': `url('${story.bannerImage}')`,
-                width: '120px',
-                height: '80px',
+                width: '200px',
+                height: '112.50px',
               }"
             ></div>
-            <p class="mt-1 text-sm">Recommended size 1280x720 pixels</p>
+            <label
+              style="width: 200px; height: 112.5px"
+              class="border-2 border-dashed rounded-xl ml-4 cursor-pointer flex-col flex items-center inline-block justify-center"
+            >
+              <ui-spinner v-if="uploadLoading"></ui-spinner>
+              <template v-else>
+                <ui-icon name="plus" size="36"></ui-icon>
+                <p class="text-sm">Banner image</p>
+                <input
+                  accept="image/png, .jpg, .jpeg, image/gif"
+                  type="file"
+                  class="hidden"
+                  @change="handleFileChange"
+                />
+              </template>
+            </label>
           </div>
+          <p class="mt-1 text-sm">Recommended size 1280x720 pixels</p>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { onMounted, reactive, watch } from 'vue';
+import { onMounted, reactive, watch, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 import { url, required, minLength, maxLength } from '@vuelidate/validators';
+import { useToast } from 'vue-toastification';
 import Story from '@/models/story';
+import upload from '@/utils/upload';
 import { debounce } from '@/utils/helper';
 
 export default {
   setup() {
     const route = useRoute();
+    const toast = useToast();
+
     const storyId = route.params.storyid;
 
     const story = reactive({
       title: '',
       description: '',
-      // category: '',
       bannerImage: '',
     });
+    const uploadLoading = ref(false);
 
     const rules = {
       title: {
@@ -95,9 +106,6 @@ export default {
         minLength: minLength(30),
         maxLength: maxLength(1024),
       },
-      // category: {
-      //   required,
-      // },
       bannerImage: {
         required,
         url,
@@ -105,11 +113,22 @@ export default {
     };
     const validation = useVuelidate(rules, story, { $scope: 'detail' });
 
-    function updateImage(type, index) {
-      if (type === 'add') {
-        story.images.push('');
-      } else if (type === 'delete') {
-        story.images.splice(index, 1);
+    function handleFileChange({ target }) {
+      uploadLoading.value = true;
+      const [file] = target.files;
+
+      if (file) {
+        upload
+          .image(file, storyId)
+          .then(({ imageUrl }) => {
+            uploadLoading.value = false;
+            story.bannerImage = imageUrl;
+          })
+          .catch((error) => {
+            console.error(error);
+            toast.error(error);
+            uploadLoading.value = false;
+          });
       }
     }
 
@@ -134,7 +153,8 @@ export default {
     return {
       story,
       validation,
-      updateImage,
+      uploadLoading,
+      handleFileChange,
     };
   },
 };
