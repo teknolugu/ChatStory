@@ -24,7 +24,15 @@
         </ui-input>
       </div>
       <div class="flex-grow"></div>
-      <ui-button icon class="mr-2 md:hidden" @click="state.showSearch = !state.showSearch">
+      <a
+        href="https://github.com/WinTenDev/ChatStory"
+        rel="noreferrer noopener"
+        title="Github"
+        class="mr-2"
+      >
+        <ui-icon view-box="0 0 24 24" name="github" size="26"></ui-icon>
+      </a>
+      <ui-button icon class="md:hidden" @click="state.showSearch = !state.showSearch">
         <ui-icon :name="state.showSearch ? 'x' : 'search'"></ui-icon>
       </ui-button>
       <template v-if="user">
