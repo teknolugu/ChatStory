@@ -18,7 +18,7 @@
     "dropzone": "^5.9.2",
     "firebase": "9.0.0-beta.2",
     "firebase-auth-lite": "^0.8.8",
-    "nanoid": "^3.1.20",
+    "nanoid": "^3.1.31",
     "tiny-emitter": "^2.1.0",
     "tippy.js": "^6.2.7",
     "vue": "^3.0.11",
